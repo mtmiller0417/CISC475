@@ -1,24 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// We have created a component called MainContainer.js in our directory.
+// In order to use it in App.js, we have to import it. Note that you don't
+// need to add .js to the file name at the end (so the last part doesn't have
+// to be /MainContainer.js)
+import MainContainer from './components/MainContainer/MainContainer';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        // This comment is in reference to using MainContainer below. As you can see,
+        // we use it just like an HTML tag, except we can pass in "props". In this case
+        // we are passing a random message in it. In MainContainer.js, you can see how we
+        // use this field
+      }
+      <MainContainer message="Hello World" />
     </div>
   );
 }
