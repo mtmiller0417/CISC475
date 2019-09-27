@@ -7,20 +7,20 @@ export default class MainContainer extends React.Component {
   render() {
     return(
       <div className={styles.container}>
-        <Grid>
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-          <GridItem />
-        </Grid>
+           <Grid>
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           <GridItem />
+           </Grid>
       </div>
     );
   }
