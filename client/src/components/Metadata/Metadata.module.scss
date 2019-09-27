@@ -1,6 +1,6 @@
 .metadata {
     background-color: white;
-    padding: 20px;
+    padding: 10px;
     font-size: 30px;
     text-align: center;
     border: 1px solid #f5f5f5;
@@ -9,7 +9,12 @@
     border-top-left-radius: 11px;
 }
 
-.metadata:hover {
-    cursor: pointer;
-    background-color: #f1f1f1;
+.metadataInfo {
+    font-size: 14px;
+    padding: 5px;
+}
+
+.metadataHeader {
+    grid-column: 1 / -1;
+    padding: 30px;
 }
