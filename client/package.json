@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "chart.js": "^2.8.0",
+    "d3-fetch": "^5.12.0",
     "node-sass": "^4.12.0",
     "react": "^16.9.0",
     "react-chartjs-2": "^2.8.0",
