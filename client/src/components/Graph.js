@@ -26,8 +26,6 @@ class Graph extends Component{
             <div className="graph">
                    <Line
                    data={this.state.graphData}
-                   width={600}
-                   height={300}
                    options={{ maintainAspectRatio: false }}
                    />
             </div>
