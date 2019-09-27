@@ -6,8 +6,8 @@ class Metadata extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            filePath: null,
-            csvData: csv(filePath),
+            //filePath: null,
+            //csvData: csv(filePath),
             patientID: null,
             scanID: null,
             gender: null,
@@ -23,18 +23,10 @@ class Metadata extends React.Component{
     render(){
         return(
             <div className="metadata">
-                <Grid>
-                    <GridItem />
-                    <GridItem />
-                    <GridItem />
-                    <GridItem />
-                    <GridItem />
-                    <GridItem />
-                    <GridItem />
-                    <GridItem />
-                    <GridItem />
-                </Grid>
+                Hello World!
             </div>
         )
     }
 }
+
+export default Metadata;
