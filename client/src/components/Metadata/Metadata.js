@@ -1,8 +1,9 @@
 import React from 'react'
-import {csv} from 'd3-fetch'
-import GridItem from './Grid/GridItem/GridItem';
+//import {csv} from 'd3-fetch'
+//import GridItem from '../Grid/GridItem/GridItem';
+import styles from '../Grid/GridItem/GridItem.module.scss';
 
-class Metadata extends React.Component{
+export default class Metadata extends React.Component{
     constructor(props){
         super(props);
         this.state = {
@@ -22,11 +23,9 @@ class Metadata extends React.Component{
 
     render(){
         return(
-            <div className="metadata">
+            <div className={styles.gridItem}>
                 Hello World!
             </div>
         )
     }
 }
-
-export default Metadata;
