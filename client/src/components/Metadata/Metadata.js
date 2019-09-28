@@ -1,5 +1,5 @@
 import React from 'react'
-//import {csv} from 'd3-fetch'
+import {csv} from 'd3-fetch'
 import Grid from '../Grid/Grid';
 import styles from './Metadata.module.scss';
 
@@ -7,8 +7,8 @@ export default class Metadata extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            //filePath: null,
-            //csvData: csv(filePath),
+            filePath: null,
+            csvData: csv('../../../ECG Dataset/Metadata.csv'),
             patientID: 123456789,
             scanID: 987654321,
             gender: "Male",

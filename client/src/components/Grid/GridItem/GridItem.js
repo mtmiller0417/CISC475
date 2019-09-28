@@ -5,7 +5,7 @@ import Graph from '../../Graph'
 export default class GridItem extends React.Component {
   render() {
     return(
-      <div class={styles.gridItem}>
+      <div className={styles.gridItem}>
         <Graph />
       </div>
     );
