@@ -7,8 +7,9 @@ export default class Metadata extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            filePath: null,
-            csvData: csv('../../../ECG Dataset/Metadata.csv'),
+            csvData: csv('').then(function(data){
+                console.log(data);
+            }),
             patientID: 123456789,
             scanID: 987654321,
             gender: "Male",
