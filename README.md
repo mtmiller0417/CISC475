@@ -10,7 +10,7 @@ This will contain the ability to load and view annotated ECG data, navigate it, 
 
 The architecture of this system is as follows:
 
--   JavaScript (ReactJS, NodeJS, Victory/ChartJS)
+-   JavaScript (ReactJS, NodeJS, ChartJS, D3-Fetch)
 -   HTML (To implement JavaScript at this time)
 -   CSS (For program styling)
 
