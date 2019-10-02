@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
 import {Line} from 'react-chartjs-2';
+// Some of the changes I made to test
 import * as d3 from 'd3';
+import data from '../csv_files/13013356000.csv';
+
+//C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\csv_files\13013356000.csv       // file
+//C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\components\Graph.js             // Graph.js
 
 class Graph extends Component{
     constructor(props){
         super(props);
-        d3.csv("CISC475/ECG Dataset/13013356000.csv",function(data){
+        d3.csv(data,function(data){
             // Write code dealing with data
-            console.log(data.data);
+            console.log(data);
         });
         this.state = {
             graphData:{
