@@ -38,7 +38,7 @@ class Graph extends Component{
             labels.push(i)
             array.push(data);
             ecg0.push(parseInt(data['I'],10))
-            console.log(ecg0[i])
+            //console.log(ecg0[i])
             /*ecg1.push(parseInt(data['II'],10))
             ecg2.push(parseInt(data['III'],10))
             ecg3.push(parseInt(data['aVR'],10))
@@ -52,7 +52,7 @@ class Graph extends Component{
             ecg11.push(parseInt(data['V6'],10))*/
             i++
         });
-        console.log(ecg0[0])
+        //console.log(ecg0[0])
         let fake_data = [-92, -87, -82, -78, -73, -73, -92, -190, -287]
         if (fake_data[0] !== ecg0[0]){
             console.log("Something is wrong")
@@ -74,7 +74,6 @@ class Graph extends Component{
                 datasets:[
                 {
                     label:'Population',
-                    //data:[3234, 5637, 50],
                     //data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
                     data: fake_data,
                     backgroundColor:['rgba(255,99,132,0.6)',]
