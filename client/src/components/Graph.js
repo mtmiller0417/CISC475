@@ -33,8 +33,27 @@ class Graph extends Component{
         */
 
         //Parse the CSV into an array of objects where each object represents a row
-        var parsed_csv = d3.csv(data);
-
+        var parsed_csv = d3.csv(data, function(d)
+        {
+            //Function is neccessary to handle the fact that the CSV has spaces AND commas
+            //The left hand side of each line defines a new field to handle spaces before field names
+            //The + is used to convert each data point to an integer since they are read in as strings w/ leading space
+            return {
+                I: +d["I"],
+                II: +d[" II"],
+                III: +d[" III"],
+                aVR: +d[" aVR"],
+                aVL: +d[" aVL"],
+                aVF: +d[" aVF"],
+                V1: +d[" V1"],
+                V2: +d[" V2"],
+                V3: +d[" V3"],
+                V4: +d[" V4"],
+                V5: +d[" V5"],
+                V6: +d[" V6"]
+            }
+        });
+        
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
         parsed_csv.then(function(data)
@@ -55,11 +74,15 @@ class Graph extends Component{
                 lead_v4.push(data[i].V4);
                 lead_v5.push(data[i].V5);
                 lead_v6.push(data[i].V6);
+
+                console.log(data[i]);
             }
+
+            //console.log(lead_ii[0]);
         });
 
         //Fake data stuff
-        let fake_data = [-92, -87, -82, -78, -73, -73, -92, -190, -287]
+        //let fake_data = [-92, -87, -82, -78, -73, -73, -92, -190, -287]
 
         //Graph Stuff
         this.state = {
@@ -69,11 +92,10 @@ class Graph extends Component{
                 //labels: labels,
                 datasets:[
                 {
-                    label:'Population',
+                    label:'Lead I',
                     //data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
                     data: lead_i,
                     backgroundColor:['rgba(255,99,132,0.6)',]
-                      
                 }
             ]
         }
@@ -86,7 +108,16 @@ class Graph extends Component{
             <div className="graph">
                 <Line
                     data={this.state.graphData}
-                    options={{ maintainAspectRatio: false }}
+                    options={{
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    min: -1000,
+                                    max: 1000
+                                }
+                            }]
+                        }
+                    }}
                />
             </div>
          )
