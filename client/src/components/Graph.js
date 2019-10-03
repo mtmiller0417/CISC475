@@ -11,61 +11,57 @@ class Graph extends Component{
     constructor(props){
         super(props);
 
-        let array=[]
-
-        let labels = []
-
-        let ecg0 = []
-        /*let ecg1 = []
-        let ecg2 = []
-        let ecg3 = []
-        let ecg4 = []
-        let ecg5 = []
-        let ecg6 = []
-        let ecg7 = []
-        let ecg8 = []
-        let ecg9 = []
-        let ecg10 = []
-        let ecg11 = []*/
-        let i = 0
-        let y = 0
-        d3.csv(data,function(data){
-            // Write code dealing with data
-            //console.log(data);
-            // Create an array of maps
-            //console.log(data['I'] + 0)
-            y = data['I'] + 0
-            labels.push(i)
-            array.push(data);
-            ecg0.push(parseInt(data['I'],10))
-            //console.log(ecg0[i])
-            /*ecg1.push(parseInt(data['II'],10))
-            ecg2.push(parseInt(data['III'],10))
-            ecg3.push(parseInt(data['aVR'],10))
-            ecg4.push(parseInt(data['aVL'],10))
-            ecg5.push(parseInt(data['aVF'],10))
-            ecg6.push(parseInt(data['V1'],10))
-            ecg7.push(parseInt(data['V2'],10))
-            ecg8.push(parseInt(data['V3'],10))
-            ecg9.push(parseInt(data['V4'],10))
-            ecg10.push(parseInt(data['V5'],10))
-            ecg11.push(parseInt(data['V6'],10))*/
-            i++
+        //Define arrays
+        var lead_i = [];
+        let lead_ii = [];
+        let lead_iii = [];
+        let lead_avr = [];
+        let lead_avl = [];
+        let lead_avf = [];
+        let lead_v1 = [];
+        let lead_v2 = [];
+        let lead_v3 = [];
+        let lead_v4 = [];
+        let lead_v5 = [];
+        let lead_v6 = [];
+    
+        /*
+        var parsed_csv = d3.csv(data).then(function(data)
+        {
+            console.log(data[0].I);
         });
-        //console.log(ecg0[0])
-        let fake_data = [-92, -87, -82, -78, -73, -73, -92, -190, -287]
-        if (fake_data[0] !== ecg0[0]){
-            console.log("Something is wrong")
-            console.log("   fake_data: " + fake_data[0])
-            console.log("   ecg0: " + ecg0[0])
-        }
-        //console.log(fake_data)
-        //console.log(y)
-        /*let ecg0 = array.map(function(pt){
-            //console.log(pt);
-            return pt;
-        });*/
+        */
 
+        //Parse the CSV into an array of objects where each object represents a row
+        var parsed_csv = d3.csv(data);
+
+        //Resolve the returned promise to gain access to the newly created array
+        //Then iterate through it and assign the correct values to the correct arrays
+        parsed_csv.then(function(data)
+        {
+            //console.log(data[0].I);
+            for(var i = 0; i < data.length; i++)
+            {
+                //Push the data points of the current object to the appropriate arrays
+                lead_i.push(data[i].I);
+                lead_ii.push(data[i].II);
+                lead_iii.push(data[i].III);
+                lead_avr.push(data[i].aVR);
+                lead_avl.push(data[i].aVL);
+                lead_avf.push(data[i].aVF);
+                lead_v1.push(data[i].V1);
+                lead_v2.push(data[i].V2);
+                lead_v3.push(data[i].V3);
+                lead_v4.push(data[i].V4);
+                lead_v5.push(data[i].V5);
+                lead_v6.push(data[i].V6);
+            }
+        });
+
+        //Fake data stuff
+        let fake_data = [-92, -87, -82, -78, -73, -73, -92, -190, -287]
+
+        //Graph Stuff
         this.state = {
             graphData:{
                 //labels: ['Boston', 'New York', 'Paris'],
@@ -75,7 +71,7 @@ class Graph extends Component{
                 {
                     label:'Population',
                     //data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
-                    data: fake_data,
+                    data: lead_i,
                     backgroundColor:['rgba(255,99,132,0.6)',]
                       
                 }
@@ -83,7 +79,8 @@ class Graph extends Component{
         }
     }
 }
-    
+
+    //Render the graph
     render(){
         return(
             <div className="graph">
