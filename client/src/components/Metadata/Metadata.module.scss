@@ -6,7 +6,6 @@
 .metadata {
 	background-color: white;
 	padding: 10px;
-	font-size: 30px;
 	text-align: center;
 	border: 1px solid #f5f5f5;
 	grid-column: 1 / -1;
@@ -16,11 +15,12 @@
 }
 
 .metadataInfo {
-	font-size: 14px;
+	font-size: 16px;
 	padding: 5px;
 }
 
 .metadataHeader {
+	font-size: 30px;
 	grid-column: 1 / -1;
-	padding: 30px;
+	padding: 10px;
 }

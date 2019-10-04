@@ -16,7 +16,7 @@ export default class Metadata extends React.Component{
         })
 
         this.state = {
-            patientID: headers,
+            patientID: 123456789,
             scanID: 987654321,
             gender: "Male",
             age: 21,
@@ -32,7 +32,7 @@ export default class Metadata extends React.Component{
         return(
             <div className={styles.metadata}>
                 <Grid>
-                    <h4 className={styles.metadataHeader}>Patient Metadata</h4>
+                    <h4 className={styles.metadataHeader}>Patient Information</h4>
                     <div className={styles.metadataInfo}><b>Patient ID:</b> {this.state.patientID}</div>
                     <div className={styles.metadataInfo}><b>ECG ID:</b> {this.state.scanID}</div>
                     <div className={styles.metadataInfo}><b>Gender:</b> {this.state.gender}</div>

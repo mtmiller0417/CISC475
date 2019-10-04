@@ -1,20 +1,20 @@
 .gridItem {
-  background-color: white;
-  padding: 20px;
-  font-size: 30px;
-  text-align: center;
-  border: 1px solid #f5f5f5;
+	background-color: white;
+	padding: 20px;
+	font-size: 30px;
+	text-align: center;
+	border: 1px solid #f5f5f5;
 }
 
 .gridItem:hover {
-  cursor: pointer;
-  background-color: #f1f1f1;
+	cursor: pointer;
+	background-color: #f1f1f1;
 }
 
-.gridItem:nth-child(12) {
-  border-bottom-left-radius: 11px;
+.gridItem:nth-child(11) {
+	border-bottom-left-radius: 11px;
 }
 
 .gridItem:nth-child(13) {
-  border-bottom-right-radius: 11px;
+	border-bottom-right-radius: 11px;
 }
