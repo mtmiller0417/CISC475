@@ -58,6 +58,7 @@ class Graph extends Component{
         //Then iterate through it and assign the correct values to the correct arrays
         parsed_csv.then(function(data)
         {
+            console.log(data)
             //console.log(data[0].I);
             for(var i = 0; i < data.length; i++)
             {
@@ -75,7 +76,7 @@ class Graph extends Component{
                 lead_v5.push(data[i].V5);
                 lead_v6.push(data[i].V6);
 
-                console.log(data[i]);
+                //console.log(data[i]);
             }
 
             //console.log(lead_ii[0]);
@@ -93,8 +94,8 @@ class Graph extends Component{
                 datasets:[
                 {
                     label:'Lead I',
-                    //data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
-                    data: lead_i,
+                    data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
+                    //data: lead_i,
                     backgroundColor:['rgba(255,99,132,0.6)',]
                 }
             ]
@@ -112,8 +113,8 @@ class Graph extends Component{
                         scales: {
                             yAxes: [{
                                 ticks: {
-                                    min: -1000,
-                                    max: 1000
+                                    //min: -1000,
+                                    //max: 1000
                                 }
                             }]
                         }
