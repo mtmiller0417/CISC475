@@ -96,11 +96,12 @@ class Graph extends Component{
                     label:'Lead I',
                     data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
                     //data: lead_i,
-                    backgroundColor:['rgba(255,99,132,0.6)',]
+                    //backgroundColor:['rgba(255,99,132,0.6)',]
                 }
             ]
         }
     }
+        
 }
 
     //Render the graph
@@ -125,4 +126,4 @@ class Graph extends Component{
     }
 }
 
-export default Graph;
+export default Graph; 
