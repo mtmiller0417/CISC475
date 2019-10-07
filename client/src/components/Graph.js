@@ -7,6 +7,12 @@ import data from '../csv_files/13013356000.csv'; // Hard coded in...
 //C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\csv_files\13013356000.csv       // file
 //C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\components\Graph.js             // Graph.js
 
+let dynamic_labels = [2500];
+for(var i = 0; i < 2500; i++)
+{
+    dynamic_labels[i] = i;
+}
+
 class Graph extends Component{
     constructor(props){
         super(props);
@@ -89,7 +95,7 @@ class Graph extends Component{
         this.state = {
             graphData:{
                 //labels: ['Boston', 'New York', 'Paris'],
-                labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+                labels: dynamic_labels,
                 //labels: labels,
                 datasets:[
                 {
