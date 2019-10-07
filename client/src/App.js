@@ -4,6 +4,7 @@ import React from 'react';
 // need to add .js to the file name at the end (so the last part doesn't have
 // to be /MainContainer.js)
 import MainContainer from './components/MainContainer/MainContainer';
+import Header from './components/Header/Header';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         // we are passing a random message in it. In MainContainer.js, you can see how we
         // use this field
       }
+      <Header />
       <MainContainer message="Hello World" />
     </div>
   );

@@ -1,14 +1,21 @@
-import React from 'react'
-import {csv} from 'd3-fetch'
+import React from 'react';
+import {csv} from 'd3-fetch';
+import data from './meta.csv';
 import Grid from '../Grid/Grid';
 import styles from './Metadata.module.scss';
 
 export default class Metadata extends React.Component{
     constructor(props){
         super(props);
+
+        let headers = [];
+
+        let csvData = csv(data, function(data){
+            headers = data.columns;
+            console.log(headers);
+        })
+
         this.state = {
-            filePath: null,
-            csvData: csv('../../../ECG Dataset/Metadata.csv'),
             patientID: 123456789,
             scanID: 987654321,
             gender: "Male",
@@ -25,7 +32,7 @@ export default class Metadata extends React.Component{
         return(
             <div className={styles.metadata}>
                 <Grid>
-                    <h4 className={styles.metadataHeader}>Patient Metadata</h4>
+                    <h4 className={styles.metadataHeader}>Patient Information</h4>
                     <div className={styles.metadataInfo}><b>Patient ID:</b> {this.state.patientID}</div>
                     <div className={styles.metadataInfo}><b>ECG ID:</b> {this.state.scanID}</div>
                     <div className={styles.metadataInfo}><b>Gender:</b> {this.state.gender}</div>
