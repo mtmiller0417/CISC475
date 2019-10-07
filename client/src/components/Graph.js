@@ -10,7 +10,9 @@ import data from '../csv_files/13013356000.csv'; // Hard coded in...
 class Graph extends Component{
     constructor(props){
         super(props);
+    }
 
+    componentWillMount(){
         //Define arrays
         var lead_i = [];
         let lead_ii = [];
@@ -53,10 +55,13 @@ class Graph extends Component{
                 V6: +d[" V6"]
             }
         });
+        this.state={
+            graphData: ''
+        }
         
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
-        parsed_csv.then(function(data)
+        parsed_csv.then((data) =>
         {
             console.log(data)
             //console.log(data[0].I);
@@ -75,18 +80,29 @@ class Graph extends Component{
                 lead_v4.push(data[i].V4);
                 lead_v5.push(data[i].V5);
                 lead_v6.push(data[i].V6);
-
-                //console.log(data[i]);
             }
-
-            //console.log(lead_ii[0]);
+            this.setState({
+                graphData:{
+                    //labels: ['Boston', 'New York', 'Paris'],
+                    labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+                    //labels: labels,
+                    datasets:[
+                    {
+                        label:'Lead I',
+                        //data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
+                        data: lead_i,
+                        //backgroundColor:['rgba(255,99,132,0.6)',]
+                    }
+                ]
+            }
+            })
         });
 
         //Fake data stuff
         //let fake_data = [-92, -87, -82, -78, -73, -73, -92, -190, -287]
 
         //Graph Stuff
-        this.state = {
+        /*this.state = {
             graphData:{
                 //labels: ['Boston', 'New York', 'Paris'],
                 labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
@@ -100,28 +116,36 @@ class Graph extends Component{
                 }
             ]
         }
-    }
-        
-}
+    }*/
+    }   
 
     //Render the graph
     render(){
         return(
-            <div className="graph">
-                <Line
-                    data={this.state.graphData}
-                    options={{
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    //min: -1000,
-                                    //max: 1000
+            <React.Fragment>
+                {
+                    this.state.graphData ? 
+                    <div className="graph">
+                        <Line
+                            data={this.state.graphData}
+                            options={{
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            //min: -1000,
+                                            //max: 1000
+                                        }
+                                    }]
                                 }
-                            }]
-                        }
-                    }}
-               />
-            </div>
+                            }}
+                         />
+                    </div>
+                    :
+                    <div class="graph">
+                        Loading...
+                    </div>
+                }
+            </React.Fragment>
          )
     }
 }
