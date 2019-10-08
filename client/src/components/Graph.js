@@ -32,6 +32,8 @@ class Graph extends Component{
         let lead_v4 = [];
         let lead_v5 = [];
         let lead_v6 = [];
+
+        let labels = [];
     
         /*
         var parsed_csv = d3.csv(data).then(function(data)
@@ -86,18 +88,22 @@ class Graph extends Component{
                 lead_v4.push(data[i].V4);
                 lead_v5.push(data[i].V5);
                 lead_v6.push(data[i].V6);
+                labels.push(i);
             }
             this.setState({
                 graphData:{
                     //labels: ['Boston', 'New York', 'Paris'],
-                    labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
-                    //labels: labels,
+                    //labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+                    labels: labels,
                     datasets:[
                     {
+                        radius: 0, // Makes the dots go away
                         label:'Lead I',
+                        fill: false,
                         //data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
+                        borderColor: ['black'],
                         data: lead_i,
-                        //backgroundColor:['rgba(255,99,132,0.6)',]
+                        backgroundColor:['rgba(255,99,132,0.6)',] // Uses the color
                     }
                 ]
             }
