@@ -10,8 +10,9 @@ export default class MainContainer extends React.Component {
 		return (
 			<div className={styles.container}>
 				<Grid>
-					<Metadata />
 					<Header />
+					<Metadata />
+					<Metadata />
 				</Grid>
 
 				<Grid>

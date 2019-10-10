@@ -14,6 +14,7 @@
 	border-color: lightgray;
 	border-width: medium;
 	border-radius: 10px;
-	height: 25%;
+	height: auto;
 	width: 50%;
+	grid-column: span 2;
 }

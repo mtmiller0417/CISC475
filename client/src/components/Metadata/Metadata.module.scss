@@ -9,7 +9,6 @@
 	border-top-right-radius: 11px;
 	border-top-left-radius: 11px;
 	font-family: Greycliff;
-	width: 20%;
 	margin: 10px auto;
 }
 
@@ -19,6 +18,11 @@
 }
 
 .metadataHeader {
-	font-size: 1px;
+	font-size: 16px;
 	padding: 10px;
+}
+
+.metadataGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
 }
