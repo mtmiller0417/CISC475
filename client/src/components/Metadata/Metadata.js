@@ -1,7 +1,6 @@
 import React from "react";
 import * as d3 from "d3";
 import data from "./meta.csv";
-import Grid from "../Grid/Grid";
 import styles from "./Metadata.module.scss";
 
 export default class Metadata extends React.Component {
