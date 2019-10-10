@@ -1,0 +1,32 @@
+@font-face {
+	font-family: Greycliff_Bold;
+	src: url("../../Fonts/Greycliff-CF-Bold.otf");
+}
+
+.controlPanel {
+	background-color: lightgreen;
+	text-align: center;
+	padding: 10px;
+	font-family: Greycliff_Bold;
+	border-radius: 11px;
+	border: solid;
+	border-width: medium;
+	border-color: darkgray;
+}
+
+.controlHeader {
+	grid-column: span 3;
+}
+
+.controlGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
+.controlButtonText {
+	padding: 10px;
+}
+
+.controlButton {
+	padding: 20px;
+}

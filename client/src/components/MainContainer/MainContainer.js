@@ -4,6 +4,7 @@ import Grid from "../Grid/Grid";
 import GridItem from "../Grid/GridItem/GridItem";
 import Metadata from "../Metadata/Metadata";
 import Header from "../Header/Header";
+import ControlPanel from "../ControlPanel/ControlPanel";
 
 export default class MainContainer extends React.Component {
 	render() {
@@ -12,7 +13,7 @@ export default class MainContainer extends React.Component {
 				<Grid>
 					<Header />
 					<Metadata />
-					<Metadata />
+					<ControlPanel />
 				</Grid>
 
 				<Grid>
