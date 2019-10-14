@@ -46,16 +46,16 @@ export default class Metadata extends React.Component {
 		csvData.then(data => {
 			console.log(data);
 
-			ecg_ID.push(data[3].ECGID);
-			patient_ID.push(data[3].PatientID);
-			gender.push(data[3].Gender);
-			race.push(data[3].Race);
-			age.push(data[3].Age);
-			height.push(data[3].Height);
-			weight.push(data[3].Weight);
-			ac_Date.push(data[3].AcquisitionDate);
-			ac_Time.push(data[3].AcquisitionTime);
-			sample_base.push(data[3].SampleBase);
+			ecg_ID.push(data[1].ECGID);
+			patient_ID.push(data[1].PatientID);
+			gender.push(data[1].Gender);
+			race.push(data[1].Race);
+			age.push(data[1].Age);
+			height.push(data[1].Height);
+			weight.push(data[1].Weight);
+			ac_Date.push(data[1].AcquisitionDate);
+			ac_Time.push(data[1].AcquisitionTime);
+			sample_base.push(data[1].SampleBase);
 
 			this.setState({
 				patientID: patient_ID,
