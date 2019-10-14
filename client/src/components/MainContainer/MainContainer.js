@@ -5,6 +5,7 @@ import GridItem from '../Grid/GridItem/GridItem';
 import Metadata from '../Metadata/Metadata';
 
 export default class MainContainer extends React.Component {
+  // Use props
   render() {
     return(
       <div className={styles.container}>
