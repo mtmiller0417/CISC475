@@ -34,13 +34,6 @@ class Graph extends Component{
         let lead_v6 = [];
 
         let labels = [];
-    
-        /*
-        var parsed_csv = d3.csv(data).then(function(data)
-        {
-            console.log(data[0].I);
-        });
-        */
 
         //Parse the CSV into an array of objects where each object represents a row
         var parsed_csv = d3.csv(data, function(d)
@@ -92,15 +85,12 @@ class Graph extends Component{
             }
             this.setState({
                 graphData:{
-                    //labels: ['Boston', 'New York', 'Paris'],
-                    //labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
                     labels: labels,
                     datasets:[
                     {
                         radius: 0, // Makes the dots go away
                         label:'Lead I',
                         fill: false,
-                        //data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
                         borderColor: ['black'],
                         data: lead_i,
                         backgroundColor:['rgba(255,99,132,0.6)',],
@@ -111,25 +101,6 @@ class Graph extends Component{
             })
         });
 
-        //Fake data stuff
-        //let fake_data = [-92, -87, -82, -78, -73, -73, -92, -190, -287]
-
-        //Graph Stuff
-        /*this.state = {
-            graphData:{
-                //labels: ['Boston', 'New York', 'Paris'],
-                labels: dynamic_labels,
-                //labels: labels,
-                datasets:[
-                {
-                    label:'Lead I',
-                    data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
-                    //data: lead_i,
-                    //backgroundColor:['rgba(255,99,132,0.6)',]
-                }
-            ]
-        }
-    }*/
     }   
 
     //Render the graph
@@ -143,6 +114,15 @@ class Graph extends Component{
                             data={this.state.graphData}
                             height={50}
                             options={{
+                                title: {
+                                display: true,
+                                text: 'Lead I',
+                                fontSize: 8,
+                                fontFamily: "sans-serif"
+                                },
+                                legend: {
+                                    display: false
+                                },
                                 scales: {
                                     yAxes: [{
                                         ticks: {
