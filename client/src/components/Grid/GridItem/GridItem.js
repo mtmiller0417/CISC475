@@ -6,7 +6,7 @@ export default class GridItem extends React.Component {
   render() {
     return(
       <div className={styles.gridItem}>
-        <Graph />
+        <Graph inputArr={this.props.inputArr}/>
       </div>
     );
   }

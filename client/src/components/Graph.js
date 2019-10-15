@@ -19,6 +19,7 @@ class Graph extends Component{
     }
 
     componentWillMount(){
+
         //Define arrays
         var lead_i = [];
         let lead_ii = [];
@@ -83,6 +84,7 @@ class Graph extends Component{
                 lead_v6.push(data[i].V6);
                 labels.push(i);
             }
+
             this.setState({
                 graphData:{
                     labels: labels,
@@ -92,7 +94,7 @@ class Graph extends Component{
                         label:'Lead I',
                         fill: false,
                         borderColor: ['black'],
-                        data: lead_i,
+                        data: this.props.inputArr,
                         backgroundColor:['rgba(255,99,132,0.6)',],
                         borderWidth: 1
                     }
@@ -100,7 +102,6 @@ class Graph extends Component{
             }
             })
         });
-
     }   
 
     //Render the graph
