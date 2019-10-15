@@ -20,6 +20,7 @@ class Graph extends Component{
 
     componentWillMount(){
 
+        
         //Define arrays
         var lead_i = [];
         let lead_ii = [];
@@ -56,7 +57,9 @@ class Graph extends Component{
                 V5: +d[" V5"],
                 V6: +d[" V6"]
             }
-        });
+        }); 
+
+
         this.state={
             graphData: ''
         }
@@ -84,17 +87,18 @@ class Graph extends Component{
                 lead_v6.push(data[i].V6);
                 labels.push(i);
             }
+            
 
             this.setState({
                 graphData:{
-                    labels: labels,
+                    labels: this.props.inputArr.labels,
                     datasets:[
                     {
                         radius: 0, // Makes the dots go away
-                        label:'Lead I',
+                        label: this.props.inputArr.title,
                         fill: false,
                         borderColor: ['black'],
-                        data: this.props.inputArr,
+                        data: this.props.inputArr.data,
                         backgroundColor:['rgba(255,99,132,0.6)',],
                         borderWidth: 1
                     }
@@ -117,8 +121,8 @@ class Graph extends Component{
                             options={{
                                 title: {
                                 display: true,
-                                text: 'Lead I',
-                                fontSize: 8,
+                                text: this.props.inputArr.title,
+                                fontSize: 18,
                                 fontFamily: "sans-serif"
                                 },
                                 legend: {
@@ -128,8 +132,8 @@ class Graph extends Component{
                                     yAxes: [{
                                         ticks: {
                                             stacked: true
-                                            //min: -1000,
-                                            //max: 1000
+                                            //min: -2000,
+                                            //max: 2000
                                         }
                                     }]
                                 }

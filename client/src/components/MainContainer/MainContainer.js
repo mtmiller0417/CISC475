@@ -89,18 +89,18 @@ export default class MainContainer extends React.Component {
 				</Grid>
 
 				<Grid>
-					<GridItem inputArr={lead_i}/>
-					<GridItem inputArr={lead_avl}/>
-					<GridItem inputArr={lead_ii}/>
-					<GridItem inputArr={lead_iii}/>
-					<GridItem inputArr={lead_avf}/>
-					<GridItem inputArr={lead_avr}/>
-					<GridItem inputArr={lead_v1}/>
-					<GridItem inputArr={lead_v2}/>
-					<GridItem inputArr={lead_v3}/>
-					<GridItem inputArr={lead_v4}/>
-					<GridItem inputArr={lead_v5}/>
-					<GridItem inputArr={lead_v6}/>
+					<GridItem inputArr={{data: lead_i, title: "Lead I", labels: labels}}/>
+					<GridItem inputArr={{data: lead_avl, title: "Lead aVL", labels: labels}}/>
+					<GridItem inputArr={{data: lead_ii, title: "Lead II", labels: labels}}/>
+					<GridItem inputArr={{data: lead_iii, title: "Lead III", labels: labels}}/>
+					<GridItem inputArr={{data: lead_avf, title: "Lead aVF", labels: labels}}/>
+					<GridItem inputArr={{data: lead_avr, title: "Lead aVR", labels: labels}}/>
+					<GridItem inputArr={{data: lead_v1, title: "Lead V1", labels: labels}}/>
+					<GridItem inputArr={{data: lead_v2, title: "Lead V2", labels: labels}}/>
+					<GridItem inputArr={{data: lead_v3, title: "Lead V3", labels: labels}}/>
+					<GridItem inputArr={{data: lead_v4, title: "Lead V4", labels: labels}}/>
+					<GridItem inputArr={{data: lead_v5, title: "Lead V5", labels: labels}}/>
+					<GridItem inputArr={{data: lead_v6, title: "Lead V6", labels: labels}}/>
 				</Grid>
 			</div>
 		);
