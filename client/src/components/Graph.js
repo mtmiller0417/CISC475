@@ -103,7 +103,8 @@ class Graph extends Component{
                         //data: [-92, -87, -82, -78, -73, -73, -92, -190, -287],
                         borderColor: ['black'],
                         data: lead_i,
-                        backgroundColor:['rgba(255,99,132,0.6)',] // Uses the color
+                        backgroundColor:['rgba(255,99,132,0.6)',],
+                        borderWidth: 1
                     }
                 ]
             }
@@ -140,10 +141,12 @@ class Graph extends Component{
                     <div className="graph">
                         <Line
                             data={this.state.graphData}
+                            height={50}
                             options={{
                                 scales: {
                                     yAxes: [{
                                         ticks: {
+                                            stacked: true
                                             //min: -1000,
                                             //max: 1000
                                         }
