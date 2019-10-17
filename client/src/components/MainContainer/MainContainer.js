@@ -11,10 +11,27 @@ import data from '../../csv_files/13013356000.csv'; // Hard coded in...
 export default class MainContainer extends React.Component {
 	constructor(props){
         super(props);
+
+        // Set initial state 
+        this.state={
+            labels: [],
+            i: '',
+            ii: '',
+            iii: '',
+            avr: '',
+            avl: '',
+            avf: '',
+            v1: '',
+            v2: '',
+            v3: '',
+            v4: '',
+            v5: '',
+            v6: ''
+        }
     }
-	
-	render() {
-		//Define arrays
+
+    componentWillMount(){
+        //Define arrays
         var lead_i = [];
         let lead_ii = [];
         let lead_iii = [];
@@ -51,15 +68,11 @@ export default class MainContainer extends React.Component {
                 V6: +d[" V6"]
             }
         });
-        this.state={
-            graphData: ''
-        }
         
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
         parsed_csv.then((data) =>
         {
-            console.log(data)
             for(var i = 0; i < data.length; i++)
             {
                 //Push the data points of the current object to the appropriate arrays
@@ -76,9 +89,28 @@ export default class MainContainer extends React.Component {
                 lead_v5.push(data[i].V5);
                 lead_v6.push(data[i].V6);
                 labels.push(i);
-			}
-		})
+            }
 
+            // Update the state and cause a re-render
+            this.setState({
+                labels: labels,
+                i: lead_i,
+                ii: lead_ii,
+                iii: lead_iii,
+                avr: lead_avr,
+                avl: lead_avl,
+                avf: lead_avf,
+                v1: lead_v1,
+                v2: lead_v2,
+                v3: lead_v3,
+                v4: lead_v4,
+                v5: lead_v5,
+                v6: lead_v6
+            })   
+		})
+    }
+	
+	render() {
 		return (
 			<div className={styles.container}>
 				<Grid>
@@ -88,18 +120,18 @@ export default class MainContainer extends React.Component {
 				</Grid>
 
 				<Grid>
-					<GridItem inputArr={{data: lead_i, title: "Lead I", labels: labels}}/>
-					<GridItem inputArr={{data: lead_avl, title: "Lead aVL", labels: labels}}/>
-					<GridItem inputArr={{data: lead_ii, title: "Lead II", labels: labels}}/>
-					<GridItem inputArr={{data: lead_iii, title: "Lead III", labels: labels}}/>
-					<GridItem inputArr={{data: lead_avf, title: "Lead aVF", labels: labels}}/>
-					<GridItem inputArr={{data: lead_avr, title: "Lead aVR", labels: labels}}/>
-					<GridItem inputArr={{data: lead_v1, title: "Lead V1", labels: labels}}/>
-					<GridItem inputArr={{data: lead_v2, title: "Lead V2", labels: labels}}/>
-					<GridItem inputArr={{data: lead_v3, title: "Lead V3", labels: labels}}/>
-					<GridItem inputArr={{data: lead_v4, title: "Lead V4", labels: labels}}/>
-					<GridItem inputArr={{data: lead_v5, title: "Lead V5", labels: labels}}/>
-					<GridItem inputArr={{data: lead_v6, title: "Lead V6", labels: labels}}/>
+					<GridItem inputArr={{data: this.state.i, title: "Lead I", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.avl, title: "Lead aVL", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.ii, title: "Lead II", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.iii, title: "Lead III", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.avf, title: "Lead aVF", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.avr, title: "Lead aVR", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.v1, title: "Lead V1", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.v2, title: "Lead V2", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.v3, title: "Lead V3", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.v4, title: "Lead V4", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.v5, title: "Lead V5", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.v6, title: "Lead V6", labels: this.state.labels}}/>
 				</Grid>
 			</div>
 		);
