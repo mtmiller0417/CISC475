@@ -60,7 +60,6 @@ export default class MainContainer extends React.Component {
         parsed_csv.then((data) =>
         {
             console.log(data)
-            //console.log(data[0].I);
             for(var i = 0; i < data.length; i++)
             {
                 //Push the data points of the current object to the appropriate arrays

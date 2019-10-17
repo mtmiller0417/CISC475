@@ -129,11 +129,28 @@ class Graph extends Component{
                                     display: false
                                 },
                                 scales: {
-                                    yAxes: [{
+                                    xAxes: [{
+                                        //type: 'linear', // This causes no data to show...
                                         ticks: {
-                                            stacked: true
+                                            //stacked: true,
+                                            stepSize: 100
+                                        },
+                                        // Vertical grid-lines
+                                        gridLines: {
+                                            display: true,
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        type: 'linear', // Doesn't cause a problem in y-axis
+                                        ticks: {
+                                            //stepSize: 500,
+                                            stacked: true,
+                                            //stepSize: 1000
                                             //min: -2000,
                                             //max: 2000
+                                        },
+                                        gridLines: {
+                                            display: true
                                         }
                                     }]
                                 }
