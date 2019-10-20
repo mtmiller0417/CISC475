@@ -41,6 +41,27 @@ export default class MainContainer extends React.Component {
         }
     }
 
+    //Function to generalize the loading of annotation files
+    //Since the logic for all 5 is the exact same
+    //Receives a CSV file and an array for output
+    //Processes the CSV file into the specified array
+    //Returns nothing
+    parseAnnotationCsv(inputCsv, outputArr)
+    {
+        var parsed_p = d3.csv(inputCsv).then(function(data)
+        {
+            return data;
+        })
+
+        parsed_p.then(function(data)
+        {
+            for(var i = 0; i < data.columns.length; i++)
+            {
+                outputArr.push(+data.columns[i]);
+            }
+        })
+    }
+
     componentWillMount(){
         //Define arrays
         var lead_i = [];
@@ -123,22 +144,21 @@ export default class MainContainer extends React.Component {
                 v6: lead_v6
             })   
         })
-        
-        //Handle Parsing the annotation data 
-        var parsed_p = d3.csv(csv_p).then(function(data)
-        {
-            return data;
-        })
 
-        parsed_p.then(function(data)
-        {
-            for(var i = 0; i < data.columns.length; i++)
-            {
-                annotation_p.push(+data.columns[i]);
-                //console.log(data.columns[i]);
-            }
+        //Parse and store all annotation data in the appropriate arrays
+        this.parseAnnotationCsv(csv_p, annotation_p);
+        this.parseAnnotationCsv(csv_q, annotation_q);
+        this.parseAnnotationCsv(csv_r, annotation_r);
+        this.parseAnnotationCsv(csv_s, annotation_s);
+        this.parseAnnotationCsv(csv_t, annotation_t);
 
-            console.log(annotation_p);
+        //Update the state again now that annotation data is parsed
+        this.setState({
+                p: annotation_p,
+                q: annotation_q,
+                r: annotation_r,
+                s: annotation_s,
+                t: annotation_t
         })
     }
 	
@@ -152,20 +172,22 @@ export default class MainContainer extends React.Component {
 				</Grid>
 
 				<Grid>
-					<GridItem inputArr={{data: this.state.i, title: "Lead I", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.avl, title: "Lead aVL", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.ii, title: "Lead II", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.iii, title: "Lead III", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.avf, title: "Lead aVF", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.avr, title: "Lead aVR", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v1, title: "Lead V1", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v2, title: "Lead V2", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v3, title: "Lead V3", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v4, title: "Lead V4", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v5, title: "Lead V5", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v6, title: "Lead V6", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.i, title: "Lead I", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.avl, title: "Lead aVL", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.ii, title: "Lead II", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.iii, title: "Lead III", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.avf, title: "Lead aVF", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.avr, title: "Lead aVR", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.v1, title: "Lead V1", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.v2, title: "Lead V2", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.v3, title: "Lead V3", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.v4, title: "Lead V4", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.v5, title: "Lead V5", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
+					<GridItem inputArr={{data: this.state.v6, title: "Lead V6", labels: this.state.labels, p: this.p, q: this.q, r: this.r, s: this.s, t: this.t}}/>
 				</Grid>
 			</div>
 		);
 	}
 }
+
+
