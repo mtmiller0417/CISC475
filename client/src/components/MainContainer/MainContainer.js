@@ -7,6 +7,12 @@ import Header from "../Header/Header";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import * as d3 from 'd3';
 import data from '../../csv_files/13013356000.csv'; // Hard coded in...
+import annotation_p from '../../csv_files/Annotattion/P.csv';
+import annotation_q from '../../csv_files/Annotattion/Q.csv';
+import annotation_r from '../../csv_files/Annotattion/R.csv';
+import annotation_s from '../../csv_files/Annotattion/S.csv';
+import annotation_t from '../../csv_files/Annotattion/T.csv';
+
 
 export default class MainContainer extends React.Component {
 	constructor(props){
@@ -26,7 +32,12 @@ export default class MainContainer extends React.Component {
             v3: '',
             v4: '',
             v5: '',
-            v6: ''
+            v6: '',
+            p: '',
+            q: '',
+            r: '',
+            s: '',
+            t: ''
         }
     }
 
@@ -44,7 +55,11 @@ export default class MainContainer extends React.Component {
         let lead_v4 = [];
         let lead_v5 = [];
         let lead_v6 = [];
-
+        let annotation_p = [];
+        let annotation_q = [];
+        let annotation_r = [];
+        let annotation_s = [];
+        let annotation_t = [];
         let labels = [];
 
         //Parse the CSV into an array of objects where each object represents a row
@@ -107,7 +122,9 @@ export default class MainContainer extends React.Component {
                 v5: lead_v5,
                 v6: lead_v6
             })   
-		})
+        })
+        
+        //Handle Parsing the annotation data 
     }
 	
 	render() {
