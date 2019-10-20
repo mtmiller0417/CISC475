@@ -5,10 +5,6 @@ class Graph extends Component{
     constructor(props){
         super(props);
 
-        //console.log("Datalength1: " + this.props.inputArr.data.length);
-        console.log("Graph props:")
-        console.log(this.props);
-
         this.state = ({
             graphData:{
                 labels: this.props.inputArr.labels,
@@ -29,6 +25,11 @@ class Graph extends Component{
     // Call this when this component receives new props
     componentWillReceiveProps(props){
         // Calling setState causes this component to re-render with the new data its received
+
+        console.log("Updated Graph props:")
+        console.log(props);
+
+
         this.setState({
             graphData:{
                 labels: props.inputArr.labels,
