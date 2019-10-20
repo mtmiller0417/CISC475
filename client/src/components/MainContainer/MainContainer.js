@@ -7,11 +7,11 @@ import Header from "../Header/Header";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import * as d3 from 'd3';
 import data from '../../csv_files/13013356000.csv'; // Hard coded in...
-import annotation_p from '../../csv_files/Annotattion/P.csv';
-import annotation_q from '../../csv_files/Annotattion/Q.csv';
-import annotation_r from '../../csv_files/Annotattion/R.csv';
-import annotation_s from '../../csv_files/Annotattion/S.csv';
-import annotation_t from '../../csv_files/Annotattion/T.csv';
+import csv_p from '../../csv_files/Annotattion/P.csv';
+import csv_q from '../../csv_files/Annotattion/Q.csv';
+import csv_r from '../../csv_files/Annotattion/R.csv';
+import csv_s from '../../csv_files/Annotattion/S.csv';
+import csv_t from '../../csv_files/Annotattion/T.csv';
 
 
 export default class MainContainer extends React.Component {
@@ -125,6 +125,21 @@ export default class MainContainer extends React.Component {
         })
         
         //Handle Parsing the annotation data 
+        var parsed_p = d3.csv(csv_p).then(function(data)
+        {
+            return data;
+        })
+
+        parsed_p.then(function(data)
+        {
+            for(var i = 0; i < data.columns.length; i++)
+            {
+                annotation_p.push(+data.columns[i]);
+                //console.log(data.columns[i]);
+            }
+
+            console.log(annotation_p);
+        })
     }
 	
 	render() {
