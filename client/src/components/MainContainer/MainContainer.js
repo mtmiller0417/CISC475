@@ -7,6 +7,12 @@ import Header from "../Header/Header";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import * as d3 from 'd3';
 import data from '../../csv_files/13013356000.csv'; // Hard coded in...
+import csv_p from '../../csv_files/Annotattion/P.csv';
+import csv_q from '../../csv_files/Annotattion/Q.csv';
+import csv_r from '../../csv_files/Annotattion/R.csv';
+import csv_s from '../../csv_files/Annotattion/S.csv';
+import csv_t from '../../csv_files/Annotattion/T.csv';
+
 
 export default class MainContainer extends React.Component {
 	constructor(props){
@@ -26,8 +32,34 @@ export default class MainContainer extends React.Component {
             v3: '',
             v4: '',
             v5: '',
-            v6: ''
+            v6: '',
+            p: '',
+            q: '',
+            r: '',
+            s: '',
+            t: ''
         }
+    }
+
+    //Function to generalize the loading of annotation files
+    //Since the logic for all 5 is the exact same
+    //Receives a CSV file and an array for output
+    //Processes the CSV file into the specified array
+    //Returns nothing
+    parseAnnotationCsv(inputCsv, outputArr)
+    {
+        var parsed_p = d3.csv(inputCsv).then(function(data)
+        {
+            return data;
+        })
+
+        parsed_p.then(function(data)
+        {
+            for(var i = 0; i < data.columns.length; i++)
+            {
+                outputArr.push(+data.columns[i]);
+            }
+        })
     }
 
     componentWillMount(){
@@ -44,7 +76,11 @@ export default class MainContainer extends React.Component {
         let lead_v4 = [];
         let lead_v5 = [];
         let lead_v6 = [];
-
+        let annotation_p = [];
+        let annotation_q = [];
+        let annotation_r = [];
+        let annotation_s = [];
+        let annotation_t = [];
         let labels = [];
 
         //Parse the CSV into an array of objects where each object represents a row
@@ -107,7 +143,23 @@ export default class MainContainer extends React.Component {
                 v5: lead_v5,
                 v6: lead_v6
             })   
-		})
+        })
+
+        //Parse and store all annotation data in the appropriate arrays
+        this.parseAnnotationCsv(csv_p, annotation_p);
+        this.parseAnnotationCsv(csv_q, annotation_q);
+        this.parseAnnotationCsv(csv_r, annotation_r);
+        this.parseAnnotationCsv(csv_s, annotation_s);
+        this.parseAnnotationCsv(csv_t, annotation_t);
+
+        //Update the state again now that annotation data is parsed
+        this.setState({
+                p: annotation_p,
+                q: annotation_q,
+                r: annotation_r,
+                s: annotation_s,
+                t: annotation_t
+        })
     }
 	
 	render() {
@@ -120,20 +172,22 @@ export default class MainContainer extends React.Component {
 				</Grid>
 
 				<Grid>
-					<GridItem inputArr={{data: this.state.i, title: "Lead I", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.avl, title: "Lead aVL", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.ii, title: "Lead II", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.iii, title: "Lead III", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.avf, title: "Lead aVF", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.avr, title: "Lead aVR", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v1, title: "Lead V1", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v2, title: "Lead V2", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v3, title: "Lead V3", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v4, title: "Lead V4", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v5, title: "Lead V5", labels: this.state.labels}}/>
-					<GridItem inputArr={{data: this.state.v6, title: "Lead V6", labels: this.state.labels}}/>
+					<GridItem inputArr={{data: this.state.i, title: "Lead I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.avl, title: "Lead aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.ii, title: "Lead II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.iii, title: "Lead III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.avf, title: "Lead aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.avr, title: "Lead aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.v1, title: "Lead V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.v2, title: "Lead V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.v3, title: "Lead V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.v4, title: "Lead V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.v5, title: "Lead V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.v6, title: "Lead V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
 				</Grid>
 			</div>
 		);
 	}
 }
+
+
