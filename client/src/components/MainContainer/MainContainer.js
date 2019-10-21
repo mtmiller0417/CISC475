@@ -112,7 +112,7 @@ export default class MainContainer extends React.Component {
             for(var i = 0; i < data.length; i++)
             {
                 //Push the data points of the current object to the appropriate arrays
-                lead_i.push(data[i].I);
+                /*lead_i.push(data[i].I);
                 lead_ii.push(data[i].II);
                 lead_iii.push(data[i].III);
                 lead_avr.push(data[i].aVR);
@@ -123,8 +123,58 @@ export default class MainContainer extends React.Component {
                 lead_v3.push(data[i].V3);
                 lead_v4.push(data[i].V4);
                 lead_v5.push(data[i].V5);
-                lead_v6.push(data[i].V6);
+                lead_v6.push(data[i].V6);*/
                 labels.push(i);
+
+                // Way to create scatterplot data
+                lead_i.push({
+                    x:i,
+                    y:data[i].I
+                });
+                lead_ii.push({
+                    x:i,
+                    y:data[i].II
+                });
+                lead_iii.push({
+                    x:i,
+                    y:data[i].III
+                });
+                lead_avr.push({
+                    x:i,
+                    y:data[i].aVR
+                });
+                lead_avl.push({
+                    x:i,
+                    y:data[i].aVL
+                });
+                lead_avf.push({
+                    x:i,
+                    y:data[i].aVF
+                });
+                lead_v1.push({
+                    x:i,
+                    y:data[i].V1
+                });
+                lead_v2.push({
+                    x:i,
+                    y:data[i].V2
+                });
+                lead_v3.push({
+                    x:i,
+                    y:data[i].V3
+                });
+                lead_v4.push({
+                    x:i,
+                    y:data[i].V4
+                });
+                lead_v5.push({
+                    x:i,
+                    y:data[i].V5
+                });
+                lead_v6.push({
+                    x:i,
+                    y:data[i].V6
+                });
             }
 
             // Update the state and cause a re-render
@@ -163,6 +213,10 @@ export default class MainContainer extends React.Component {
     }
 	
 	render() {
+        if(this.state.i != ""){
+            //console.log('MainComponent')
+            //console.log(this.state.i[0]);
+        }
 		return (
 			<div className={styles.container}>
 				<Grid>
