@@ -110,20 +110,25 @@ class Graph extends Component{
                 pointHoverRadius: 5,
                 pointHoverBackgroundColor: 'rgba(75,192,192,1)',
                 pointHoverBorderColor: 'rgba(220,220,220,1)',
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
+                pointHoverBorderWidth: 1,
+                pointRadius: 0, // pointRadius: 1
                 pointHitRadius: 10,
+                borderWidth: 1,
+                borderColor:'black',
                 showLine: true,
                 data: this.state.data.datasets.data
               }
-            ]
+            ], 
           };
 
         return(
         <React.Fragment>
             {
                 <div className="graph">
-                    <Scatter data={dat} />
+                    <Scatter 
+                        data={dat} 
+                        height={50}
+                    />
                 </div>
             }
         </React.Fragment>)
