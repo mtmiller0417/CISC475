@@ -124,6 +124,7 @@ export default class MainContainer extends React.Component {
                 lead_v4.push(data[i].V4);
                 lead_v5.push(data[i].V5);
                 lead_v6.push(data[i].V6);*/
+
                 labels.push(i);
 
                 // Way to create scatterplot data
@@ -177,6 +178,9 @@ export default class MainContainer extends React.Component {
                 });
             }
 
+            // Parse annotation based on index
+            // Do this in graph.js???
+
             // Update the state and cause a re-render
             this.setState({
                 labels: labels,
@@ -204,19 +208,15 @@ export default class MainContainer extends React.Component {
 
         //Update the state again now that annotation data is parsed
         this.setState({
-                p: annotation_p,
-                q: annotation_q,
-                r: annotation_r,
-                s: annotation_s,
-                t: annotation_t
+            p: annotation_p,
+            q: annotation_q,
+            r: annotation_r,
+            s: annotation_s,
+            t: annotation_t
         })
     }
 	
 	render() {
-        if(this.state.i != ""){
-            //console.log('MainComponent')
-            //console.log(this.state.i[0]);
-        }
 		return (
 			<div className={styles.container}>
 				<Grid>
