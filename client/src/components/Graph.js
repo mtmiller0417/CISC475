@@ -41,7 +41,8 @@ class Graph extends Component{
                     r: '',
                     s: '',
                     t: ''
-                }
+                }, 
+                frequency: 0
             }
         })
     }
@@ -54,12 +55,11 @@ class Graph extends Component{
                 y: props.inputArr.data[annotation[i]].y
             });
         }
-        console.log("Done parsing an annotation")
     }
 
     // Might need to add UNSAFE_ to this function name
     // Call this when this component receives new props
-    componentWillReceiveProps(new_props){
+    /*componentWillReceiveProps(new_props){
         // Calling setState causes this component to re-render with the new data its received
 
         //console.log("Updated Graph props:")
@@ -71,15 +71,22 @@ class Graph extends Component{
         let props_array = new_props.inputArr;
 
         let p_pair = [];
-        this.parseAnnotation(props_array.p, p_pair, new_props);
+        //this.parseAnnotation(props_array.p, p_pair, new_props);
+
+        for(let i = 0; i < props_array.p.length; i++){
+            p_pair.push({
+                x: props_array.p[i],
+                y: new_props.inputArr.data[props_array.p[i]].y
+            });
+        }
         let q_pair = [];
-        this.parseAnnotation(props_array.q, q_pair, new_props);
+        //this.parseAnnotation(props_array.q, q_pair, new_props);
         let r_pair = [];
-        this.parseAnnotation(props_array.r, r_pair, new_props);
+        //this.parseAnnotation(props_array.r, r_pair, new_props);
         let s_pair = [];
-        this.parseAnnotation(props_array.s, s_pair, new_props);
+        //this.parseAnnotation(props_array.s, s_pair, new_props);
         let t_pair = [];
-        this.parseAnnotation(props_array.t, t_pair, new_props);
+        //this.parseAnnotation(props_array.t, t_pair, new_props);
 
         console.log('P-Pair')
         console.log(p_pair)
@@ -108,9 +115,72 @@ class Graph extends Component{
 
         console.log('State after update')
         console.log(this.state)
-    }
+    }*/
 
-    //static getDerivedStateFromProps(props, state){}
+    static getDerivedStateFromProps(next_props, prev_state){
+        let props_array = next_props.inputArr;
+        let p_pair = [];
+        let q_pair = [];
+        let r_pair = [];
+        let s_pair = [];
+        let t_pair = [];
+        // p_pair
+        for(let i = 0; i < props_array.p.length; i++){
+            p_pair.push({
+                x: props_array.p[i],
+                y: next_props.inputArr.data[props_array.p[i]].y
+            });
+        }
+        // q_pair
+        for(let i = 0; i < props_array.q.length; i++){
+            q_pair.push({
+                x: props_array.q[i],
+                y: next_props.inputArr.data[props_array.q[i]].y
+            });
+        }
+        // r_pair
+        for(let i = 0; i < props_array.r.length; i++){
+            r_pair.push({
+                x: props_array.r[i],
+                y: next_props.inputArr.data[props_array.r[i]].y
+            });
+        }
+        // s_pair
+        for(let i = 0; i < props_array.s.length; i++){
+            s_pair.push({
+                x: props_array.s[i],
+                y: next_props.inputArr.data[props_array.s[i]].y
+            });
+        }
+        // t_pair
+        for(let i = 0; i < props_array.t.length; i++){
+            t_pair.push({
+                x: props_array.t[i],
+                y: next_props.inputArr.data[props_array.t[i]].y
+            });
+        }
+        return{
+            data:{
+                datasets:{
+                    radius: 0, // Makes the dots go away
+                    label: next_props.inputArr.title,
+                    fill: false,
+                    borderColor: ['black'],
+                    data: next_props.inputArr.data,
+                    backgroundColor:['rgba(255,99,132,0.6)',],
+                    borderWidth: 1
+                },
+                annotation:{
+                    p:p_pair,
+                    q:q_pair,
+                    r:r_pair,
+                    s:s_pair,
+                    t:t_pair
+                }, 
+                frequency: 500
+            }
+        }
+    }
 
     // Notes for rendering the annotations
     // ... Make current data a scatter plot rn
@@ -124,6 +194,16 @@ class Graph extends Component{
     render(){
 
         console.log('RENDER in Graph.js')
+        console.log('State after update')
+        console.log(this.state)
+
+        let skip = 500
+        // Need 200 ms or 0.2 s
+        if(this.state.data.frequency > 0){
+            skip = this.state.data.frequency * 0.2; // 0.2 seconds = 200 ms
+            console.log("skip: " + skip)
+        }
+
 
         const dat = {
             labels: ['Scatter'],
@@ -156,6 +236,41 @@ class Graph extends Component{
                     <Scatter 
                         data={dat} 
                         height={50}
+                        options={{
+                            title: {
+                                display: true,
+                                text: this.props.inputArr.title,
+                                fontSize: 18,
+                                fontFamily: "sans-serif"
+                            },
+                            legend: {
+                                display: false
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        // Change this stepsize based on metadata info...
+                                        stepSize: 0.2//skip Measured in seconds
+                                    },
+                                    // Vertical grid-lines
+                                    gridLines: {
+                                        display: true,
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Time in Seconds'
+                                      }
+                                }],
+                                yAxes: [{
+                                    ticks: {
+                                        //stepSize: skip
+                                    },
+                                    gridLines: {
+                                        display: true
+                                    }
+                                }]
+                            }
+                        }}
                     />
                 </div>
             }
