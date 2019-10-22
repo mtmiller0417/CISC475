@@ -20,7 +20,7 @@ class Graph extends Component{
                     backgroundColor:['rgba(255,99,132,0.6)',],
                     borderWidth: 1
                 },
-                annotations:{
+                annotation:{
                     p: '',
                     q: '',
                     r: '',
@@ -44,37 +44,69 @@ class Graph extends Component{
 
     // Might need to add UNSAFE_ to this function name
     // Call this when this component receives new props
-    /*componentWillReceiveProps(new_props){
+    /*UNSAFE_componentWillReceiveProps(new_props){
         // Calling setState causes this component to re-render with the new data its received
 
         //console.log("Updated Graph props:")
-        //console.log(new_props);
+        // /console.log(new_props);
+
+        console.log('p')
+        console.log(new_props.inputArr.p)
+        console.log('p.length: ' + new_props.inputArr.p.length)
 
 
         // Used for scatterplot
 
-        let props_array = new_props.inputArr;
-
-        let p_pair = [];
-        //this.parseAnnotation(props_array.p, p_pair, new_props);
-
-        for(let i = 0; i < props_array.p.length; i++){
+        var props_array = new_props.inputArr;
+        var p_pair = [];
+        var q_pair = [];
+        var r_pair = [];
+        var s_pair = [];
+        var t_pair = [];
+        //console.log('length')
+        //console.log(new_props.inputArr.p.length)
+        // p_pair
+        for(var i = 0; i < props_array.p.length; i++){
+            if(i === props_array.p.length - 1){
+                console.log('p_pair almost filled')
+            }
+            console.log('HELLO')
             p_pair.push({
                 x: props_array.p[i],
                 y: new_props.inputArr.data[props_array.p[i]].y
             });
         }
-        let q_pair = [];
-        //this.parseAnnotation(props_array.q, q_pair, new_props);
-        let r_pair = [];
-        //this.parseAnnotation(props_array.r, r_pair, new_props);
-        let s_pair = [];
-        //this.parseAnnotation(props_array.s, s_pair, new_props);
-        let t_pair = [];
-        //this.parseAnnotation(props_array.t, t_pair, new_props);
+        // q_pair
+        for(let i = 0; i < props_array.q.length; i++){
+            q_pair.push({
+                x: props_array.q[i],
+                y: new_props.inputArr.data[props_array.q[i]].y
+            });
+        }
+        // r_pair
+        for(let i = 0; i < props_array.r.length; i++){
+            r_pair.push({
+                x: props_array.r[i],
+                y: new_props.inputArr.data[props_array.r[i]].y
+            });
+        }
+        // s_pair
+        for(let i = 0; i < props_array.s.length; i++){
+            s_pair.push({
+                x: props_array.s[i],
+                y: new_props.inputArr.data[props_array.s[i]].y
+            });
+        }
+        // t_pair
+        for(let i = 0; i < props_array.t.length; i++){
+            t_pair.push({
+                x: props_array.t[i],
+                y: new_props.inputArr.data[props_array.t[i]].y
+            });
+        }
 
-        console.log('P-Pair')
-        console.log(p_pair)
+        //console.log('P-Pair')
+        //console.log(p_pair)
 
         // Update the annotations
         this.setState({
@@ -88,18 +120,19 @@ class Graph extends Component{
                     backgroundColor:['rgba(255,99,132,0.6)',],
                     borderWidth: 1
                 },
-                annotations:{
+                annotation:{
                     p: p_pair,
                     q: q_pair,
                     r: r_pair,
                     s: s_pair,
                     t: t_pair
                 }, 
+                frequency: 500
             }
         });
 
-        console.log('State after update')
-        console.log(this.state)
+        //console.log('State after update')
+        //console.log(this.state)
     }*/
 
     // Can't use 'this.' because this is a static function
@@ -107,14 +140,26 @@ class Graph extends Component{
     // This loads metadata... but sometimes doesnt load all of them? is kinda random...
     // Fills the data properly
     static getDerivedStateFromProps(next_props, prev_state){
+
+        //console.log("Updated Graph props:")
+        //console.log(next_props);
+        //console.log('old state')
+        //console.log(prev_state)
+
         let props_array = next_props.inputArr;
         let p_pair = [];
         let q_pair = [];
         let r_pair = [];
         let s_pair = [];
         let t_pair = [];
+
+        /*console.log('p')
+        console.log(next_props.inputArr.p)
+        console.log('p.length: ' + next_props.inputArr.p.length)*/
+
         // p_pair
         for(let i = 0; i < props_array.p.length; i++){
+            //console.log('HELLO')
             p_pair.push({
                 x: props_array.p[i],
                 y: next_props.inputArr.data[props_array.p[i]].y
@@ -148,6 +193,8 @@ class Graph extends Component{
                 y: next_props.inputArr.data[props_array.t[i]].y
             });
         }
+        //console.log('P_Pair')
+        //console.log(p_pair)
         return{
             data:{
                 datasets:{
@@ -182,8 +229,8 @@ class Graph extends Component{
     //Render the graph
     render(){
 
-        //console.log('RENDER in Graph.js')
-        //console.log(this.state)
+        console.log('RENDER in Graph.js')
+        console.log(this.state)
 
         const dat = {
             type:'Scatter',
@@ -204,7 +251,7 @@ class Graph extends Component{
                     borderWidth: 1,
                     borderColor:'black',
                     showLine: true,
-                    data: this.state.data.datasets.data
+                    data: this.state.data.datasets.data,
                 },
                 { 
                     label:'P-Annotation',
@@ -213,6 +260,7 @@ class Graph extends Component{
                     pointBorderColor: 'red',
                     pointRadius: 8,
                     pointBorderWidth: 2,
+                    backgroundColor: 'red',
                     showLine: false,
                     data: this.state.data.annotation.p
                 },
@@ -223,6 +271,7 @@ class Graph extends Component{
                     pointBorderColor: 'blue',
                     pointRadius: 8,
                     pointBorderWidth: 2,
+                    backgroundColor: 'blue',
                     showLine: false,
                     data: this.state.data.annotation.q
                 },
@@ -233,6 +282,7 @@ class Graph extends Component{
                     pointBorderColor: 'yellow',
                     pointRadius: 8,
                     pointBorderWidth: 2,
+                    backgroundColor: 'yellow',
                     showLine: false,
                     data: this.state.data.annotation.r
                 },
@@ -243,6 +293,7 @@ class Graph extends Component{
                     pointBorderColor: 'green',
                     pointRadius: 8,
                     pointBorderWidth: 2,
+                    backgroundColor: 'green',
                     showLine: false,
                     data: this.state.data.annotation.s
                 },
@@ -253,6 +304,7 @@ class Graph extends Component{
                     pointBorderColor: 'black',
                     pointRadius: 8,
                     pointBorderWidth: 2,
+                    backgroundColor: 'black',
                     showLine: false,
                     data: this.state.data.annotation.t
                 }
@@ -274,7 +326,12 @@ class Graph extends Component{
                                 fontFamily: "sans-serif"
                             },
                             legend: {
-                                display: false
+                                labels: {
+                                    filter: function(item) {
+                                        // Remove the legend of the main-data, keep the annotation legend
+                                        return !item.text.includes('Main-Data');
+                                    }
+                                }
                             },
                             scales: {
                                 xAxes: [{

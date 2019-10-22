@@ -111,20 +111,6 @@ export default class MainContainer extends React.Component {
         {
             for(var i = 0; i < data.length; i++)
             {
-                //Push the data points of the current object to the appropriate arrays
-                /*lead_i.push(data[i].I);
-                lead_ii.push(data[i].II);
-                lead_iii.push(data[i].III);
-                lead_avr.push(data[i].aVR);
-                lead_avl.push(data[i].aVL);
-                lead_avf.push(data[i].aVF);
-                lead_v1.push(data[i].V1);
-                lead_v2.push(data[i].V2);
-                lead_v3.push(data[i].V3);
-                lead_v4.push(data[i].V4);
-                lead_v5.push(data[i].V5);
-                lead_v6.push(data[i].V6);*/
-
                 labels.push(i);
 
                 let freq = 500;
