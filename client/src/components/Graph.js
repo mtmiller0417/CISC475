@@ -332,7 +332,12 @@ class Graph extends Component{
                         options={{
                             tooltips:{
                                 enabled: true,
-                                mode: 'nearest'
+                                mode: 'nearest',
+                                callbacks: {
+                                    label: function(tooltipItems, data) { 
+                                        return tooltipItems.xLabel + ' s, ' + tooltipItems.yLabel + ' mv';
+                                    }
+                                }
                             },
                             title: {
                                 display: true,
@@ -361,7 +366,7 @@ class Graph extends Component{
                                     scaleLabel: {
                                         display: true,
                                         labelString: 'Time in Seconds'
-                                      }
+                                    }
                                 }],
                                 yAxes: [{
                                     ticks: {
@@ -369,6 +374,10 @@ class Graph extends Component{
                                     },
                                     gridLines: {
                                         display: true
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Voltage in Millivolts'
                                     }
                                 }]
                             }
