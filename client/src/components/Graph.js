@@ -102,6 +102,10 @@ class Graph extends Component{
         console.log(this.state)
     }*/
 
+    // Can't use 'this.' because this is a static function
+    // The state is updated through what is returned from this function
+    // This loads metadata... but sometimes doesnt load all of them? is kinda random...
+    // Fills the data properly
     static getDerivedStateFromProps(next_props, prev_state){
         let props_array = next_props.inputArr;
         let p_pair = [];
@@ -178,66 +182,82 @@ class Graph extends Component{
     //Render the graph
     render(){
 
-        console.log('RENDER in Graph.js')
-        console.log(this.state)
-
-        let skip = 500
-        // Need 200 ms or 0.2 s
-        if(this.state.data.frequency > 0){
-            skip = this.state.data.frequency * 0.2; // 0.2 seconds = 200 ms
-            //console.log("skip: " + skip)
-        }
-
+        //console.log('RENDER in Graph.js')
+        //console.log(this.state)
 
         const dat = {
-            labels: ['Scatter'],
+            type:'Scatter',
             datasets: [
-              {
-                //label: 'My First dataset',
-                fill: false,
-                backgroundColor: 'rgba(75,192,192,0.4)',
-                pointBorderColor: 'rgba(75,192,192,1)',
-                pointBackgroundColor: '#fff',
-                pointBorderWidth: 1,
-                pointHoverRadius: 1,
-                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                pointHoverBorderColor: 'rgba(220,220,220,1)',
-                pointHoverBorderWidth: 1,
-                pointRadius: 0, // pointRadius: 1
-                pointHitRadius: 10,
-                borderWidth: 1,
-                borderColor:'black',
-                showLine: true,
-                data: this.state.data.datasets.data
-              }
+                {
+                    label:'Main-Data',
+                    fill: false,
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    pointBorderColor: 'rgba(75,192,192,1)',
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 1,
+                    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 0, // This makes the individual points disappear
+                    pointHitRadius: 10,
+                    borderWidth: 1,
+                    borderColor:'black',
+                    showLine: true,
+                    data: this.state.data.datasets.data
+                },
+                { 
+                    label:'P-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'red',
+                    pointRadius: 8,
+                    pointBorderWidth: 2,
+                    showLine: false,
+                    data: this.state.data.annotation.p
+                },
+                { 
+                    label:'Q-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'blue',
+                    pointRadius: 8,
+                    pointBorderWidth: 2,
+                    showLine: false,
+                    data: this.state.data.annotation.q
+                },
+                { 
+                    label:'R-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'yellow',
+                    pointRadius: 8,
+                    pointBorderWidth: 2,
+                    showLine: false,
+                    data: this.state.data.annotation.r
+                },
+                { 
+                    label:'S-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'green',
+                    pointRadius: 8,
+                    pointBorderWidth: 2,
+                    showLine: false,
+                    data: this.state.data.annotation.s
+                },
+                { 
+                    label:'T-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'black',
+                    pointRadius: 8,
+                    pointBorderWidth: 2,
+                    showLine: false,
+                    data: this.state.data.annotation.t
+                }
             ], 
           };
-
-          const p_graph = {
-            labels: ['Scatter'],
-            datasets: [
-              {
-                pointStyle: 'star',
-                fill: false,
-                backgroundColor: 'red',
-                pointBorderColor: 'rgba(75,192,192,1)',
-                pointBackgroundColor: '#fff',
-                pointBorderWidth: 1,
-                pointHoverRadius: 1,
-                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                pointHoverBorderColor: 'rgba(220,220,220,1)',
-                pointHoverBorderWidth: 1,
-                pointRadius: 0, // pointRadius: 1
-                pointHitRadius: 10,
-                borderWidth: 1,
-                borderColor:'black',
-                showLine: false,
-                data: this.state.data.annotation.p
-              }
-            ], 
-          };
-
-          
 
         return(
         <React.Fragment>

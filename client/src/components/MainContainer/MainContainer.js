@@ -131,51 +131,63 @@ export default class MainContainer extends React.Component {
 
                 // Way to create scatterplot data
                 lead_i.push({
-                    x:(i * 1/freq),
+                    //x:(i * 1/freq),
+                    x:i,
                     y:data[i].I
                 });
                 lead_ii.push({
-                    x:(i * 1/freq),
+                   //x:(i * 1/freq),
+                   x:i,
                     y:data[i].II
                 });
                 lead_iii.push({
-                    x:(i * 1/freq),
+                    //x:(i * 1/freq),
+                    x:i,
                     y:data[i].III
                 });
                 lead_avr.push({
-                    x:(i * 1/freq),
+                    //x:(i * 1/freq),
+                    x:i,
                     y:data[i].aVR
                 });
                 lead_avl.push({
-                    x:(i * 1/freq),
+                    //x:(i * 1/freq),
+                    x:i,
                     y:data[i].aVL
                 });
                 lead_avf.push({
-                    x:(i * 1/freq),
+                    //x:(i * 1/freq),
+                    x:i,
                     y:data[i].aVF
                 });
                 lead_v1.push({
-                    x:(i * 1/freq),
+                   //x:(i * 1/freq),
+                   x:i,
                     y:data[i].V1
                 });
                 lead_v2.push({
-                    x:(i * 1/freq),
+                    //x:(i * 1/freq),
+                    x:i,
                     y:data[i].V2
                 });
                 lead_v3.push({
-                    x:(i * 1/freq),
+                    //x:(i * 1/freq),
+                    x:i,
                     y:data[i].V3
                 });
                 lead_v4.push({
-                    x:(i * 1/freq),
+                    //x:(i * 1/freq),
+                    x:i,
                     y:data[i].V4
                 });
                 lead_v5.push({
-                    x:(i * 1/freq),
+                   //x:(i * 1/freq),
+                   x:i,
                     y:data[i].V5
                 });
                 lead_v6.push({
-                    x:(i * 1/freq),
+                    //x:(i * 1/freq),
+                    x:i,
                     y:data[i].V6
                 });
             }
