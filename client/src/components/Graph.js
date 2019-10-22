@@ -142,7 +142,8 @@ class Graph extends Component{
     static getDerivedStateFromProps(next_props, prev_state){
 
         var freq = prev_state.data.frequency
-        if(freq == 0){
+        // Looks like this if isnt necessary
+        if(freq === 0){
             freq = 1
         }
 
@@ -252,7 +253,7 @@ class Graph extends Component{
                     pointHoverBorderColor: 'rgba(220,220,220,1)',
                     pointHoverBorderWidth: 1,
                     pointRadius: 0, // This makes the individual points disappear
-                    pointHitRadius: 10,
+                    pointHitRadius: 1,
                     borderWidth: 1,
                     borderColor:'black',
                     showLine: true,
@@ -264,6 +265,7 @@ class Graph extends Component{
                     pointStyle: 'star',
                     pointBorderColor: 'red',
                     pointRadius: 8,
+                    pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: 'red',
                     showLine: false,
@@ -275,6 +277,7 @@ class Graph extends Component{
                     pointStyle: 'star',
                     pointBorderColor: 'blue',
                     pointRadius: 8,
+                    pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: 'blue',
                     showLine: false,
@@ -286,6 +289,7 @@ class Graph extends Component{
                     pointStyle: 'star',
                     pointBorderColor: 'yellow',
                     pointRadius: 8,
+                    pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: 'yellow',
                     showLine: false,
@@ -297,6 +301,7 @@ class Graph extends Component{
                     pointStyle: 'star',
                     pointBorderColor: 'green',
                     pointRadius: 8,
+                    pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: 'green',
                     showLine: false,
@@ -308,6 +313,7 @@ class Graph extends Component{
                     pointStyle: 'star',
                     pointBorderColor: 'black',
                     pointRadius: 8,
+                    pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: 'black',
                     showLine: false,
@@ -324,6 +330,10 @@ class Graph extends Component{
                         data={dat} 
                         height={50}
                         options={{
+                            tooltips:{
+                                enabled: true,
+                                mode: 'nearest'
+                            },
                             title: {
                                 display: true,
                                 text: this.state.data.datasets.label,
