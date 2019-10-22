@@ -141,6 +141,11 @@ class Graph extends Component{
     // Fills the data properly
     static getDerivedStateFromProps(next_props, prev_state){
 
+        var freq = prev_state.data.frequency
+        if(freq == 0){
+            freq = 1
+        }
+
         //console.log("Updated Graph props:")
         //console.log(next_props);
         //console.log('old state')
@@ -161,35 +166,35 @@ class Graph extends Component{
         for(let i = 0; i < props_array.p.length; i++){
             //console.log('HELLO')
             p_pair.push({
-                x: props_array.p[i],
+                x: props_array.p[i] * (1/freq),
                 y: next_props.inputArr.data[props_array.p[i]].y
             });
         }
         // q_pair
         for(let i = 0; i < props_array.q.length; i++){
             q_pair.push({
-                x: props_array.q[i],
+                x: props_array.q[i] * (1/freq),
                 y: next_props.inputArr.data[props_array.q[i]].y
             });
         }
         // r_pair
         for(let i = 0; i < props_array.r.length; i++){
             r_pair.push({
-                x: props_array.r[i],
+                x: props_array.r[i] * (1/freq),
                 y: next_props.inputArr.data[props_array.r[i]].y
             });
         }
         // s_pair
         for(let i = 0; i < props_array.s.length; i++){
             s_pair.push({
-                x: props_array.s[i],
+                x: props_array.s[i] * (1/freq),
                 y: next_props.inputArr.data[props_array.s[i]].y
             });
         }
         // t_pair
         for(let i = 0; i < props_array.t.length; i++){
             t_pair.push({
-                x: props_array.t[i],
+                x: props_array.t[i] * (1/freq),
                 y: next_props.inputArr.data[props_array.t[i]].y
             });
         }
