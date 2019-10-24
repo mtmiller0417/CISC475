@@ -37,7 +37,9 @@ export default class MainContainer extends React.Component {
             q: '',
             r: '',
             s: '',
-            t: ''
+            t: '',
+            max: 0,
+            min: 0
         }
     }
 
@@ -83,6 +85,10 @@ export default class MainContainer extends React.Component {
         let annotation_t = [];
         let labels = [];
 
+        //Define Min/Max trackers
+        let max = 0;
+        let min = 0;
+
         //Parse the CSV into an array of objects where each object represents a row
         var parsed_csv = d3.csv(data, function(d)
         {
@@ -112,18 +118,18 @@ export default class MainContainer extends React.Component {
             for(var i = 0; i < data.length; i++)
             {
                 //Push the data points of the current object to the appropriate arrays
-                lead_i.push(data[i].I);
-                lead_ii.push(data[i].II);
-                lead_iii.push(data[i].III);
-                lead_avr.push(data[i].aVR);
-                lead_avl.push(data[i].aVL);
-                lead_avf.push(data[i].aVF);
-                lead_v1.push(data[i].V1);
-                lead_v2.push(data[i].V2);
-                lead_v3.push(data[i].V3);
-                lead_v4.push(data[i].V4);
-                lead_v5.push(data[i].V5);
-                lead_v6.push(data[i].V6);
+                lead_i.push(data[i].I); if(max < data[i].I){max = data[i].I}; if(min > data[i].I){min = data[i].I};
+                lead_ii.push(data[i].II); if(max < data[i].II){max = data[i].II}; if(min > data[i].II){min = data[i].II};
+                lead_iii.push(data[i].III); if(max < data[i].III){max = data[i].III}; if(min > data[i].III){min = data[i].III};
+                lead_avr.push(data[i].aVR); if(max < data[i].aVR){max = data[i].aVR}; if(min > data[i].aVR){min = data[i].aVR};
+                lead_avl.push(data[i].aVL); if(max < data[i].aVL){max = data[i].aVL}; if(min > data[i].aVL){min = data[i].aVL};
+                lead_avf.push(data[i].aVF); if(max < data[i].aVF){max = data[i].aVF}; if(min > data[i].aVF){min = data[i].aVF};
+                lead_v1.push(data[i].V1); if(max < data[i].V1){max = data[i].V1}; if(min > data[i].V1){min = data[i].V1};
+                lead_v2.push(data[i].V2); if(max < data[i].V2){max = data[i].V2}; if(min > data[i].V2){min = data[i].V2};
+                lead_v3.push(data[i].V3); if(max < data[i].V3){max = data[i].V3}; if(min > data[i].V3){min = data[i].V3};
+                lead_v4.push(data[i].V4); if(max < data[i].V4){max = data[i].V4}; if(min > data[i].V4){min = data[i].V4};
+                lead_v5.push(data[i].V5); if(max < data[i].V5){max = data[i].V5}; if(min > data[i].V5){min = data[i].V5};
+                lead_v6.push(data[i].V6); if(max < data[i].V6){max = data[i].V6}; if(min > data[i].V6){min = data[i].V6};
                 labels.push(i);
             }
 
@@ -141,8 +147,10 @@ export default class MainContainer extends React.Component {
                 v3: lead_v3,
                 v4: lead_v4,
                 v5: lead_v5,
-                v6: lead_v6
-            })   
+                v6: lead_v6,
+                max: +max,
+                min: +min
+            })
         })
 
         //Parse and store all annotation data in the appropriate arrays
@@ -172,18 +180,18 @@ export default class MainContainer extends React.Component {
 				</Grid>
 
 				<Grid>
-					<GridItem inputArr={{data: this.state.i, title: "Lead I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.avl, title: "Lead aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.ii, title: "Lead II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.iii, title: "Lead III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.avf, title: "Lead aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.avr, title: "Lead aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v1, title: "Lead V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v2, title: "Lead V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v3, title: "Lead V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v4, title: "Lead V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v5, title: "Lead V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v6, title: "Lead V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.i, title: "Lead I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.avl, title: "Lead aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.ii, title: "Lead II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.iii, title: "Lead III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.avf, title: "Lead aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.avr, title: "Lead aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v1, title: "Lead V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v2, title: "Lead V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v3, title: "Lead V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v4, title: "Lead V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v5, title: "Lead V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v6, title: "Lead V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
 				</Grid>
 			</div>
 		);

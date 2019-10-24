@@ -29,20 +29,21 @@ class Graph extends Component{
         console.log("Updated Graph props:")
         console.log(props);
 
-
         this.setState({
             graphData:{
                 labels: props.inputArr.labels,
                 datasets:[{
                     radius: 0, // Makes the dots go away
-                    label: props.inputArr.title,
+                    label: this.props.inputArr.title,
                     fill: false,
                     borderColor: ['black'],
                     data: props.inputArr.data,
                     backgroundColor:['rgba(255,99,132,0.6)',],
                     borderWidth: 1
                 }]
-            }
+            },
+            max: props.inputArr.max,
+            min: props.inputArr.min
         });
     }
 
@@ -83,11 +84,9 @@ class Graph extends Component{
                                     yAxes: [{
                                         type: 'linear', // Doesn't cause a problem in y-axis
                                         ticks: {
-                                            //stepSize: 500,
                                             stacked: true,
-                                            //stepSize: 1000
-                                            //min: -2000,
-                                            //max: 2000
+                                            min: this.state.min,
+                                            max: this.state.max
                                         },
                                         gridLines: {
                                             display: true
