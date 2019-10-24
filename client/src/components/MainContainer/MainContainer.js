@@ -180,18 +180,18 @@ export default class MainContainer extends React.Component {
 				</Grid>
 
 				<Grid>
-					<GridItem inputArr={{data: this.state.i, title: "Lead I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.avl, title: "Lead aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.ii, title: "Lead II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.iii, title: "Lead III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.avf, title: "Lead aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.avr, title: "Lead aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.v1, title: "Lead V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.v2, title: "Lead V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.v3, title: "Lead V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.v4, title: "Lead V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.v5, title: "Lead V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
-					<GridItem inputArr={{data: this.state.v6, title: "Lead V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
+					<GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, max: this.state.max, min: this.state.min}}/>
 				</Grid>
 			</div>
 		);
