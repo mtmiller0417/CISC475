@@ -37,7 +37,12 @@ export default class MainContainer extends React.Component {
             q: '',
             r: '',
             s: '',
-            t: ''
+            t: '', 
+            extra_info: {
+                min: 0, 
+                max: 0, 
+                freq: 0
+            }
         }
     }
 
@@ -48,10 +53,7 @@ export default class MainContainer extends React.Component {
     //Returns nothing
     parseAnnotationCsv(inputCsv, outputArr)
     {
-        var parsed_p = d3.csv(inputCsv).then(function(data)
-        {
-            return data;
-        })
+        var parsed_p = d3.csv(inputCsv,data=>data);
 
         parsed_p.then(function(data)
         {
@@ -105,17 +107,21 @@ export default class MainContainer extends React.Component {
             }
         });
         
+        var max = 0;
+        var min = 0;
+        
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
         parsed_csv.then((data) =>
         {
             var time = true;
+            let freq = 500
 
             for(var i = 0; i < data.length; i++)
             {
                 labels.push(i);
-
-                let freq = 500;
+                //console.log('x')
+                //console.log(i * 1/freq)
 
                 // Way to create scatterplot data
                 lead_i.push({
@@ -178,6 +184,48 @@ export default class MainContainer extends React.Component {
                     //x:i,
                     y:data[i].V6
                 });
+
+                // Check for max / min for each array
+
+                if (lead_i[i].y < min){ min = lead_i[i].y }
+                if (lead_i[i].y > max){ max = lead_i[i].y }
+
+                if (lead_ii[i].y < min){ min = lead_ii[i].y }
+                if (lead_ii[i].y > max){ max = lead_ii[i].y }
+
+                if (lead_iii[i].y < min){ min = lead_iii[i].y }
+                if (lead_iii[i].y > max){ max = lead_iii[i].y }
+
+                if (lead_avr[i].y < min){ min = lead_avr[i].y }
+                if (lead_avr[i].y > max){ max = lead_avr[i].y }
+
+                if (lead_avl[i].y < min){ min = lead_avl[i].y }
+                if (lead_avl[i].y > max){ max = lead_avl[i].y }
+
+                if (lead_avl[i].y < min){ min = lead_avl[i].y }
+                if (lead_avl[i].y > max){ max = lead_avl[i].y }
+
+                if (lead_avf[i].y < min){ min = lead_avf[i].y }
+                if (lead_avf[i].y > max){ max = lead_avf[i].y }
+
+                if (lead_v1[i].y < min){ min = lead_v1[i].y }
+                if (lead_v1[i].y > max){ max = lead_v1[i].y }
+
+                if (lead_v2[i].y < min){ min = lead_v2[i].y }
+                if (lead_v2[i].y > max){ max = lead_v2[i].y }
+
+                if (lead_v3[i].y < min){ min = lead_v3[i].y }
+                if (lead_v3[i].y > max){ max = lead_v3[i].y }
+
+                if (lead_v4[i].y < min){ min = lead_v4[i].y }
+                if (lead_v4[i].y > max){ max = lead_v4[i].y }
+
+                if (lead_v5[i].y < min){ min = lead_v5[i].y }
+                if (lead_v5[i].y > max){ max = lead_v5[i].y }
+
+                if (lead_v6[i].y < min){ min = lead_v6[i].y }
+                if (lead_v6[i].y > max){ max = lead_v6[i].y }
+
             }
 
             // Parse annotation based on index
@@ -197,8 +245,16 @@ export default class MainContainer extends React.Component {
                 v3: lead_v3,
                 v4: lead_v4,
                 v5: lead_v5,
-                v6: lead_v6
-            })   
+                v6: lead_v6, 
+                extra_info: {
+                    min: min, 
+                    max: max, 
+                    freq: freq
+                }
+            })
+            
+            console.log('hello')
+            console.log('min: ' + this.state.extra_info.min + ' max: ' + this.state.extra_info.max)
         })
 
         //Parse and store all annotation data in the appropriate arrays
@@ -219,6 +275,8 @@ export default class MainContainer extends React.Component {
     }
 	
 	render() {
+        console.log('RENDER')
+        console.log(this.state.extra_info)
 		return (
 			<div className={styles.container}>
 				<Grid>
@@ -228,18 +286,18 @@ export default class MainContainer extends React.Component {
 				</Grid>
 
 				<Grid>
-					<GridItem inputArr={{data: this.state.i, title: "Lead I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.avl, title: "Lead aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.ii, title: "Lead II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.iii, title: "Lead III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.avf, title: "Lead aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.avr, title: "Lead aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v1, title: "Lead V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v2, title: "Lead V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v3, title: "Lead V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v4, title: "Lead V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v5, title: "Lead V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
-					<GridItem inputArr={{data: this.state.v6, title: "Lead V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t}}/>
+					<GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
 				</Grid>
 			</div>
 		);

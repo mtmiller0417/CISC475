@@ -27,7 +27,9 @@ class Graph extends Component{
                     s: '',
                     t: ''
                 }, 
-                frequency: 0
+                freq: 0,
+                max:this.props.inputArr.extra_info.max,
+                min:this.props.inputArr.extra_info.min
             }
         })
     }
@@ -127,7 +129,7 @@ class Graph extends Component{
                     s: s_pair,
                     t: t_pair
                 }, 
-                frequency: 500
+                freq: 500
             }
         });
 
@@ -141,31 +143,26 @@ class Graph extends Component{
     // Fills the data properly
     static getDerivedStateFromProps(next_props, prev_state){
 
-        var freq = prev_state.data.frequency
-        // Looks like this if isnt necessary
-        if(freq === 0){
-            freq = 1
-        }
+        var max = prev_state.max
+        var min = prev_state.min
 
-        //console.log("Updated Graph props:")
-        //console.log(next_props);
-        //console.log('old state')
-        //console.log(prev_state)
+        /*console.log('Length')
+        console.log(next_props.inputArr.p)
+        console.log(next_props.inputArr.p.length)
+        console.log('\n')*/
+
+        var freq = next_props.inputArr.extra_info.freq
 
         let props_array = next_props.inputArr;
+        
         let p_pair = [];
         let q_pair = [];
         let r_pair = [];
         let s_pair = [];
         let t_pair = [];
 
-        /*console.log('p')
-        console.log(next_props.inputArr.p)
-        console.log('p.length: ' + next_props.inputArr.p.length)*/
-
         // p_pair
         for(let i = 0; i < props_array.p.length; i++){
-            //console.log('HELLO')
             p_pair.push({
                 x: props_array.p[i] * (1/freq),
                 y: next_props.inputArr.data[props_array.p[i]].y
@@ -199,8 +196,7 @@ class Graph extends Component{
                 y: next_props.inputArr.data[props_array.t[i]].y
             });
         }
-        //console.log('P_Pair')
-        //console.log(p_pair)
+        
         return{
             data:{
                 datasets:{
@@ -219,7 +215,9 @@ class Graph extends Component{
                     s:s_pair,
                     t:t_pair
                 }, 
-                frequency: 500
+                freq: next_props.inputArr.extra_info.freq, 
+                min: next_props.inputArr.extra_info.min, 
+                max: next_props.inputArr.extra_info.max, 
             }
         }
     }
@@ -234,9 +232,6 @@ class Graph extends Component{
 
     //Render the graph
     render(){
-
-        console.log('RENDER in Graph.js')
-        console.log(this.state)
 
         const dat = {
             type:'Scatter',
@@ -287,11 +282,11 @@ class Graph extends Component{
                     label:'R-Annotation',
                     fill:true,
                     pointStyle: 'star',
-                    pointBorderColor: 'yellow',
+                    pointBorderColor: 'purple',
                     pointRadius: 8,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
-                    backgroundColor: 'yellow',
+                    backgroundColor: 'purple',
                     showLine: false,
                     data: this.state.data.annotation.r
                 },
@@ -322,13 +317,28 @@ class Graph extends Component{
             ], 
           };
 
+          let height = 50
+          let dataLen = this.state.data.datasets.data.length
+          let total_time = 1
+          if(this.state.data.datasets.data[dataLen - 1]){
+            total_time = this.state.data.datasets.data[dataLen - 1].x
+          }
+          let interval = 0.2 // 0.2 seconds or 200 ms
+          let ticks_on_x = total_time / interval
+          let between_tick = dataLen / ticks_on_x
+          let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 
+          let q = range / height
+          let y_axis_step_size = q * (height/5)
+          console.log('y_step_size: ' + y_axis_step_size)
+          console.log('\n')
+
         return(
         <React.Fragment>
             {
                 <div className="graph">
                     <Scatter 
                         data={dat} 
-                        height={50}
+                        height={height}
                         options={{
                             tooltips:{
                                 enabled: true,
@@ -342,10 +352,12 @@ class Graph extends Component{
                             title: {
                                 display: true,
                                 text: this.state.data.datasets.label,
-                                fontSize: 18,
-                                fontFamily: "sans-serif"
+                                fontSize: 13,
+                                fontFamily: "serif",
+                                position: 'left'
                             },
                             legend: {
+                                display:false,
                                 labels: {
                                     filter: function(item) {
                                         // Remove the legend of the main-data, keep the annotation legend
@@ -357,7 +369,7 @@ class Graph extends Component{
                                 xAxes: [{
                                     ticks: {
                                         // Change this stepsize based on metadata info...
-                                        stepSize: 0.2//skip Measured in seconds
+                                        stepSize: 0.2//skip Measured in seconds(200 miliseconds)
                                     },
                                     // Vertical grid-lines
                                     /*gridLines: {
@@ -365,19 +377,21 @@ class Graph extends Component{
                                     },*/
                                     scaleLabel: {
                                         display: true,
-                                        labelString: 'Time in Seconds'
+                                        labelString: 'Seconds'
                                     }
                                 }],
                                 yAxes: [{
                                     ticks: {
-                                        stepSize: 500
+                                        stepSize: y_axis_step_size, //724
+                                        min: this.state.data.min,
+                                        max: this.state.data.max
                                     },
                                     gridLines: {
                                         display: true
                                     },
                                     scaleLabel: {
                                         display: true,
-                                        labelString: 'Voltage in Millivolts'
+                                        labelString: 'MV'
                                     }
                                 }]
                             }
