@@ -4,6 +4,23 @@ import data from "./meta.csv";
 import styles from "./Metadata.module.scss";
 
 export default class Metadata extends React.Component {
+
+	constructor(props){
+		super(props);
+
+		this.state = {
+			patientID: 0,
+			scanID: 0,
+			gender: '',
+			age: 0,
+			race: '',
+			height: 0,
+			weight: 0,
+			acquisitionDateTime: '',
+			sampleBase: 0
+		};
+	}
+
 	componentWillMount() {
 		let ecg_ID = [];
 		let patient_ID = [];
@@ -31,20 +48,8 @@ export default class Metadata extends React.Component {
 			};
 		});
 
-		this.state = {
-			patientID: 123456789,
-			scanID: 987654321,
-			gender: "Male",
-			age: 21,
-			race: "Caucasian",
-			height: 70 + " inches",
-			weight: 145 + " pounds",
-			acquisitionDateTime: "27 September 2019 19:41",
-			sampleBase: 500
-		};
-
 		csvData.then(data => {
-			console.log(data);
+			//console.log(data);
 
 			ecg_ID.push(data[1].ECGID);
 			patient_ID.push(data[1].PatientID);

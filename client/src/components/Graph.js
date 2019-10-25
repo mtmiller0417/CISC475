@@ -1,14 +1,17 @@
-import React, { Component } from 'react'
-import {Line} from 'react-chartjs-2';
+import React, { Component } from 'react';
+import {Scatter} from 'react-chartjs-2';
+
+//C:\Users\mattm\Documents\Files\CISC475\CISC475\client\node_modules\canvasjs
+//C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\components\Graph.js
 
 class Graph extends Component{
+
     constructor(props){
         super(props);
 
         this.state = ({
-            graphData:{
-                labels: this.props.inputArr.labels,
-                datasets:[{
+            data:{
+                datasets:{
                     radius: 0, // Makes the dots go away
                     label: this.props.inputArr.title,
                     fill: false,
@@ -16,42 +19,389 @@ class Graph extends Component{
                     data: this.props.inputArr.data,
                     backgroundColor:['rgba(255,99,132,0.6)',],
                     borderWidth: 1
-                }]
+                },
+                annotation:{
+                    p: '',
+                    q: '',
+                    r: '',
+                    s: '',
+                    t: ''
+                }, 
+                freq: 0,
+                max:this.props.inputArr.extra_info.max,
+                min:this.props.inputArr.extra_info.min
             }
         })
     }
 
-    // Might need to add UNSAFE_ to this function name
-    // Call this when this component receives new props
-    componentWillReceiveProps(props){
-        // Calling setState causes this component to re-render with the new data its received
-
-        console.log("Updated Graph props:")
-        console.log(props);
-
-        this.setState({
-            graphData:{
-                labels: props.inputArr.labels,
-                datasets:[{
-                    radius: 0, // Makes the dots go away
-                    label: this.props.inputArr.title,
-                    fill: false,
-                    borderColor: ['black'],
-                    data: props.inputArr.data,
-                    backgroundColor:['rgba(255,99,132,0.6)',],
-                    borderWidth: 1
-                }]
-            },
-            max: props.inputArr.max,
-            min: props.inputArr.min
-        });
+    // 
+    parseAnnotation(annotation, pair_array, props){
+        for(let i = 0; i < annotation.length; i++){
+            pair_array.push({
+                x: annotation[i],
+                y: props.inputArr.data[annotation[i]].y
+            });
+        }
     }
 
-    //static getDerivedStateFromProps(props, state){}
+    // Might need to add UNSAFE_ to this function name
+    // Call this when this component receives new props
+    /*UNSAFE_componentWillReceiveProps(new_props){
+        // Calling setState causes this component to re-render with the new data its received
+
+        //console.log("Updated Graph props:")
+        // /console.log(new_props);
+
+        console.log('p')
+        console.log(new_props.inputArr.p)
+        console.log('p.length: ' + new_props.inputArr.p.length)
+
+
+        // Used for scatterplot
+
+        var props_array = new_props.inputArr;
+        var p_pair = [];
+        var q_pair = [];
+        var r_pair = [];
+        var s_pair = [];
+        var t_pair = [];
+        //console.log('length')
+        //console.log(new_props.inputArr.p.length)
+        // p_pair
+        for(var i = 0; i < props_array.p.length; i++){
+            if(i === props_array.p.length - 1){
+                console.log('p_pair almost filled')
+            }
+            console.log('HELLO')
+            p_pair.push({
+                x: props_array.p[i],
+                y: new_props.inputArr.data[props_array.p[i]].y
+            });
+        }
+        // q_pair
+        for(let i = 0; i < props_array.q.length; i++){
+            q_pair.push({
+                x: props_array.q[i],
+                y: new_props.inputArr.data[props_array.q[i]].y
+            });
+        }
+        // r_pair
+        for(let i = 0; i < props_array.r.length; i++){
+            r_pair.push({
+                x: props_array.r[i],
+                y: new_props.inputArr.data[props_array.r[i]].y
+            });
+        }
+        // s_pair
+        for(let i = 0; i < props_array.s.length; i++){
+            s_pair.push({
+                x: props_array.s[i],
+                y: new_props.inputArr.data[props_array.s[i]].y
+            });
+        }
+        // t_pair
+        for(let i = 0; i < props_array.t.length; i++){
+            t_pair.push({
+                x: props_array.t[i],
+                y: new_props.inputArr.data[props_array.t[i]].y
+            });
+        }
+
+        //console.log('P-Pair')
+        //console.log(p_pair)
+
+        // Update the annotations
+        this.setState({
+            data:{
+                datasets:{
+                    radius: 0, // Makes the dots go away
+                    label: new_props.inputArr.title,
+                    fill: false,
+                    borderColor: ['black'],
+                    data: new_props.inputArr.data,
+                    backgroundColor:['rgba(255,99,132,0.6)',],
+                    borderWidth: 1
+                },
+                annotation:{
+                    p: p_pair,
+                    q: q_pair,
+                    r: r_pair,
+                    s: s_pair,
+                    t: t_pair
+                }, 
+                freq: 500
+            }
+        });
+
+        //console.log('State after update')
+        //console.log(this.state)
+    }*/
+
+    // Can't use 'this.' because this is a static function
+    // The state is updated through what is returned from this function
+    // This loads metadata... but sometimes doesnt load all of them? is kinda random...
+    // Fills the data properly
+    static getDerivedStateFromProps(next_props, prev_state){
+
+        var max = prev_state.max
+        var min = prev_state.min
+
+        /*console.log('Length')
+        console.log(next_props.inputArr.p)
+        console.log(next_props.inputArr.p.length)
+        console.log('\n')*/
+
+        var freq = next_props.inputArr.extra_info.freq
+
+        let props_array = next_props.inputArr;
+        
+        let p_pair = [];
+        let q_pair = [];
+        let r_pair = [];
+        let s_pair = [];
+        let t_pair = [];
+
+        // p_pair
+        for(let i = 0; i < props_array.p.length; i++){
+            p_pair.push({
+                x: props_array.p[i] * (1/freq),
+                y: next_props.inputArr.data[props_array.p[i]].y
+            });
+        }
+        // q_pair
+        for(let i = 0; i < props_array.q.length; i++){
+            q_pair.push({
+                x: props_array.q[i] * (1/freq),
+                y: next_props.inputArr.data[props_array.q[i]].y
+            });
+        }
+        // r_pair
+        for(let i = 0; i < props_array.r.length; i++){
+            r_pair.push({
+                x: props_array.r[i] * (1/freq),
+                y: next_props.inputArr.data[props_array.r[i]].y
+            });
+        }
+        // s_pair
+        for(let i = 0; i < props_array.s.length; i++){
+            s_pair.push({
+                x: props_array.s[i] * (1/freq),
+                y: next_props.inputArr.data[props_array.s[i]].y
+            });
+        }
+        // t_pair
+        for(let i = 0; i < props_array.t.length; i++){
+            t_pair.push({
+                x: props_array.t[i] * (1/freq),
+                y: next_props.inputArr.data[props_array.t[i]].y
+            });
+        }
+        
+        return{
+            data:{
+                datasets:{
+                    radius: 0, // Makes the dots go away
+                    label: next_props.inputArr.title,
+                    fill: false,
+                    borderColor: ['black'],
+                    data: next_props.inputArr.data,
+                    backgroundColor:['rgba(255,99,132,0.6)',],
+                    borderWidth: 1
+                },
+                annotation:{
+                    p:p_pair,
+                    q:q_pair,
+                    r:r_pair,
+                    s:s_pair,
+                    t:t_pair
+                }, 
+                freq: next_props.inputArr.extra_info.freq, 
+                min: next_props.inputArr.extra_info.min, 
+                max: next_props.inputArr.extra_info.max, 
+            }
+        }
+    }
+
+    // Notes for rendering the annotations
+    // ... Make current data a scatter plot rn
+    //  Multiple graphs on top of one another
+    //  Create data pairs for annotation data, making a scatter plot
+    
+    //  stepSize, tooltips, canvasJS?
+
 
     //Render the graph
     render(){
+
+        const dat = {
+            type:'Scatter',
+            datasets: [
+                {
+                    label:'Main-Data',
+                    fill: false,
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    pointBorderColor: 'rgba(75,192,192,1)',
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 1,
+                    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 0, // This makes the individual points disappear
+                    pointHitRadius: 1,
+                    borderWidth: 1,
+                    borderColor:'black',
+                    showLine: true,
+                    data: this.state.data.datasets.data,
+                },
+                { 
+                    label:'P-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'red',
+                    pointRadius: 8,
+                    pointHitRadius: 3,
+                    pointBorderWidth: 2,
+                    backgroundColor: 'red',
+                    showLine: false,
+                    data: this.state.data.annotation.p
+                },
+                { 
+                    label:'Q-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'blue',
+                    pointRadius: 8,
+                    pointHitRadius: 3,
+                    pointBorderWidth: 2,
+                    backgroundColor: 'blue',
+                    showLine: false,
+                    data: this.state.data.annotation.q
+                },
+                { 
+                    label:'R-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'purple',
+                    pointRadius: 8,
+                    pointHitRadius: 3,
+                    pointBorderWidth: 2,
+                    backgroundColor: 'purple',
+                    showLine: false,
+                    data: this.state.data.annotation.r
+                },
+                { 
+                    label:'S-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'green',
+                    pointRadius: 8,
+                    pointHitRadius: 3,
+                    pointBorderWidth: 2,
+                    backgroundColor: 'green',
+                    showLine: false,
+                    data: this.state.data.annotation.s
+                },
+                { 
+                    label:'T-Annotation',
+                    fill:true,
+                    pointStyle: 'star',
+                    pointBorderColor: 'black',
+                    pointRadius: 8,
+                    pointHitRadius: 3,
+                    pointBorderWidth: 2,
+                    backgroundColor: 'black',
+                    showLine: false,
+                    data: this.state.data.annotation.t
+                }
+            ], 
+          };
+
+          let height = 50
+          let dataLen = this.state.data.datasets.data.length
+          let total_time = 1
+          if(this.state.data.datasets.data[dataLen - 1]){
+            total_time = this.state.data.datasets.data[dataLen - 1].x
+          }
+          let interval = 0.2 // 0.2 seconds or 200 ms
+          let ticks_on_x = total_time / interval
+          let between_tick = dataLen / ticks_on_x
+          let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 
+          let q = range / height
+          let y_axis_step_size = q * (height/5)
+          console.log('y_step_size: ' + y_axis_step_size)
+          console.log('\n')
+
         return(
+        <React.Fragment>
+            {
+                <div className="graph">
+                    <Scatter 
+                        data={dat} 
+                        height={height}
+                        options={{
+                            tooltips:{
+                                enabled: true,
+                                mode: 'nearest',
+                                callbacks: {
+                                    label: function(tooltipItems, data) { 
+                                        return tooltipItems.xLabel + ' s, ' + tooltipItems.yLabel + ' mv';
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: this.state.data.datasets.label,
+                                fontSize: 13,
+                                fontFamily: "serif",
+                                position: 'left'
+                            },
+                            legend: {
+                                display:false,
+                                labels: {
+                                    filter: function(item) {
+                                        // Remove the legend of the main-data, keep the annotation legend
+                                        return !item.text.includes('Main-Data');
+                                    }
+                                }
+                            },
+                            scales: {
+                                xAxes: [{
+                                    ticks: {
+                                        // Change this stepsize based on metadata info...
+                                        stepSize: 0.2//skip Measured in seconds(200 miliseconds)
+                                    },
+                                    // Vertical grid-lines
+                                    /*gridLines: {
+                                        display: true,
+                                    },*/
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Seconds'
+                                    }
+                                }],
+                                yAxes: [{
+                                    ticks: {
+                                        stepSize: y_axis_step_size, //724
+                                        min: this.state.data.min,
+                                        max: this.state.data.max
+                                    },
+                                    gridLines: {
+                                        display: true
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'MV'
+                                    }
+                                }]
+                            }
+                        }}
+                    />
+                </div>
+            }
+        </React.Fragment>)
+
+        /*return(
             <React.Fragment>
                 {
                     this.state.graphData ? 
@@ -102,7 +452,7 @@ class Graph extends Component{
                     </div>
                 }
             </React.Fragment>
-         )
+         )*/
     }
 }
 
