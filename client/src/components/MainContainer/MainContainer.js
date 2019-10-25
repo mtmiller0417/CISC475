@@ -111,9 +111,6 @@ export default class MainContainer extends React.Component {
             }
         });
         
-        //var max = 0;
-        //var min = 0;
-        
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
         parsed_csv.then((data) =>
@@ -245,9 +242,6 @@ export default class MainContainer extends React.Component {
 
             }
 
-            // Parse annotation based on index
-            // Do this in graph.js???
-
             // Update the state and cause a re-render
             this.setState({
                 labels: labels,
@@ -269,9 +263,6 @@ export default class MainContainer extends React.Component {
                     freq: freq
                 }
             })
-            
-            console.log('hello')
-            console.log('min: ' + this.state.extra_info.min + ' max: ' + this.state.extra_info.max)
         })
 
         //Parse and store all annotation data in the appropriate arrays
@@ -292,8 +283,6 @@ export default class MainContainer extends React.Component {
     }
 	
 	render() {
-        console.log('RENDER')
-        console.log(this.state.extra_info)
 		return (
 			<div className={styles.container}>
 				<Grid>
