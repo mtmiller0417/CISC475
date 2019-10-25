@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
 
-//C:\Users\mattm\Documents\Files\CISC475\CISC475\client\node_modules\canvasjs
-//C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\components\Graph.js
-
 class Graph extends Component{
 
     constructor(props){
@@ -34,7 +31,6 @@ class Graph extends Component{
         })
     }
 
-    // 
     parseAnnotation(annotation, pair_array, props){
         for(let i = 0; i < annotation.length; i++){
             pair_array.push({
@@ -44,99 +40,6 @@ class Graph extends Component{
         }
     }
 
-    // Might need to add UNSAFE_ to this function name
-    // Call this when this component receives new props
-    /*UNSAFE_componentWillReceiveProps(new_props){
-        // Calling setState causes this component to re-render with the new data its received
-
-        //console.log("Updated Graph props:")
-        // /console.log(new_props);
-
-        console.log('p')
-        console.log(new_props.inputArr.p)
-        console.log('p.length: ' + new_props.inputArr.p.length)
-
-
-        // Used for scatterplot
-
-        var props_array = new_props.inputArr;
-        var p_pair = [];
-        var q_pair = [];
-        var r_pair = [];
-        var s_pair = [];
-        var t_pair = [];
-        //console.log('length')
-        //console.log(new_props.inputArr.p.length)
-        // p_pair
-        for(var i = 0; i < props_array.p.length; i++){
-            if(i === props_array.p.length - 1){
-                console.log('p_pair almost filled')
-            }
-            console.log('HELLO')
-            p_pair.push({
-                x: props_array.p[i],
-                y: new_props.inputArr.data[props_array.p[i]].y
-            });
-        }
-        // q_pair
-        for(let i = 0; i < props_array.q.length; i++){
-            q_pair.push({
-                x: props_array.q[i],
-                y: new_props.inputArr.data[props_array.q[i]].y
-            });
-        }
-        // r_pair
-        for(let i = 0; i < props_array.r.length; i++){
-            r_pair.push({
-                x: props_array.r[i],
-                y: new_props.inputArr.data[props_array.r[i]].y
-            });
-        }
-        // s_pair
-        for(let i = 0; i < props_array.s.length; i++){
-            s_pair.push({
-                x: props_array.s[i],
-                y: new_props.inputArr.data[props_array.s[i]].y
-            });
-        }
-        // t_pair
-        for(let i = 0; i < props_array.t.length; i++){
-            t_pair.push({
-                x: props_array.t[i],
-                y: new_props.inputArr.data[props_array.t[i]].y
-            });
-        }
-
-        //console.log('P-Pair')
-        //console.log(p_pair)
-
-        // Update the annotations
-        this.setState({
-            data:{
-                datasets:{
-                    radius: 0, // Makes the dots go away
-                    label: new_props.inputArr.title,
-                    fill: false,
-                    borderColor: ['black'],
-                    data: new_props.inputArr.data,
-                    backgroundColor:['rgba(255,99,132,0.6)',],
-                    borderWidth: 1
-                },
-                annotation:{
-                    p: p_pair,
-                    q: q_pair,
-                    r: r_pair,
-                    s: s_pair,
-                    t: t_pair
-                }, 
-                freq: 500
-            }
-        });
-
-        //console.log('State after update')
-        //console.log(this.state)
-    }*/
-
     // Can't use 'this.' because this is a static function
     // The state is updated through what is returned from this function
     // This loads metadata... but sometimes doesnt load all of them? is kinda random...
@@ -145,11 +48,6 @@ class Graph extends Component{
 
         var max = prev_state.max
         var min = prev_state.min
-
-        /*console.log('Length')
-        console.log(next_props.inputArr.p)
-        console.log(next_props.inputArr.p.length)
-        console.log('\n')*/
 
         var freq = next_props.inputArr.extra_info.freq
 
