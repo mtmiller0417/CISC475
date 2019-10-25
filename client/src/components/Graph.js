@@ -434,11 +434,9 @@ class Graph extends Component{
                                     yAxes: [{
                                         type: 'linear', // Doesn't cause a problem in y-axis
                                         ticks: {
-                                            //stepSize: 500,
                                             stacked: true,
-                                            //stepSize: 1000
-                                            //min: -2000,
-                                            //max: 2000
+                                            min: this.state.min,
+                                            max: this.state.max
                                         },
                                         gridLines: {
                                             display: true

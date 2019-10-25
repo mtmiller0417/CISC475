@@ -85,6 +85,10 @@ export default class MainContainer extends React.Component {
         let annotation_t = [];
         let labels = [];
 
+        //Define Min/Max trackers
+        let max = 0;
+        let min = 0;
+
         //Parse the CSV into an array of objects where each object represents a row
         var parsed_csv = d3.csv(data, function(d)
         {
@@ -107,8 +111,8 @@ export default class MainContainer extends React.Component {
             }
         });
         
-        var max = 0;
-        var min = 0;
+        //var max = 0;
+        //var min = 0;
         
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
@@ -119,6 +123,19 @@ export default class MainContainer extends React.Component {
 
             for(var i = 0; i < data.length; i++)
             {
+                //Push the data points of the current object to the appropriate arrays
+                /*lead_i.push(data[i].I); if(max < data[i].I){max = data[i].I}; if(min > data[i].I){min = data[i].I};
+                lead_ii.push(data[i].II); if(max < data[i].II){max = data[i].II}; if(min > data[i].II){min = data[i].II};
+                lead_iii.push(data[i].III); if(max < data[i].III){max = data[i].III}; if(min > data[i].III){min = data[i].III};
+                lead_avr.push(data[i].aVR); if(max < data[i].aVR){max = data[i].aVR}; if(min > data[i].aVR){min = data[i].aVR};
+                lead_avl.push(data[i].aVL); if(max < data[i].aVL){max = data[i].aVL}; if(min > data[i].aVL){min = data[i].aVL};
+                lead_avf.push(data[i].aVF); if(max < data[i].aVF){max = data[i].aVF}; if(min > data[i].aVF){min = data[i].aVF};
+                lead_v1.push(data[i].V1); if(max < data[i].V1){max = data[i].V1}; if(min > data[i].V1){min = data[i].V1};
+                lead_v2.push(data[i].V2); if(max < data[i].V2){max = data[i].V2}; if(min > data[i].V2){min = data[i].V2};
+                lead_v3.push(data[i].V3); if(max < data[i].V3){max = data[i].V3}; if(min > data[i].V3){min = data[i].V3};
+                lead_v4.push(data[i].V4); if(max < data[i].V4){max = data[i].V4}; if(min > data[i].V4){min = data[i].V4};
+                lead_v5.push(data[i].V5); if(max < data[i].V5){max = data[i].V5}; if(min > data[i].V5){min = data[i].V5};
+                lead_v6.push(data[i].V6); if(max < data[i].V6){max = data[i].V6}; if(min > data[i].V6){min = data[i].V6};*/
                 labels.push(i);
                 //console.log('x')
                 //console.log(i * 1/freq)
