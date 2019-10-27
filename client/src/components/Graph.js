@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
 
+// Set constant colors here
+let lightOpacity = .2
+let pastelOrange = 'rgba(255,180,71,1)';
+let pastelOrangeLightOpacity = 'rgba(255,180,71,' + lightOpacity + ')';
+let pastelRed = 'rgba(255,105,97,1)';
+let pastelRedLightOpacity = 'rgba(255,105,97,' + lightOpacity + ')';
+let pastelBlue = 'rgba(88,148,156,1)';
+let pastelBlueLightOpacity = 'rgba(88,148,156,' + lightOpacity + ')';
+let pastelGreen = 'rgba(133,222,119,1)';
+let pastelGreenLightOpacity = 'rgba(133,222,119,' + lightOpacity + ')';
+let pastelPurple = 'rgba(178,157,217,1)';
+let pastelPurpleLightOpacity = 'rgba(178,157,217,' + lightOpacity + ')';
+
+
 class Graph extends Component{
 
     constructor(props){
@@ -155,60 +169,60 @@ class Graph extends Component{
                 { 
                     label:'P-Annotation',
                     fill:true,
-                    pointStyle: 'star',
-                    pointBorderColor: 'red',
+                    pointStyle: 'circle',
+                    pointBorderColor: pastelRed,
                     pointRadius: 8,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
-                    backgroundColor: 'red',
+                    backgroundColor: pastelRedLightOpacity,
                     showLine: false,
                     data: this.state.data.annotation.p
                 },
                 { 
                     label:'Q-Annotation',
                     fill:true,
-                    pointStyle: 'star',
-                    pointBorderColor: 'blue',
+                    pointStyle: 'circle',
+                    pointBorderColor: pastelPurple,
                     pointRadius: 8,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
-                    backgroundColor: 'blue',
+                    backgroundColor: pastelPurpleLightOpacity,
                     showLine: false,
                     data: this.state.data.annotation.q
                 },
                 { 
                     label:'R-Annotation',
                     fill:true,
-                    pointStyle: 'star',
-                    pointBorderColor: 'purple',
+                    pointStyle: 'circle',
+                    pointBorderColor: pastelOrange, 
                     pointRadius: 8,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
-                    backgroundColor: 'purple',
+                    backgroundColor: pastelOrangeLightOpacity,
                     showLine: false,
                     data: this.state.data.annotation.r
                 },
                 { 
                     label:'S-Annotation',
                     fill:true,
-                    pointStyle: 'star',
-                    pointBorderColor: 'green',
+                    pointStyle: 'circle',
+                    pointBorderColor: pastelBlue,
                     pointRadius: 8,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
-                    backgroundColor: 'green',
+                    backgroundColor: pastelBlueLightOpacity,
                     showLine: false,
                     data: this.state.data.annotation.s
                 },
-                { 
+                {  
                     label:'T-Annotation',
                     fill:true,
-                    pointStyle: 'star',
-                    pointBorderColor: 'black',
+                    pointStyle: 'circle',
+                    pointBorderColor: pastelGreen,
                     pointRadius: 8,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
-                    backgroundColor: 'black',
+                    backgroundColor: pastelGreenLightOpacity,
                     showLine: false,
                     data: this.state.data.annotation.t
                 }
