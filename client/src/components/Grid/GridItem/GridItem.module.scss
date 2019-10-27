@@ -10,19 +10,3 @@
 	cursor: pointer;
 	background-color: #f1f1f1;
 }
-
-.gridItem:nth-child(1) {
-	border-top-left-radius: 11px;
-}
-
-.gridItem:nth-child(2) {
-	border-top-right-radius: 11px;
-}
-
-.gridItem:nth-child(11) {
-	border-bottom-left-radius: 11px;
-}
-
-.gridItem:nth-child(12) {
-	border-bottom-right-radius: 11px;
-}

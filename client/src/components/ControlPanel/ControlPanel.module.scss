@@ -15,16 +15,19 @@
 }
 
 .controlHeader {
-	grid-column: span 3;
+	grid-column: span 2;
 }
 
 .controlGrid {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr;
+	grid-column: span 2;
+	align-items: center;
+	justify-items: center;
 }
 
 .controlButtonText {
-	padding: 10px;
+	padding: 20px;
 }
 
 .controlButton {

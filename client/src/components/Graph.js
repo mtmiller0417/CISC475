@@ -248,7 +248,7 @@ class Graph extends Component{
                                 }
                             },
                             title: {
-                                display: true,
+                                display: false,
                                 text: this.state.data.datasets.label,
                                 fontSize: 13,
                                 fontFamily: "serif",
