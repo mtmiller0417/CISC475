@@ -153,7 +153,7 @@ class Graph extends Component{
                     data: this.state.data.datasets.data,
                 },
                 { 
-                    label:'P-Annotation',
+                    label:'P',
                     fill:true,
                     pointStyle: 'star',
                     pointBorderColor: 'red',
@@ -165,7 +165,7 @@ class Graph extends Component{
                     data: this.state.data.annotation.p
                 },
                 { 
-                    label:'Q-Annotation',
+                    label:'Q',
                     fill:true,
                     pointStyle: 'star',
                     pointBorderColor: 'blue',
@@ -177,7 +177,7 @@ class Graph extends Component{
                     data: this.state.data.annotation.q
                 },
                 { 
-                    label:'R-Annotation',
+                    label:'R',
                     fill:true,
                     pointStyle: 'star',
                     pointBorderColor: 'purple',
@@ -189,7 +189,7 @@ class Graph extends Component{
                     data: this.state.data.annotation.r
                 },
                 { 
-                    label:'S-Annotation',
+                    label:'S',
                     fill:true,
                     pointStyle: 'star',
                     pointBorderColor: 'green',
@@ -201,7 +201,7 @@ class Graph extends Component{
                     data: this.state.data.annotation.s
                 },
                 { 
-                    label:'T-Annotation',
+                    label:'T',
                     fill:true,
                     pointStyle: 'star',
                     pointBorderColor: 'black',
@@ -255,7 +255,8 @@ class Graph extends Component{
                                 position: 'left'
                             },
                             legend: {
-                                display:false,
+                                display:true,
+                                position: 'right',
                                 labels: {
                                     filter: function(item) {
                                         // Remove the legend of the main-data, keep the annotation legend
