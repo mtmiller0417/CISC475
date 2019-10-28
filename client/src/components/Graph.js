@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
+import styles from 'C:/Users/mattm/Documents/Files/CISC475/CISC475/client/src/components/Grid/GridItem/GridItem.module.scss';
+
+// C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\components\Graph.js
+// C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\components\Grid\GridItem\GridItem.module.scss
 
 class Graph extends Component{
 
@@ -131,6 +135,10 @@ class Graph extends Component{
     //Render the graph
     render(){
 
+        var griditem = document.getElementsByClassName(styles.griditem);
+        console.log('griditem')
+        console.log(griditem.width)
+
         const dat = {
             type:'Scatter',
             datasets: [
@@ -204,11 +212,11 @@ class Graph extends Component{
                     label:'T-Annotation',
                     fill:true,
                     pointStyle: 'star',
-                    pointBorderColor: 'black',
+                    pointBorderColor: 'orange',
                     pointRadius: 8,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
-                    backgroundColor: 'black',
+                    backgroundColor: 'orange',
                     showLine: false,
                     data: this.state.data.annotation.t
                 }
@@ -252,7 +260,7 @@ class Graph extends Component{
                                 text: this.state.data.datasets.label,
                                 fontSize: 13,
                                 fontFamily: "serif",
-                                position: 'left'
+                                position:'left'
                             },
                             legend: {
                                 display:false,
@@ -280,7 +288,8 @@ class Graph extends Component{
                                 }],
                                 yAxes: [{
                                     ticks: {
-                                        stepSize: y_axis_step_size, //724
+                                        //stepSize: y_axis_step_size, //724
+                                        stepSize: 750,
                                         min: this.state.data.min,
                                         max: this.state.data.max
                                     },
