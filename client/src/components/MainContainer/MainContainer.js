@@ -287,8 +287,7 @@ export default class MainContainer extends React.Component {
 			<div className={styles.container}>
 				<Grid>
 					<Header />
-					<Metadata />
-					<ControlPanel />
+				
 				</Grid>
 
 				<Grid>
@@ -316,6 +315,7 @@ export default class MainContainer extends React.Component {
                     <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
 					<div><b>V6</b></div>
                     <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                                    <Metadata />
 				</Grid>
 			</div>
 		);

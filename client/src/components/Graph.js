@@ -215,7 +215,7 @@ class Graph extends Component{
             ], 
           };
 
-          let height = 50
+          let height = 35
           let dataLen = this.state.data.datasets.data.length
           let total_time = 1
           if(this.state.data.datasets.data[dataLen - 1]){
@@ -275,7 +275,7 @@ class Graph extends Component{
                                         display: true,
                                     },*/
                                     scaleLabel: {
-                                        display: true,
+                                        display: false,
                                         labelString: 'Seconds'
                                     }
                                 }],
@@ -289,7 +289,7 @@ class Graph extends Component{
                                         display: true
                                     },
                                     scaleLabel: {
-                                        display: true,
+                                        display: false,
                                         labelString: 'MV'
                                     }
                                 }]
