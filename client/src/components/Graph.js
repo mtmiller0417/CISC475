@@ -18,21 +18,6 @@ let pastelGreenLightOpacity = 'rgba(133,222,119,' + lightOpacity + ')';
 let pastelPurple = 'rgba(178,157,217,1)';
 let pastelPurpleLightOpacity = 'rgba(178,157,217,' + lightOpacity + ')';
 
-
-// Set constant colors here
-let lightOpacity = .2
-let pastelOrange = 'rgba(255,180,71,1)';
-let pastelOrangeLightOpacity = 'rgba(255,180,71,' + lightOpacity + ')';
-let pastelRed = 'rgba(255,105,97,1)';
-let pastelRedLightOpacity = 'rgba(255,105,97,' + lightOpacity + ')';
-let pastelBlue = 'rgba(88,148,156,1)';
-let pastelBlueLightOpacity = 'rgba(88,148,156,' + lightOpacity + ')';
-let pastelGreen = 'rgba(133,222,119,1)';
-let pastelGreenLightOpacity = 'rgba(133,222,119,' + lightOpacity + ')';
-let pastelPurple = 'rgba(178,157,217,1)';
-let pastelPurpleLightOpacity = 'rgba(178,157,217,' + lightOpacity + ')';
-
-
 class Graph extends Component{
 
     constructor(props){
