@@ -45,6 +45,10 @@ class Graph extends Component{
         })
     }
 
+    deleteAnnotation(e) {
+        alert(this.getElementAtEvent(e));
+    }
+
     parseAnnotation(annotation, pair_array, props){
         for(let i = 0; i < annotation.length; i++){
             pair_array.push({
@@ -160,10 +164,11 @@ class Graph extends Component{
                     pointHoverBorderColor: 'rgba(220,220,220,1)',
                     pointHoverBorderWidth: 1,
                     pointRadius: 0, // This makes the individual points disappear
-                    pointHitRadius: 1,
+                    pointHitRadius: 0,
                     borderWidth: 1,
                     borderColor:'black',
                     showLine: true,
+                    tooltipHidden: true,
                     data: this.state.data.datasets.data,
                 },
                 { 
@@ -173,9 +178,11 @@ class Graph extends Component{
                     pointBorderColor: pastelRed,
                     pointRadius: 8,
                     pointHitRadius: 3,
+                    pointHoverRadius: 10,
                     pointBorderWidth: 2,
                     backgroundColor: pastelRedLightOpacity,
                     showLine: false,
+                    tooltipHidden: false,
                     data: this.state.data.annotation.p
                 },
                 { 
@@ -185,9 +192,11 @@ class Graph extends Component{
                     pointBorderColor: pastelPurple,
                     pointRadius: 8,
                     pointHitRadius: 3,
+                    pointHoverRadius: 10,
                     pointBorderWidth: 2,
                     backgroundColor: pastelPurpleLightOpacity,
                     showLine: false,
+                    tooltipHidden: false,
                     data: this.state.data.annotation.q
                 },
                 { 
@@ -197,9 +206,11 @@ class Graph extends Component{
                     pointBorderColor: pastelOrange, 
                     pointRadius: 8,
                     pointHitRadius: 3,
+                    pointHoverRadius: 10,
                     pointBorderWidth: 2,
                     backgroundColor: pastelOrangeLightOpacity,
                     showLine: false,
+                    tooltipHidden: false,
                     data: this.state.data.annotation.r
                 },
                 { 
@@ -209,9 +220,11 @@ class Graph extends Component{
                     pointBorderColor: pastelBlue,
                     pointRadius: 8,
                     pointHitRadius: 3,
+                    pointHoverRadius: 10,
                     pointBorderWidth: 2,
                     backgroundColor: pastelBlueLightOpacity,
                     showLine: false,
+                    tooltipHidden: false,
                     data: this.state.data.annotation.s
                 },
                 {  
@@ -221,9 +234,11 @@ class Graph extends Component{
                     pointBorderColor: pastelGreen,
                     pointRadius: 8,
                     pointHitRadius: 3,
+                    pointHoverRadius: 10,
                     pointBorderWidth: 2,
                     backgroundColor: pastelGreenLightOpacity,
                     showLine: false,
+                    tooltipHidden: false,
                     data: this.state.data.annotation.t
                 }
             ], 
@@ -247,14 +262,33 @@ class Graph extends Component{
         return(
         <React.Fragment>
             {
-                <div className="graph">
+                <div className="graph" /*onClick={this.deleteAnnotation}*/>
                     <Scatter 
                         data={dat} 
                         height={height}
+                        getElementAtEvent={(point) =>{
+                            if(point.length > 0){
+                                console.log(point);
+                            }
+                        }}
                         options={{
                             tooltips:{
                                 enabled: true,
                                 mode: 'nearest',
+                                custom: function(tooltipModel) {
+                                    // EXTENSION: filter is not enough! Hide tooltip frame
+                                    if (!tooltipModel.body || tooltipModel.body.length < 1) {
+                                    tooltipModel.caretSize = 0;
+                                    tooltipModel.xPadding = 0;
+                                    tooltipModel.yPadding = 0;
+                                    tooltipModel.cornerRadius = 0;
+                                    tooltipModel.width = 0;
+                                    tooltipModel.height = 0;
+                                    }
+                                },
+                                filter: function(tooltipItem, data) {
+                                    return !data.datasets[tooltipItem.datasetIndex].tooltipHidden;
+                                },
                                 callbacks: {
                                     label: function(tooltipItems, data) { 
                                         return tooltipItems.xLabel + ' s, ' + tooltipItems.yLabel + ' mv';
@@ -366,6 +400,7 @@ class Graph extends Component{
             </React.Fragment>
          )*/
     }
+
 }
 
 export default Graph; 
