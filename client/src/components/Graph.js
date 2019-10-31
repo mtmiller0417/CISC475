@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
 import styles from 'C:/Users/mattm/Documents/Files/CISC475/CISC475/client/src/components/Grid/GridItem/GridItem.module.scss';
-
-// C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\components\Graph.js
-// C:\Users\mattm\Documents\Files\CISC475\CISC475\client\src\components\Grid\GridItem\GridItem.module.scss
+import ReactDOM from 'react-dom';
 
 // Set constant colors here
 let lightOpacity = .2
@@ -22,6 +20,8 @@ class Graph extends Component{
 
     constructor(props){
         super(props);
+
+        this.ref = React.createRef()
 
         this.state = ({
             data:{
@@ -43,9 +43,19 @@ class Graph extends Component{
                 }, 
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
-                min:this.props.inputArr.extra_info.min
+                min:this.props.inputArr.extra_info.min, 
+                parent_width: 0
             }
         })
+    }
+
+    componentDidMount(){
+        /*let width = ReactDOM.findDOMNode(this).getBoundingClientRect().width + 0;
+        let height = ReactDOM.findDOMNode(this).getBoundingClientRect().height + 0;
+        console.log('width')
+        console.log(width)
+        console.log('height')
+        console.log(height)*/
     }
 
     parseAnnotation(annotation, pair_array, props){
@@ -62,6 +72,9 @@ class Graph extends Component{
     // This loads metadata... but sometimes doesnt load all of them? is kinda random...
     // Fills the data properly
     static getDerivedStateFromProps(next_props, prev_state){
+
+        //console.log('props')
+        //console.log(next_props);
 
         var max = prev_state.max
         var min = prev_state.min
@@ -133,25 +146,13 @@ class Graph extends Component{
                 freq: next_props.inputArr.extra_info.freq, 
                 min: next_props.inputArr.extra_info.min, 
                 max: next_props.inputArr.extra_info.max, 
+                parent_width: next_props.width
             }
         }
     }
 
-    // Notes for rendering the annotations
-    // ... Make current data a scatter plot rn
-    //  Multiple graphs on top of one another
-    //  Create data pairs for annotation data, making a scatter plot
-    
-    //  stepSize, tooltips, canvasJS?
-
-
     //Render the graph
     render(){
-
-        var griditem = document.getElementsByClassName(styles.griditem);
-        console.log('griditem')
-        console.log(griditem.width)
-
         const dat = {
             type:'Scatter',
             datasets: [
@@ -178,7 +179,7 @@ class Graph extends Component{
                     fill:true,
                     pointStyle: 'circle',
                     pointBorderColor: pastelRed,
-                    pointRadius: 8,
+                    pointRadius: 5,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: pastelRedLightOpacity,
@@ -190,7 +191,7 @@ class Graph extends Component{
                     fill:true,
                     pointStyle: 'circle',
                     pointBorderColor: pastelPurple,
-                    pointRadius: 8,
+                    pointRadius: 5,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: pastelPurpleLightOpacity,
@@ -202,7 +203,7 @@ class Graph extends Component{
                     fill:true,
                     pointStyle: 'circle',
                     pointBorderColor: pastelOrange, 
-                    pointRadius: 8,
+                    pointRadius: 5,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: pastelOrangeLightOpacity,
@@ -214,7 +215,7 @@ class Graph extends Component{
                     fill:true,
                     pointStyle: 'circle',
                     pointBorderColor: pastelBlue,
-                    pointRadius: 8,
+                    pointRadius: 5,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: pastelBlueLightOpacity,
@@ -224,47 +225,72 @@ class Graph extends Component{
                 {  
                     label:'T-Annotation',
                     fill:true,
-                    pointStyle: 'star',
-                    pointBorderColor: 'orange',
-                    pointRadius: 8,
-                    pointHitRadius: 3,
-                    pointBorderWidth: 2,
-                    backgroundColor: 'orange',
                     pointStyle: 'circle',
                     pointBorderColor: pastelGreen,
-                    pointRadius: 8,
+                    pointRadius: 5,
                     pointHitRadius: 3,
                     pointBorderWidth: 2,
                     backgroundColor: pastelGreenLightOpacity,
                     showLine: false,
-                    data: this.state.data.annotation.t
+                    data: this.state.data.annotation.s
                 }
             ], 
-          };
+        };
 
-          let height = 50
-          let dataLen = this.state.data.datasets.data.length
-          let total_time = 1
-          if(this.state.data.datasets.data[dataLen - 1]){
+        // The stated height of the chart
+        const HEIGHT = 225;
+
+        let dataLen = this.state.data.datasets.data.length
+        let total_time = 1
+        if(this.state.data.datasets.data[dataLen - 1]){
             total_time = this.state.data.datasets.data[dataLen - 1].x
-          }
-          let interval = 0.2 // 0.2 seconds or 200 ms
-          let ticks_on_x = total_time / interval
-          let between_tick = dataLen / ticks_on_x
-          let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 
-          let q = range / height
-          let y_axis_step_size = q * (height/5)
-          console.log('y_step_size: ' + y_axis_step_size)
-          console.log('\n')
+        }
+        const INTERVAL = 0.2 // 0.2 seconds or 200 ms
+
+        //let between_tick = dataLen / ticks_on_x
+        let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 
+
+        // Number of seconds to fit on the screen at a time
+        const TIME_PER_WIDTH = 5
+
+        // The amount of the width/height that is not part of the graph
+        const width_offset = 79 
+        const height_offset = 60 
+
+        // The fixed width of the container on the screen
+        const parent_width = this.state.data.parent_width - width_offset
+
+        // The amount of px that will be visible in every given second of the x axis
+        const px_per_second = parent_width / TIME_PER_WIDTH;
+
+        // Calculates the width of the graph(can be greater than the fixed width, scrollable allow the excess to be seen)
+        const width = (TIME_PER_WIDTH * px_per_second); // 1571
+
+        // The true height/width px on the screen
+        const true_with = width                     // 1571px
+        const true_height = HEIGHT - height_offset  // 165px
+
+        const ticks_per_width = Math.min(TIME_PER_WIDTH, total_time) / INTERVAL; // 25
+        const ratio = true_height / (true_with / ticks_per_width); // Solve 1571/25 = 165/x
+        const round_up_ratio = Math.ceil(ratio)
+        //const rounded_range = Math.round((range / ratio) * round_up_ratio)
+        const y_step = Math.round(range / ratio) 
+        const max_y = (y_step* round_up_ratio) - Math.abs(this.state.data.min)
+
+        /*const y_step_size = rounded_range / (round_up_ratio - 1)
+        console.log('y_step_size')
+        console.log(y_step_size)*/
 
         return(
         <React.Fragment>
             {
-                <div className="graph">
+                // Changing the width here changes the width of the graph ()
+                <div className="graph" style={{width: width+width_offset+'px'}}>
                     <Scatter 
                         data={dat} 
-                        height={height}
+                        height={HEIGHT}
                         options={{
+                            maintainAspectRatio: false,
                             tooltips:{
                                 enabled: true,
                                 mode: 'nearest',
@@ -294,12 +320,8 @@ class Graph extends Component{
                                 xAxes: [{
                                     ticks: {
                                         // Change this stepsize based on metadata info...
-                                        stepSize: 0.2//skip Measured in seconds(200 miliseconds)
+                                        stepSize: INTERVAL//skip Measured in seconds(200 miliseconds)
                                     },
-                                    // Vertical grid-lines
-                                    /*gridLines: {
-                                        display: true,
-                                    },*/
                                     scaleLabel: {
                                         display: true,
                                         labelString: 'Seconds'
@@ -307,10 +329,10 @@ class Graph extends Component{
                                 }],
                                 yAxes: [{
                                     ticks: {
-                                        //stepSize: y_axis_step_size, //724
-                                        stepSize: 750,
+                                        display: false,
+                                        stepSize: y_step, // 1379
                                         min: this.state.data.min,
-                                        max: this.state.data.max
+                                        max: max_y
                                     },
                                     gridLines: {
                                         display: true
@@ -326,59 +348,6 @@ class Graph extends Component{
                 </div>
             }
         </React.Fragment>)
-
-        /*return(
-            <React.Fragment>
-                {
-                    this.state.graphData ? 
-                    <div className="graph">
-                        <Line
-                            data={this.state.graphData}
-                            height={50}
-                            options={{
-                                title: {
-                                display: true,
-                                text: this.props.inputArr.title,
-                                fontSize: 18,
-                                fontFamily: "sans-serif"
-                                },
-                                legend: {
-                                    display: false
-                                },
-                                scales: {
-                                    xAxes: [{
-                                        //type: 'linear', // This causes no data to show...
-                                        ticks: {
-                                            //stacked: true,
-                                            stepSize: 100
-                                        },
-                                        // Vertical grid-lines
-                                        gridLines: {
-                                            display: true,
-                                        }
-                                    }],
-                                    yAxes: [{
-                                        type: 'linear', // Doesn't cause a problem in y-axis
-                                        ticks: {
-                                            stacked: true,
-                                            min: this.state.min,
-                                            max: this.state.max
-                                        },
-                                        gridLines: {
-                                            display: true
-                                        }
-                                    }]
-                                }
-                            }}
-                         />
-                    </div>
-                    :
-                    <div class="graph">
-                        Loading...
-                    </div>
-                }
-            </React.Fragment>
-         )*/
     }
 }
 
