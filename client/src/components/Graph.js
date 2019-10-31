@@ -293,7 +293,7 @@ class Graph extends Component{
                 <div className="graph" style={{width: width+width_offset+'px'}} /*onClick={this.deleteAnnotation}*/>
                     <Scatter 
                         data={dat} 
-                        height={height}
+                        height={HEIGHT}
                         getElementAtEvent={(point) =>{
                             if(point.length > 0){
                                 console.log(point);
