@@ -53,15 +53,16 @@ export default class MainContainer extends React.Component {
     //Returns nothing
     parseAnnotationCsv(inputCsv)
     {
-        var parsed_p = d3.text(inputCsv, function(text) {
+        var parsed_val = d3.text(inputCsv, function(text) {
                 var data = d3.csv.parseRows(text, function(d) {
                                             return d.map(Number);
                                             });
                 });
         
-        return parsed_p.then(data => {
-                      return data;
-                             });
+        return parsed_val.then(data => {
+                               return data.split(',').map(function(item){
+                                                          return parseInt(item,10);
+                                                          })})
     }
 
     componentWillMount(){
@@ -252,43 +253,28 @@ export default class MainContainer extends React.Component {
 
         // 5 Seperate Set States that resolve a promise from ParseAnnotationCsv, they set each annotation in Graph.js.
         this.parseAnnotationCsv(csv_p).then(data => {
-                    annotation_p = data.split(',').map(function(item) {
-                            return parseInt(item, 10);
-                            })
                             this.setState({
-                                           p: annotation_p
+                                           p: data
                                          })})
         
         this.parseAnnotationCsv(csv_q).then(data => {
-                        annotation_q = data.split(',').map(function(item) {
-                            return parseInt(item, 10);
-                            })
                             this.setState({
-                                          q: annotation_q
-                                        })})
+                                          q: data
+                                          })})
         
         this.parseAnnotationCsv(csv_r).then(data => {
-                         annotation_r = data.split(',').map(function(item) {
-                            return parseInt(item, 10);
-                            })
                             this.setState({
-                                         r: annotation_r
+                                         r: data
                                           })})
         
         this.parseAnnotationCsv(csv_s).then(data => {
-                        annotation_s = data.split(',').map(function(item) {
-                            return parseInt(item, 10);
-                            })
                             this.setState({
-                                         s: annotation_s
+                                         s: data
                                          })})
         
         this.parseAnnotationCsv(csv_t).then(data => {
-                        annotation_t = data.split(',').map(function(item) {
-                            return parseInt(item, 10);
-                            })
                             this.setState({
-                                          t: annotation_t
+                                          t: data
                                          })})
     }
 	
