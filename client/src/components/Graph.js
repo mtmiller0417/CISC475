@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
-import styles from 'C:/Users/mattm/Documents/Files/CISC475/CISC475/client/src/components/Grid/GridItem/GridItem.module.scss';
-import ReactDOM from 'react-dom';
+//import styles from 'C:/Users/mattm/Documents/Files/CISC475/CISC475/client/src/components/Grid/GridItem/GridItem.module.scss';
+//import ReactDOM from 'react-dom';
 
 // Set constant colors here
 let lightOpacity = .2
@@ -67,13 +67,6 @@ class Graph extends Component{
     // This loads metadata... but sometimes doesnt load all of them? is kinda random...
     // Fills the data properly
     static getDerivedStateFromProps(next_props, prev_state){
-
-        //console.log('props')
-        //console.log(next_props);
-
-        var max = prev_state.max
-        var min = prev_state.min
-
         var freq = next_props.inputArr.extra_info.freq
 
         let props_array = next_props.inputArr;
@@ -243,21 +236,20 @@ class Graph extends Component{
             ], 
         };
 
-        // The stated height of the chart
-        const HEIGHT = 225;
-
         let dataLen = this.state.data.datasets.data.length
         let total_time = 1
         if(this.state.data.datasets.data[dataLen - 1]){
             total_time = this.state.data.datasets.data[dataLen - 1].x
+            total_time += 1/this.state.data.freq
         }
+
+        // Some constants
+        const HEIGHT = 225; // The stated height of the chart
         const INTERVAL = 0.2 // 0.2 seconds or 200 ms
+        const TIME_PER_WIDTH = Math.min(5, total_time) // Number of seconds to fit on the screen at a time
 
         //let between_tick = dataLen / ticks_on_x
         let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 
-
-        // Number of seconds to fit on the screen at a time
-        const TIME_PER_WIDTH = 5
 
         // The amount of the width/height that is not part of the graph
         const width_offset = 79 
@@ -270,27 +262,28 @@ class Graph extends Component{
         const px_per_second = parent_width / TIME_PER_WIDTH;
 
         // Calculates the width of the graph(can be greater than the fixed width, scrollable allow the excess to be seen)
-        const width = (TIME_PER_WIDTH * px_per_second); // 1571
+        const width = total_time * px_per_second;
 
         // The true height/width px on the screen
-        const true_with = width                     // 1571px
+        const true_with = parent_width              // 1571px
         const true_height = HEIGHT - height_offset  // 165px
 
         const ticks_per_width = Math.min(TIME_PER_WIDTH, total_time) / INTERVAL; // 25
         const ratio = true_height / (true_with / ticks_per_width); // Solve 1571/25 = 165/x
         const round_up_ratio = Math.ceil(ratio)
-        //const rounded_range = Math.round((range / ratio) * round_up_ratio)
         const y_step = Math.round(range / ratio) 
         const max_y = (y_step* round_up_ratio) - Math.abs(this.state.data.min)
 
-        /*const y_step_size = rounded_range / (round_up_ratio - 1)
-        console.log('y_step_size')
-        console.log(y_step_size)*/
+        // Add the width_offset and 'px' to the width to be set in the graph div
+        let full_width = width+width_offset
+        full_width += 'px'
+        //console.log('full_width')
+        //console.log(full_width)
 
         return(
         <React.Fragment>
             {
-                <div className="graph" style={{width: width+width_offset+'px'}} /*onClick={this.deleteAnnotation}*/>
+                <div className="graph" style={{width: full_width}} /*onClick={this.deleteAnnotation}*/>
                     <Scatter 
                         data={dat} 
                         height={HEIGHT}
