@@ -80,28 +80,28 @@ class Graph extends Component{
             x++;
             p_pair.push({
                 x: props_array.p[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.p[i]].y
+                y: next_props.inputArr.data[props_array.p[i]]
             });
         }
         // q_pair
         for(let i = 0; i < props_array.q.length; i++){
             q_pair.push({
                 x: props_array.q[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.q[i]].y
+                y: next_props.inputArr.data[props_array.q[i]]
             });
         }
         // r_pair
         for(let i = 0; i < props_array.r.length; i++){
             r_pair.push({
                 x: props_array.r[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.r[i]].y
+                y: next_props.inputArr.data[props_array.r[i]]
             });
         }
         // s_pair
         for(let i = 0; i < props_array.s.length; i++){
             s_pair.push({
                 x: props_array.s[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.s[i]].y
+                y: next_props.inputArr.data[props_array.s[i]]
             });
         }
         // t_pair

@@ -61,8 +61,9 @@ export default class MainContainer extends React.Component {
         
         return parsed_val.then(data => {
                                return data.split(',').map(function(item){
-                                                          return parseInt(item,10);
-                                                          })})
+                                            return parseInt(item,10);
+                                                                    })
+                                            });
     }
 
     componentWillMount(){
@@ -251,10 +252,13 @@ export default class MainContainer extends React.Component {
         })
 
 
+      //  return data.split(',').map(function(item){
+       //                            return parseInt(item,10);
+        //                           })
         // 5 Seperate Set States that resolve a promise from ParseAnnotationCsv, they set each annotation in Graph.js.
         this.parseAnnotationCsv(csv_p).then(data => {
                             this.setState({
-                                           p: data
+                                          p: data
                                          })})
         
         this.parseAnnotationCsv(csv_q).then(data => {
@@ -264,12 +268,12 @@ export default class MainContainer extends React.Component {
         
         this.parseAnnotationCsv(csv_r).then(data => {
                             this.setState({
-                                         r: data
+                                          r: data
                                           })})
         
         this.parseAnnotationCsv(csv_s).then(data => {
                             this.setState({
-                                         s: data
+                                          s: data
                                          })})
         
         this.parseAnnotationCsv(csv_t).then(data => {
