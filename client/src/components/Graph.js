@@ -108,7 +108,7 @@ class Graph extends Component{
         for(let i = 0; i < props_array.t.length; i++){
             t_pair.push({
                 x: props_array.t[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.t[i]].y
+                y: next_props.inputArr.data[props_array.t[i]]
             });
         }
         
