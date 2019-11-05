@@ -47,8 +47,53 @@ class Graph extends Component{
         })
     }
 
-    deleteAnnotation(e) {
-        alert(this.getElementAtEvent(e));
+    modifyGraph(e) {
+        console.log(e);
+        let arrIndex = e[0]._index;
+        let dataSet = e[0]._datasetIndex;
+        switch (dataSet) { 
+            case 0:
+                //add a point to a specific set of annotations
+                console.log(this.state.data.datasets.data);
+                break;
+            case 1:
+                this.state.data.annotation.p.splice(arrIndex, 1);
+                console.log(this.state.data.annotation.p);
+                this.setState = ({
+                    data:{ 
+                        annotation:{
+                            p: this.state.data.annotation.p
+                        }
+                    }
+                });
+                e[0]._chart.chart.update();
+                break;
+            case 2:
+                //deleteFromArray(this.state.q_pair, arrIndex);
+                break;
+            case 3:
+                //deleteFromArray(this.state.r_pair, arrIndex);
+                break;
+            case 4:
+                //deleteFromArray(this.state.s_pair, arrIndex);
+                break;
+            case 5:
+                //deleteFromArray(this.state.t_pair, arrIndex);
+                break;
+            default:
+                console.log("Point not in any available dataset.");
+        }
+    }
+
+    addAnnotation(e) {
+        console.log(e);
+    }
+
+    static deleteFromArray(array, index)
+    {
+        array.splice(index, 1);
+
+        return array;
     }
 
     parseAnnotation(annotation, pair_array, props){
@@ -157,7 +202,7 @@ class Graph extends Component{
                     pointHoverBorderColor: 'rgba(220,220,220,1)',
                     pointHoverBorderWidth: 1,
                     pointRadius: 0, // This makes the individual points disappear
-                    pointHitRadius: 0,
+                    pointHitRadius: 2,
                     borderWidth: 1,
                     borderColor:'black',
                     showLine: true,
@@ -291,13 +336,13 @@ class Graph extends Component{
         return(
         <React.Fragment>
             {
-                <div className="graph" style={{width: full_width}} /*onClick={this.deleteAnnotation}*/>
+                <div className="graph" style={{width: full_width}}>
                     <Scatter 
                         data={dat} 
                         height={HEIGHT}
                         getElementAtEvent={(point) =>{
                             if(point.length > 0){
-                                console.log(point);
+                                this.modifyGraph(point);
                             }
                         }}
                         options={{
