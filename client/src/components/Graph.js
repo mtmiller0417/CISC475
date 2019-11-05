@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
-//import styles from 'C:/Users/mattm/Documents/Files/CISC475/CISC475/client/src/components/Grid/GridItem/GridItem.module.scss';
-//import ReactDOM from 'react-dom';
 
 // Set constant colors here
 let lightOpacity = .2
@@ -66,6 +64,8 @@ class Graph extends Component{
     // The state is updated through what is returned from this function
     // This loads metadata... but sometimes doesnt load all of them? is kinda random...
     // Fills the data properly
+    //
+   // static getDerivedStateFromProps
     static getDerivedStateFromProps(next_props, prev_state){
         var freq = next_props.inputArr.extra_info.freq
 
@@ -76,40 +76,41 @@ class Graph extends Component{
         let r_pair = [];
         let s_pair = [];
         let t_pair = [];
-
+        var x = 0;
         // p_pair
         for(let i = 0; i < props_array.p.length; i++){
+            x++;
             p_pair.push({
                 x: props_array.p[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.p[i]].y
+                y: next_props.inputArr.data[props_array.p[i]]
             });
         }
         // q_pair
         for(let i = 0; i < props_array.q.length; i++){
             q_pair.push({
                 x: props_array.q[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.q[i]].y
+                y: next_props.inputArr.data[props_array.q[i]]
             });
         }
         // r_pair
         for(let i = 0; i < props_array.r.length; i++){
             r_pair.push({
                 x: props_array.r[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.r[i]].y
+                y: next_props.inputArr.data[props_array.r[i]]
             });
         }
         // s_pair
         for(let i = 0; i < props_array.s.length; i++){
             s_pair.push({
                 x: props_array.s[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.s[i]].y
+                y: next_props.inputArr.data[props_array.s[i]]
             });
         }
         // t_pair
         for(let i = 0; i < props_array.t.length; i++){
             t_pair.push({
                 x: props_array.t[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.t[i]].y
+                y: next_props.inputArr.data[props_array.t[i]]
             });
         }
         
@@ -164,7 +165,7 @@ class Graph extends Component{
                     data: this.state.data.datasets.data,
                 },
                 { 
-                    label:'P-Annotation',
+                    label:'P',
                     fill:true,
                     pointStyle: 'circle',
                     pointBorderColor: pastelRed,
@@ -176,9 +177,10 @@ class Graph extends Component{
                     showLine: false,
                     tooltipHidden: false,
                     data: this.state.data.annotation.p
+                    //data: this.state.data.annotation.p,
                 },
                 { 
-                    label:'Q-Annotation',
+                    label:'Q',
                     fill:true,
                     pointStyle: 'circle',
                     pointBorderColor: pastelPurple,
@@ -192,7 +194,7 @@ class Graph extends Component{
                     data: this.state.data.annotation.q
                 },
                 { 
-                    label:'R-Annotation',
+                    label:'R',
                     fill:true,
                     pointStyle: 'circle',
                     pointBorderColor: pastelOrange, 
@@ -206,7 +208,7 @@ class Graph extends Component{
                     data: this.state.data.annotation.r
                 },
                 { 
-                    label:'S-Annotation',
+                    label:'S',
                     fill:true,
                     pointStyle: 'circle',
                     pointBorderColor: pastelBlue,
@@ -220,7 +222,7 @@ class Graph extends Component{
                     data: this.state.data.annotation.s
                 },
                 {  
-                    label:'T-Annotation',
+                    label:'T',
                     fill:true,
                     pointStyle: 'circle',
                     pointBorderColor: pastelGreen,
@@ -252,8 +254,8 @@ class Graph extends Component{
         let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 
 
         // The amount of the width/height that is not part of the graph
-        const width_offset = 79 
-        const height_offset = 60 
+        const width_offset = 86 // 79     (75 + 10 + 1 + 1) = offset = 86
+        const height_offset = 60 // 60   (30 + 1 + 1) = offset = 32
 
         // The fixed width of the container on the screen
         const parent_width = this.state.data.parent_width - width_offset
@@ -265,14 +267,21 @@ class Graph extends Component{
         const width = total_time * px_per_second;
 
         // The true height/width px on the screen
-        const true_with = parent_width              // 1571px
-        const true_height = HEIGHT - height_offset  // 165px
+        const true_width = parent_width              // 1571px 1564px
+        const true_height = HEIGHT - height_offset   // 165px 193
+        console.log('true_height');
+        console.log(true_height);
 
         const ticks_per_width = Math.min(TIME_PER_WIDTH, total_time) / INTERVAL; // 25
-        const ratio = true_height / (true_with / ticks_per_width); // Solve 1571/25 = 165/x
+        const ratio = true_height / (true_width / ticks_per_width); // Solve 1571/25 = 165/x
         const round_up_ratio = Math.ceil(ratio)
-        const y_step = Math.round(range / ratio) 
-        const max_y = (y_step* round_up_ratio) - Math.abs(this.state.data.min)
+        const y_step = Math.round(range / ratio)
+        console.log('y_step')
+        console.log(y_step)
+        const max_y = (y_step * round_up_ratio) - Math.abs(this.state.data.min)
+        console.log('max_y')
+        console.log(max_y)
+        //const max_y = 4501
 
         // Add the width_offset and 'px' to the width to be set in the graph div
         let full_width = width+width_offset
@@ -300,12 +309,12 @@ class Graph extends Component{
                                 custom: function(tooltipModel) {
                                     // EXTENSION: filter is not enough! Hide tooltip frame
                                     if (!tooltipModel.body || tooltipModel.body.length < 1) {
-                                    tooltipModel.caretSize = 0;
-                                    tooltipModel.xPadding = 0;
-                                    tooltipModel.yPadding = 0;
-                                    tooltipModel.cornerRadius = 0;
-                                    tooltipModel.width = 0;
-                                    tooltipModel.height = 0;
+                                        tooltipModel.caretSize = 0;
+                                        tooltipModel.xPadding = 0;
+                                        tooltipModel.yPadding = 0;
+                                        tooltipModel.cornerRadius = 0;
+                                        tooltipModel.width = 0;
+                                        tooltipModel.height = 0;
                                     }
                                 },
                                 filter: function(tooltipItem, data) {
@@ -325,7 +334,8 @@ class Graph extends Component{
                                 position:'left'
                             },
                             legend: {
-                                display:false,
+                                display:true,
+                                position: 'right',
                                 labels: {
                                     filter: function(item) {
                                         // Remove the legend of the main-data, keep the annotation legend
@@ -340,7 +350,7 @@ class Graph extends Component{
                                         stepSize: INTERVAL//skip Measured in seconds(200 miliseconds)
                                     },
                                     scaleLabel: {
-                                        display: true,
+                                        display: false,
                                         labelString: 'Seconds'
                                     }
                                 }],
@@ -355,7 +365,7 @@ class Graph extends Component{
                                         display: true
                                     },
                                     scaleLabel: {
-                                        display: true,
+                                        display: false,
                                         labelString: 'MV'
                                     }
                                 }]
