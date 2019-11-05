@@ -281,7 +281,6 @@ class Graph extends Component{
         const max_y = (y_step * round_up_ratio) - Math.abs(this.state.data.min)
         console.log('max_y')
         console.log(max_y)
-        //const max_y = 4501
 
         // Add the width_offset and 'px' to the width to be set in the graph div
         let full_width = width+width_offset
