@@ -51,10 +51,19 @@ class Graph extends Component{
         console.log(e);
         let arrIndex = e[0]._index;
         let dataSet = e[0]._datasetIndex;
+        let coordinates = this.state.data.datasets.data[arrIndex];
         switch (dataSet) { 
             case 0:
                 //add a point to a specific set of annotations
                 console.log(this.state.data.datasets.data);
+
+                //Grab x coordinate from coordinates
+
+                //Let index = 0
+                //While (x coordinates.x > this.state.annotation.p[index].x)
+                    //i++
+                //Add in the new data using splice
+                //this.state.data.annotation.p.splice(index, 0, coordinates)
                 break;
             case 1:
                 this.state.data.annotation.p.splice(arrIndex, 1);
