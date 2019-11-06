@@ -83,6 +83,7 @@ class Graph extends Component{
                         }
                     }
                 });
+                e[0]._chart.chart.update();
 
                 //this.forceUpdate()
                 
