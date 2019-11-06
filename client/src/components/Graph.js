@@ -43,7 +43,8 @@ class Graph extends Component{
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
                 min:this.props.inputArr.extra_info.min, 
-                parent_width: 0
+                parent_width: 0,
+                counter: 0
             }
         })
     }
@@ -73,14 +74,19 @@ class Graph extends Component{
                 console.log(arrCopy);
                 this.setState({p: arrCopy});
                 */
-                this.state.data.annotation.p.splice(arrIndex, 1);
+                console.log("deleteCounter = " + this.state.data.counter);
+                this.state.data.annotation.p.splice((arrIndex+this.state.data.counter), 1);
                 console.log(this.state.data.annotation.p);
+                this.state.data.counter = this.state.data.counter + 1;
+                console.log("New deleteCounter = " + this.state.data.counter);
                 this.setState = ({
                     data:{ 
                         annotation:{
                             p: this.state.data.annotation.p
-                        }
-                    }
+                        },
+                        
+                        counter: this.state.data.counter
+                    },
                 });
 
                 //this.forceUpdate()
