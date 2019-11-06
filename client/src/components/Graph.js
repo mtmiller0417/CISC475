@@ -73,7 +73,8 @@ class Graph extends Component{
                 console.log(arrCopy);
                 this.setState({p: arrCopy});
                 */
-                this.state.data.annotation.p.splice(arrIndex, 1);
+                //this.state.data.annotation.p.splice(arrIndex, 1);
+                this.state.data.annotation.p[arrIndex] = ""; // Dont delete, just make it empty
                 console.log(this.state.data.annotation.p);
                 this.setState = ({
                     data:{ 
