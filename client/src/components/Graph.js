@@ -67,12 +67,6 @@ class Graph extends Component{
                 //this.state.data.annotation.p.splice(index, 0, coordinates)
                 break;
             case 1:
-                /*
-                const arrCopy = Object.assign({}, this.state.data.annotation.p);
-                arrCopy.splice(arrIndex, 1);
-                console.log(arrCopy);
-                this.setState({p: arrCopy});
-                */
                 //this.state.data.annotation.p.splice(arrIndex, 1);
                 this.state.data.annotation.p[arrIndex] = ""; // Dont delete, just make it empty
                 console.log(this.state.data.annotation.p);
@@ -84,26 +78,6 @@ class Graph extends Component{
                     }
                 });
                 e[0]._chart.chart.update();
-
-                //this.forceUpdate()
-                
-
-                /*
-                const current_p = cloneDeep(this.state.data.annotation.p);
-                current_p.splice(arrIndex, 1);
-                console.log(current_p);
-                this.setState({p: current_p});
-                */
-
-                //e[0]._chart.chart.update();
-                /*
-                this.setState((prevState, arrIndex) => {
-                   let modifiedArr = prevState.data.annotation.p;
-                   modifiedArr.splice(arrIndex, 1);
-                   console.log(modifiedArr);
-                   return {p: modifiedArr};
-               })
-               */
         
                //console.log(this.state.data.annotation.p);
                 break;
