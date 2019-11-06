@@ -48,6 +48,22 @@ class Graph extends Component{
         })
     }
 
+    deleteAnnotation(annotationArray, arraryIndex, event, ){
+        annotationArray[arraryIndex] = ""; // Dont delete, just make it empty
+        console.log(annotationArray);
+
+        this.setState = ({
+            data:{ 
+                annotation:{
+                    p: this.state.data.annotation.p,
+
+                }
+            }
+        });
+
+        event[0]._chart.chart.update();
+    }
+
     modifyGraph(e) {
         console.log(e);
         let arrIndex = e[0]._index;
@@ -67,8 +83,9 @@ class Graph extends Component{
                 //this.state.data.annotation.p.splice(index, 0, coordinates)
                 break;
             case 1:
-                //this.state.data.annotation.p.splice(arrIndex, 1);
-                this.state.data.annotation.p[arrIndex] = ""; // Dont delete, just make it empty
+                // It seems that both of these solutions work
+                this.state.data.annotation.p.splice(arrIndex, 1)
+                //this.state.data.annotation.p[arrIndex] = ""; // Dont delete, just make it empty
                 console.log(this.state.data.annotation.p);
                 this.setState = ({
                     data:{ 
@@ -78,8 +95,7 @@ class Graph extends Component{
                     }
                 });
                 e[0]._chart.chart.update();
-        
-               //console.log(this.state.data.annotation.p);
+
                 break;
             case 2:
                 //deleteFromArray(this.state.q_pair, arrIndex);
@@ -327,24 +343,17 @@ class Graph extends Component{
         // The true height/width px on the screen
         const true_width = parent_width              // 1571px 1564px
         const true_height = HEIGHT - height_offset   // 165px 193
-        //console.log('true_height');
-        //console.log(true_height);
 
         const ticks_per_width = Math.min(TIME_PER_WIDTH, total_time) / INTERVAL; // 25
         const ratio = true_height / (true_width / ticks_per_width); // Solve 1571/25 = 165/x
         const round_up_ratio = Math.ceil(ratio)
         const y_step = Math.round(range / ratio)
-        //console.log('y_step')
-        //console.log(y_step)
+
         const max_y = (y_step * round_up_ratio) - Math.abs(this.state.data.min)
-        //console.log('max_y')
-        //console.log(max_y)
 
         // Add the width_offset and 'px' to the width to be set in the graph div
         let full_width = width+width_offset
         full_width += 'px'
-        //console.log('full_width')
-        //console.log(full_width)
 
         return(
         <React.Fragment>
