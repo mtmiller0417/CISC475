@@ -351,18 +351,18 @@ class Graph extends Component{
         // The true height/width px on the screen
         const true_width = parent_width              // 1571px 1564px
         const true_height = HEIGHT - height_offset   // 165px 193
-        console.log('true_height');
-        console.log(true_height);
+        //console.log('true_height');
+        //console.log(true_height);
 
         const ticks_per_width = Math.min(TIME_PER_WIDTH, total_time) / INTERVAL; // 25
         const ratio = true_height / (true_width / ticks_per_width); // Solve 1571/25 = 165/x
         const round_up_ratio = Math.ceil(ratio)
         const y_step = Math.round(range / ratio)
-        console.log('y_step')
-        console.log(y_step)
+        //console.log('y_step')
+        //console.log(y_step)
         const max_y = (y_step * round_up_ratio) - Math.abs(this.state.data.min)
-        console.log('max_y')
-        console.log(max_y)
+        //console.log('max_y')
+        //console.log(max_y)
 
         // Add the width_offset and 'px' to the width to be set in the graph div
         let full_width = width+width_offset
