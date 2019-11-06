@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
+import cloneDeep from 'lodash/cloneDeep';
 
 // Set constant colors here
 let lightOpacity = .2
@@ -66,6 +67,12 @@ class Graph extends Component{
                 //this.state.data.annotation.p.splice(index, 0, coordinates)
                 break;
             case 1:
+                /*
+                const arrCopy = Object.assign({}, this.state.data.annotation.p);
+                arrCopy.splice(arrIndex, 1);
+                console.log(arrCopy);
+                this.setState({p: arrCopy});
+                */
                 this.state.data.annotation.p.splice(arrIndex, 1);
                 console.log(this.state.data.annotation.p);
                 this.setState = ({
@@ -75,7 +82,28 @@ class Graph extends Component{
                         }
                     }
                 });
-                e[0]._chart.chart.update();
+
+                //this.forceUpdate()
+                
+
+                /*
+                const current_p = cloneDeep(this.state.data.annotation.p);
+                current_p.splice(arrIndex, 1);
+                console.log(current_p);
+                this.setState({p: current_p});
+                */
+
+                //e[0]._chart.chart.update();
+                /*
+                this.setState((prevState, arrIndex) => {
+                   let modifiedArr = prevState.data.annotation.p;
+                   modifiedArr.splice(arrIndex, 1);
+                   console.log(modifiedArr);
+                   return {p: modifiedArr};
+               })
+               */
+        
+               //console.log(this.state.data.annotation.p);
                 break;
             case 2:
                 //deleteFromArray(this.state.q_pair, arrIndex);
@@ -347,7 +375,8 @@ class Graph extends Component{
             {
                 <div className="graph" style={{width: full_width}}>
                     <Scatter 
-                        data={dat} 
+                        data={dat}
+                        redraw={true} 
                         height={HEIGHT}
                         getElementAtEvent={(point) =>{
                             if(point.length > 0){
