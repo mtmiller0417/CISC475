@@ -68,6 +68,10 @@ class Graph extends Component{
         event[0]._chart.chart.update();
     }
 
+    addAnnotation(e) {
+        console.log(e);
+    }
+
     modifyGraph(e) {
         console.log(e);
         let arrIndex = e[0]._index;
@@ -87,54 +91,24 @@ class Graph extends Component{
                 //this.state.data.annotation.p.splice(index, 0, coordinates)
                 break;
             case 1:
-                /*
-                // It seems that both of these solutions work
-                this.state.data.annotation.p.splice(arrIndex, 1)
-                //this.state.data.annotation.p[arrIndex] = ""; // Dont delete, just make it empty
-                console.log(this.state.data.annotation.p);
-                this.setState = ({
-                    data:{ 
-                        annotation:{
-                            p: this.state.data.annotation.p
-                        }
-                    }
-                });
-                e[0]._chart.chart.update();
-                */
-
                 this.deleteAnnotation(this.state.data.annotation.p, arrIndex, e);
 
                 break;
             case 2:
-                //deleteFromArray(this.state.q_pair, arrIndex);
                 this.deleteAnnotation(this.state.data.annotation.q, arrIndex, e);
                 break;
             case 3:
-                //deleteFromArray(this.state.r_pair, arrIndex);
                 this.deleteAnnotation(this.state.data.annotation.r, arrIndex, e);
                 break;
             case 4:
-                //deleteFromArray(this.state.s_pair, arrIndex);
                 this.deleteAnnotation(this.state.data.annotation.s, arrIndex, e);
                 break;
             case 5:
-                //deleteFromArray(this.state.t_pair, arrIndex);
                 this.deleteAnnotation(this.state.data.annotation.t, arrIndex, e);
                 break;
             default:
                 console.log("Point not in any available dataset.");
         }
-    }
-
-    addAnnotation(e) {
-        console.log(e);
-    }
-
-    static deleteFromArray(array, index)
-    {
-        array.splice(index, 1);
-
-        return array;
     }
 
     parseAnnotation(annotation, pair_array, props){
