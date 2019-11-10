@@ -131,7 +131,7 @@ class Graph extends Component{
                 }
                 //User wants to add a T
                 else if(inputChoice === 4){
-                    this.addAnnotation(this.state.data.annotation.t, 3, coordinates);
+                    this.addAnnotation(this.state.data.annotation.t, e, coordinates);
                 }
                 break;
             case 1:
