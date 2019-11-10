@@ -38,7 +38,12 @@ class Graph extends Component{
                     q: '',
                     r: '',
                     s: '',
-                    t: ''
+                    t: '',
+                    oldP: [''],
+                    oldQ: [''],
+                    oldR: [''],
+                    oldS: [''],
+                    oldT: ['']
                 }, 
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
@@ -68,8 +73,24 @@ class Graph extends Component{
         event[0]._chart.chart.update();
     }
 
-    addAnnotation(e) {
-        console.log(e);
+    addAnnotation(annotationArray, event, point)
+    {
+        annotationArray.push({x: point.x, y: point});
+        console.log(annotationArray);
+
+        this.setState = ({
+            data:{ 
+                annotation:{
+                    p: this.state.data.annotation.p,
+                    q: this.state.data.annotation.q,
+                    r: this.state.data.annotation.r,
+                    s: this.state.data.annotation.s,
+                    t: this.state.data.annotation.t    
+                }
+            }
+        });
+
+        event[0]._chart.chart.update();
     }
 
     modifyGraph(e) {
@@ -81,14 +102,37 @@ class Graph extends Component{
             case 0:
                 //add a point to a specific set of annotations
                 console.log(this.state.data.datasets.data);
+                console.log(coordinates);
 
-                //Grab x coordinate from coordinates
+                //Let the user select the type of point to add from some menu 
+                //and set the response to this variable
+                //Hardcoded to 0 now to inidicate P
+                let inputChoice = 0;
+                
+                //User wants to add P
+                if(inputChoice === 0){
+                    //Duplicate the current state
+                    //this.setState({oldP: this.state.data.annotation.oldP.push(this.state.data.annotation.p)});
 
-                //Let index = 0
-                //While (x coordinates.x > this.state.annotation.p[index].x)
-                    //i++
-                //Add in the new data using splice
-                //this.state.data.annotation.p.splice(index, 0, coordinates)
+                    //Add the annotation
+                    this.addAnnotation(this.state.data.annotation.p, e, coordinates);
+                }
+                //User wants to add Q
+                else if(inputChoice === 1){
+                    this.addAnnotation(this.state.data.annotation.q, e, coordinates);
+                }
+                //User wants to add R
+                else if(inputChoice === 2){
+                    this.addAnnotation(this.state.data.annotation.r, e, coordinates);
+                }
+                //User wants to add S
+                else if(inputChoice === 3){
+                    this.addAnnotation(this.state.data.annotation.s, e, coordinates);
+                }
+                //User wants to add a T
+                else if(inputChoice === 4){
+                    this.addAnnotation(this.state.data.annotation.t, 3, coordinates);
+                }
                 break;
             case 1:
                 this.deleteAnnotation(this.state.data.annotation.p, arrIndex, e);
