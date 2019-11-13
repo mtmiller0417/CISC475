@@ -308,7 +308,8 @@ class Graph extends Component{
         // Some constants
         const HEIGHT = 225; // The stated height of the chart
         const INTERVAL = 0.2 // 0.2 seconds or 200 ms
-        const TIME_PER_WIDTH = Math.min(5, total_time) // Number of seconds to fit on the screen at a time
+        const SECONDS_PER_WIDTH_MAX = 10
+        const TIME_PER_WIDTH = Math.min(SECONDS_PER_WIDTH_MAX, total_time) // Number of seconds to fit on the screen at a time
 
         //let between_tick = dataLen / ticks_on_x
         let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 

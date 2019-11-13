@@ -1,12 +1,11 @@
 .gridItem {
-	background-color: white;
 	padding: 10px;
-	//padding-top: 10px;
 	font-size: 30px;
 	text-align: center;
-	//border: 1px solid #f5f5f5;
-	width: 1650px; // Changes the width on the screen
+	//width: 1650px; // Changes the width on the screen
 	overflow-x: scroll; // Set overflow here
+	margin:auto;
+	width: 100%;
 }
 
 .gridItem:hover {
