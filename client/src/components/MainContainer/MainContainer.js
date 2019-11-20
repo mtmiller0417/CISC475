@@ -3,20 +3,25 @@ import styles from "./MainContainer.module.scss";
 import Grid from "../Grid/Grid";
 import GridItem from "../Grid/GridItem/GridItem";
 import Metadata from "../Metadata/Metadata";
+import LoadData from "../LoadData/LoadData";
 import Header from "../Header/Header";
 import ControlPanel from "../ControlPanel/ControlPanel";
+import FileExplorer from "../FileExplorer/FileExplorer";
 import * as d3 from 'd3';
-import data from '../../csv_files/13013356000.csv'; // Hard coded in...
 import csv_p from '../../csv_files/Annotattion/P.csv';
 import csv_q from '../../csv_files/Annotattion/Q.csv';
 import csv_r from '../../csv_files/Annotattion/R.csv';
 import csv_s from '../../csv_files/Annotattion/S.csv';
 import csv_t from '../../csv_files/Annotattion/T.csv';
 
+let data = ""
 
 export default class MainContainer extends React.Component {
 	constructor(props){
         super(props);
+        
+        // Bind callback function, used in LoadData
+        this.dataCallBack = this.dataCallBack.bind(this)
 
         // Set initial state 
         this.state={
@@ -42,8 +47,21 @@ export default class MainContainer extends React.Component {
                 min: 0, 
                 max: 0, 
                 freq: 0
-            }
+            },
+            data: []
         }
+    }
+    
+    // Callback function passed to LoadData, to get which CSV to load in
+    dataCallBack(update){
+        console.log(update)
+        data = update
+        this.parseData()
+        this.setState({
+                      data: update
+                      })
+        
+       this.forceUpdate();
     }
 
     //Function to generalize the loading of annotation files
@@ -66,8 +84,7 @@ export default class MainContainer extends React.Component {
                                             });
     }
 
-    componentWillMount(){
-        //Define arrays
+    parseData(){
         var lead_i = [];
         let lead_ii = [];
         let lead_iii = [];
@@ -81,176 +98,180 @@ export default class MainContainer extends React.Component {
         let lead_v5 = [];
         let lead_v6 = [];
         /*let annotation_p = [];
-        let annotation_q = [];
-        let annotation_r = [];
-        let annotation_s = [];
-        let annotation_t = [];*/
+         let annotation_q = [];
+         let annotation_r = [];
+         let annotation_s = [];
+         let annotation_t = [];*/
         let labels = [];
-
+        
         //Define Min/Max trackers
         let max = 0;
         let min = 0;
-
-        //Parse the CSV into an array of objects where each object represents a row
         var parsed_csv = d3.csv(data, function(d)
-        {
-            //Function is neccessary to handle the fact that the CSV has spaces AND commas
-            //The left hand side of each line defines a new field to handle spaces before field names
-            //The + is used to convert each data point to an integer since they are read in as strings w/ leading space
-            return {
-                I: +d["I"],
-                II: +d[" II"],
-                III: +d[" III"],
-                aVR: +d[" aVR"],
-                aVL: +d[" aVL"],
-                aVF: +d[" aVF"],
-                V1: +d[" V1"],
-                V2: +d[" V2"],
-                V3: +d[" V3"],
-                V4: +d[" V4"],
-                V5: +d[" V5"],
-                V6: +d[" V6"]
-            }
-        });
+                                {
+                                //console.log(this.state.data)
+                                //Function is neccessary to handle the fact that the CSV has spaces AND commas
+                                //The left hand side of each line defines a new field to handle spaces before field names
+                                //The + is used to convert each data point to an integer since they are read in as strings w/ leading space
+                                return {
+                                I: +d["I"],
+                                II: +d[" II"],
+                                III: +d[" III"],
+                                aVR: +d[" aVR"],
+                                aVL: +d[" aVL"],
+                                aVF: +d[" aVF"],
+                                V1: +d[" V1"],
+                                V2: +d[" V2"],
+                                V3: +d[" V3"],
+                                V4: +d[" V4"],
+                                V5: +d[" V5"],
+                                V6: +d[" V6"]
+                                }
+                                });
         
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
         parsed_csv.then((data) =>
-        {
-            var time = true;
-            let freq = 500
+                        {
+                        var time = true;
+                        let freq = 500
+                        
+                        for(var i = 0; i < data.length; i++)
+                        {
+                        labels.push(i);
+                        // Way to create scatterplot data
+                        lead_i.push({
+                                    x:(i * 1/freq),
+                                    //x:i,
+                                    y:data[i].I
+                                    });
+                        lead_ii.push({
+                                     x:(i * 1/freq),
+                                     //x:i,
+                                     y:data[i].II
+                                     });
+                        lead_iii.push({
+                                      x:(i * 1/freq),
+                                      //x:i,
+                                      y:data[i].III
+                                      });
+                        lead_avr.push({
+                                      x:(i * 1/freq),
+                                      //x:i,
+                                      y:data[i].aVR
+                                      });
+                        lead_avl.push({
+                                      x:(i * 1/freq),
+                                      //x:i,
+                                      y:data[i].aVL
+                                      });
+                        lead_avf.push({
+                                      x:(i * 1/freq),
+                                      //x:i,
+                                      y:data[i].aVF
+                                      });
+                        lead_v1.push({
+                                     x:(i * 1/freq),
+                                     //x:i,
+                                     y:data[i].V1
+                                     });
+                        lead_v2.push({
+                                     x:(i * 1/freq),
+                                     //x:i,
+                                     y:data[i].V2
+                                     });
+                        lead_v3.push({
+                                     x:(i * 1/freq),
+                                     //x:i,
+                                     y:data[i].V3
+                                     });
+                        lead_v4.push({
+                                     x:(i * 1/freq),
+                                     //x:i,
+                                     y:data[i].V4
+                                     });
+                        lead_v5.push({
+                                     x:(i * 1/freq),
+                                     //x:i,
+                                     y:data[i].V5
+                                     });
+                        lead_v6.push({
+                                     x:(i * 1/freq),
+                                     //x:i,
+                                     y:data[i].V6
+                                     });
+                        
+                        // Check for max / min for each array
+                        
+                        if (lead_i[i].y < min){ min = lead_i[i].y }
+                        if (lead_i[i].y > max){ max = lead_i[i].y }
+                        
+                        if (lead_ii[i].y < min){ min = lead_ii[i].y }
+                        if (lead_ii[i].y > max){ max = lead_ii[i].y }
+                        
+                        if (lead_iii[i].y < min){ min = lead_iii[i].y }
+                        if (lead_iii[i].y > max){ max = lead_iii[i].y }
+                        
+                        if (lead_avr[i].y < min){ min = lead_avr[i].y }
+                        if (lead_avr[i].y > max){ max = lead_avr[i].y }
+                        
+                        if (lead_avl[i].y < min){ min = lead_avl[i].y }
+                        if (lead_avl[i].y > max){ max = lead_avl[i].y }
+                        
+                        if (lead_avl[i].y < min){ min = lead_avl[i].y }
+                        if (lead_avl[i].y > max){ max = lead_avl[i].y }
+                        
+                        if (lead_avf[i].y < min){ min = lead_avf[i].y }
+                        if (lead_avf[i].y > max){ max = lead_avf[i].y }
+                        
+                        if (lead_v1[i].y < min){ min = lead_v1[i].y }
+                        if (lead_v1[i].y > max){ max = lead_v1[i].y }
+                        
+                        if (lead_v2[i].y < min){ min = lead_v2[i].y }
+                        if (lead_v2[i].y > max){ max = lead_v2[i].y }
+                        
+                        if (lead_v3[i].y < min){ min = lead_v3[i].y }
+                        if (lead_v3[i].y > max){ max = lead_v3[i].y }
+                        
+                        if (lead_v4[i].y < min){ min = lead_v4[i].y }
+                        if (lead_v4[i].y > max){ max = lead_v4[i].y }
+                        
+                        if (lead_v5[i].y < min){ min = lead_v5[i].y }
+                        if (lead_v5[i].y > max){ max = lead_v5[i].y }
+                        
+                        if (lead_v6[i].y < min){ min = lead_v6[i].y }
+                        if (lead_v6[i].y > max){ max = lead_v6[i].y }
+                        
+                        }
+                        
+                        // Update the state and cause a re-render
+                        this.setState({
+                                      labels: labels,
+                                      i: lead_i,
+                                      ii: lead_ii,
+                                      iii: lead_iii,
+                                      avr: lead_avr,
+                                      avl: lead_avl,
+                                      avf: lead_avf,
+                                      v1: lead_v1,
+                                      v2: lead_v2,
+                                      v3: lead_v3,
+                                      v4: lead_v4,
+                                      v5: lead_v5,
+                                      v6: lead_v6,
+                                      extra_info: {
+                                      min: min,
+                                      max: max,
+                                      freq: freq
+                                      }
+                                      })
+                        })
 
-            for(var i = 0; i < data.length; i++)
-            {
-                labels.push(i);
-                // Way to create scatterplot data
-                lead_i.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].I
-                });
-                lead_ii.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].II
-                });
-                lead_iii.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].III
-                });
-                lead_avr.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].aVR
-                });
-                lead_avl.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].aVL
-                });
-                lead_avf.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].aVF
-                });
-                lead_v1.push({
-                   x:(i * 1/freq),
-                   //x:i,
-                    y:data[i].V1
-                });
-                lead_v2.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].V2
-                });
-                lead_v3.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].V3
-                });
-                lead_v4.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].V4
-                });
-                lead_v5.push({
-                   x:(i * 1/freq),
-                   //x:i,
-                    y:data[i].V5
-                });
-                lead_v6.push({
-                    x:(i * 1/freq),
-                    //x:i,
-                    y:data[i].V6
-                });
+        //Define arrays
 
-                // Check for max / min for each array
-
-                if (lead_i[i].y < min){ min = lead_i[i].y }
-                if (lead_i[i].y > max){ max = lead_i[i].y }
-
-                if (lead_ii[i].y < min){ min = lead_ii[i].y }
-                if (lead_ii[i].y > max){ max = lead_ii[i].y }
-
-                if (lead_iii[i].y < min){ min = lead_iii[i].y }
-                if (lead_iii[i].y > max){ max = lead_iii[i].y }
-
-                if (lead_avr[i].y < min){ min = lead_avr[i].y }
-                if (lead_avr[i].y > max){ max = lead_avr[i].y }
-
-                if (lead_avl[i].y < min){ min = lead_avl[i].y }
-                if (lead_avl[i].y > max){ max = lead_avl[i].y }
-
-                if (lead_avl[i].y < min){ min = lead_avl[i].y }
-                if (lead_avl[i].y > max){ max = lead_avl[i].y }
-
-                if (lead_avf[i].y < min){ min = lead_avf[i].y }
-                if (lead_avf[i].y > max){ max = lead_avf[i].y }
-
-                if (lead_v1[i].y < min){ min = lead_v1[i].y }
-                if (lead_v1[i].y > max){ max = lead_v1[i].y }
-
-                if (lead_v2[i].y < min){ min = lead_v2[i].y }
-                if (lead_v2[i].y > max){ max = lead_v2[i].y }
-
-                if (lead_v3[i].y < min){ min = lead_v3[i].y }
-                if (lead_v3[i].y > max){ max = lead_v3[i].y }
-
-                if (lead_v4[i].y < min){ min = lead_v4[i].y }
-                if (lead_v4[i].y > max){ max = lead_v4[i].y }
-
-                if (lead_v5[i].y < min){ min = lead_v5[i].y }
-                if (lead_v5[i].y > max){ max = lead_v5[i].y }
-
-                if (lead_v6[i].y < min){ min = lead_v6[i].y }
-                if (lead_v6[i].y > max){ max = lead_v6[i].y }
-
-            }
-
-            // Update the state and cause a re-render
-            this.setState({
-                labels: labels,
-                i: lead_i,
-                ii: lead_ii,
-                iii: lead_iii,
-                avr: lead_avr,
-                avl: lead_avl,
-                avf: lead_avf,
-                v1: lead_v1,
-                v2: lead_v2,
-                v3: lead_v3,
-                v4: lead_v4,
-                v5: lead_v5,
-                v6: lead_v6, 
-                extra_info: {
-                    min: min, 
-                    max: max, 
-                    freq: freq
-                }
-            })
-        })
-
+        //Parse the CSV into an array of objects where each object represents a row
+        
+    
 
       //  return data.split(',').map(function(item){
        //                            return parseInt(item,10);
@@ -286,6 +307,8 @@ export default class MainContainer extends React.Component {
 		return (
 			<div className={styles.container}>
 				<Grid>
+                    <LoadData callBack={this.dataCallBack}/>
+                    <FileExplorer />
 					<Header />
 				
 				</Grid>
