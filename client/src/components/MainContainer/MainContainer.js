@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./MainContainer.module.scss";
 import grid_styles from "../Grid/Grid.module.scss"
+import control_styles from "../ControlPanel/ControlPanel.module.scss"
 import Grid from "../Grid/Grid";
 import GridItem from "../Grid/GridItem/GridItem";
 import Metadata from "../Metadata/Metadata";
@@ -423,7 +424,10 @@ export default class MainContainer extends React.Component {
 				</Grid>
 
 				<Grid >
-                    <Metadata metadata= {this.state.metadata}/>
+                    <div className={control_styles.metadataGrid}>
+                        <Metadata metadata= {this.state.metadata}/>
+                    </div>
+                    
                     <div className={styles.graphBackground} style = {{ backgroundImage: 'url('+this.base64String+')', backgroundRepeat: 'repeat'}}>
                     <div><b>I</b></div>
 					<GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
