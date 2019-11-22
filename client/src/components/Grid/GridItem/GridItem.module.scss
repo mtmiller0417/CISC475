@@ -1,14 +1,15 @@
 .gridItem {
-	padding: 10px;
 	font-size: 30px;
 	text-align: center;
 	//width: 1650px; // Changes the width on the screen
 	overflow-x: scroll; // Set overflow here
-	margin:auto;
-	width: 100%;
+	//margin:auto;
+	//width: 100%;
 }
 
 .gridItem:hover {
 	cursor: pointer;
-	background-color: #f1f1f1;
+	// Removed bc it interfered with the grid background that we are now using. 
+	// Perhaps some other hover action can be taken
+	//background-color: #f1f1f1;
 }

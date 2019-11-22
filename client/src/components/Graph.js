@@ -127,7 +127,7 @@ class Graph extends Component{
     //
    // static getDerivedStateFromProps
     static getDerivedStateFromProps(next_props, prev_state){
-        var freq = next_props.inputArr.extra_info.freq
+        var freq = next_props.inputArr.freq
 
         let props_array = next_props.inputArr;
         
@@ -192,7 +192,7 @@ class Graph extends Component{
                     s:s_pair,
                     t:t_pair
                 }, 
-                freq: next_props.inputArr.extra_info.freq, 
+                freq: freq, 
                 min: next_props.inputArr.extra_info.min, 
                 max: next_props.inputArr.extra_info.max, 
                 parent_width: next_props.width
@@ -218,7 +218,7 @@ class Graph extends Component{
                     pointHoverBorderWidth: 1,
                     pointRadius: 0, // This makes the individual points disappear
                     pointHitRadius: 2,
-                    borderWidth: 1,
+                    borderWidth: 1.5, // Change this back to 1???
                     borderColor:'black',
                     showLine: true,
                     tooltipHidden: true,
@@ -237,7 +237,6 @@ class Graph extends Component{
                     showLine: false,
                     tooltipHidden: false,
                     data: this.state.data.annotation.p
-                    //data: this.state.data.annotation.p,
                 },
                 { 
                     label:'Q',
@@ -357,10 +356,18 @@ class Graph extends Component{
                         }}
                         options={{
                             maintainAspectRatio: false,
+                            /*layout: {
+                                padding: {
+                                    left: 0,
+                                    right: 0,
+                                    top: 0,
+                                    bottom: 0
+                                }
+                            },*/
                             tooltips:{
                                 enabled: true,
                                 mode: 'nearest',
-                                custom: function(tooltipModel) {
+                                /*custom: function(tooltipModel) {
                                     // EXTENSION: filter is not enough! Hide tooltip frame
                                     if (!tooltipModel.body || tooltipModel.body.length < 1) {
                                         tooltipModel.caretSize = 0;
@@ -373,7 +380,7 @@ class Graph extends Component{
                                 },
                                 filter: function(tooltipItem, data) {
                                     return !data.datasets[tooltipItem.datasetIndex].tooltipHidden;
-                                },
+                                },*/
                                 callbacks: {
                                     label: function(tooltipItems, data) { 
                                         return tooltipItems.xLabel + ' s, ' + tooltipItems.yLabel + ' mv';
@@ -391,6 +398,8 @@ class Graph extends Component{
                                 display:true,
                                 position: 'right',
                                 labels: {
+                                    // generateLabel
+                                    boxWidth: 10, 
                                     filter: function(item) {
                                         // Remove the legend of the main-data, keep the annotation legend
                                         return !item.text.includes('Main-Data');
@@ -400,8 +409,11 @@ class Graph extends Component{
                             scales: {
                                 xAxes: [{
                                     ticks: {
-                                        // Change this stepsize based on metadata info...
-                                        stepSize: INTERVAL//skip Measured in seconds(200 miliseconds)
+                                        display:false,
+                                        stepSize: 0.2
+                                    },
+                                    gridLines:{
+                                        display:false 
                                     },
                                     scaleLabel: {
                                         display: false,
@@ -411,12 +423,11 @@ class Graph extends Component{
                                 yAxes: [{
                                     ticks: {
                                         display: false,
-                                        stepSize: y_step, // 1379
                                         min: this.state.data.min,
-                                        max: max_y
+                                        max: this.state.data.max
                                     },
                                     gridLines: {
-                                        display: true
+                                        display: false
                                     },
                                     scaleLabel: {
                                         display: false,

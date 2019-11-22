@@ -14,9 +14,15 @@ import csv_q from '../../csv_files/Annotattion/Q.csv';
 import csv_r from '../../csv_files/Annotattion/R.csv';
 import csv_s from '../../csv_files/Annotattion/S.csv';
 import csv_t from '../../csv_files/Annotattion/T.csv';
+//import Canvas from 'canvas'
+import { fontWeight } from "@material-ui/system";
 
+import fs from 'fs'
 
 export default class MainContainer extends React.Component {
+
+    base64String = '';
+
 	constructor(props){
         super(props);
 
@@ -30,7 +36,6 @@ export default class MainContainer extends React.Component {
             extra_info: {
                 min: 0, 
                 max: 0, 
-                freq: 200
             },
             metadata: {
                 patientID: 0,
@@ -118,19 +123,74 @@ export default class MainContainer extends React.Component {
                     sampleBase: sample_base[0]
                 }
             });
-
-            console.log(Number(this.state.metadata.sampleBase))
             
             // Reparse the data bc the frequency has been updated...
             this.parseData();
+            this.createBackgroundImage(this.state.metadata.sampleBase)
+
 		});
     }
 
+    createData(type, mimetype) {
+        return {
+            type:type,
+            value:mimetype
+        }
+    }
+
+    createBackgroundImage(freq){
+        let canvas = document.createElement('canvas');
+        console.log(freq)
+
+        const CONSTANT = 15
+        const TIME = 10
+        let winWidth = window.screen.width;
+        let containerSize = winWidth * .95
+        let actualWidth = containerSize - CONSTANT
+        const boxesper10 = (TIME/0.2) 
+
+
+        // Calculate the correct size of the box
+        let side_length = Math.ceil(actualWidth/boxesper10) - 2//34\
+        console.log("side_length")
+        console.log(side_length)
+    
+        canvas.height = side_length;
+        canvas.width = side_length;
+
+        let context = canvas.getContext("2d");
+        context.lineWidth = 0.75;
+        context.strokeStyle = "gray";
+        context.rect(0,0,side_length,side_length); // x-pos,y-pos,width,height
+        context.stroke(); // Draw the main rectangle
+
+        // Change line settings for minor ticks
+        context.lineWidth = 0.5;
+        context.strokeStyle = "lightgray";
+
+        // One main tick is 0.2s, each minor is 0.04 so there are 5 minor ticks to 1 major tick
+        let unit = side_length/5;
+        // Loop through and fill the big square with small squares
+        for(let i = 0; i < 5; i++){
+            for(let j = 0; j < 5; j++){
+                if(i > 0){
+                    context.rect(i*unit,j*unit,unit, unit) // x-pos,y-pos,width,height
+                } else {
+                    context.rect(i*unit,j*unit,unit, unit) // x-pos,y-pos,width,height
+                }
+            }
+        }
+        //context.stroke(); // Draw all the minor rectangles
+
+        // Convert to base64 and set as variable
+        this.base64String = canvas.toDataURL("grid_background/png"); 
+        console.log()
+    }
+
     parseData(){
-        console.log('Parsing Data')
-        console.log(this.state)
+
         //Define arrays
-        var lead_i = [];
+        let lead_i = [];
         let lead_ii = [];
         let lead_iii = [];
         let lead_avr = [];
@@ -289,8 +349,7 @@ export default class MainContainer extends React.Component {
                 v6: lead_v6, 
                 extra_info: {
                     min: min, 
-                    max: max, 
-                    freq: freq
+                    max: max
                 }
             })
         })
@@ -325,7 +384,7 @@ export default class MainContainer extends React.Component {
     }
 
     componentWillMount(){
-        
+
         // Parse the metaData
         this.parseMetaData();
 
@@ -345,82 +404,34 @@ export default class MainContainer extends React.Component {
 
 				<Grid >
                     <Metadata metadata= {this.state.metadata}/>
-                    <div className={styles.graphBackground}>
+                    <div className={styles.graphBackground} style = {{ backgroundImage: 'url('+this.base64String+')', backgroundRepeat: 'repeat'}}>
                     <div><b>I</b></div>
-					<GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+					<GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div ><b>aVL</b></div>
-                    <GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                     <div><b>II</b></div>
-                    <GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div><b>III</b></div>
-                    <GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div><b>aVF</b></div>
-                    <GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div><b>aVR</b></div>
-                    <GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div><b>V1</b></div>
-                    <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div><b>V2</b></div>
-                    <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div><b>V3</b></div>
-                    <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div><b>V4</b></div>
-                    <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div><b>V5</b></div>
-                    <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div><b>V6</b></div>
-                    <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info}}/>
+                    <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                     </div>
                 </Grid>
 			</div>
 		);
 	}
 }
-
-
-// Approximate code to create an image to be the background
-
-/*
-
-// we create a canvas element
-var canvas = document.createElement('canvas');
-var height=25;
-var width=25;
-
-canvas.height=height;
-canvas.width=width;
-// getting the context will allow to manipulate the image
-var context = canvas.getContext("2d");
-
-// We create a new imageData.
-var imageData=context.createImageData(width, height);
-// The property data will contain an array of int8
-var data=imageData.data;
-// we put this random image in the context
-context.putImageData(imageData, 0, 0); // at coords 0,0
-
-// we can make some drawing as well
-context.lineWidth=1;
-context.strokeStyle="black";
-context.rect(0,0,25,25);
-context.stroke();
-
-
-function createData(type, mimetype) {
-    var value=canvas.toDataURL(mimetype);
-    if (value.indexOf(mimetype)>0) { // we check if the format is supported
-        return {
-            type:type,
-            value:value
-        }
-    } else {
-        return false;
-    }
-}
-
-
-set("png",createData("png","grid_background.png"));
-
-*/
-
-
