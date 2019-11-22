@@ -6,7 +6,6 @@ import Metadata from "../Metadata/Metadata";
 import LoadData from "../LoadData/LoadData";
 import Header from "../Header/Header";
 import ControlPanel from "../ControlPanel/ControlPanel";
-import FileExplorer from "../FileExplorer/FileExplorer";
 import * as d3 from 'd3';
 import csv_p from '../../csv_files/Annotattion/P.csv';
 import csv_q from '../../csv_files/Annotattion/Q.csv';
@@ -308,7 +307,6 @@ export default class MainContainer extends React.Component {
 			<div className={styles.container}>
 				<Grid>
                     <LoadData callBack={this.dataCallBack}/>
-                    <FileExplorer />
 					<Header />
 				
 				</Grid>
