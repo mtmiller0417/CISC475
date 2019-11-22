@@ -21,24 +21,21 @@ export default class LoadData extends React.Component {
     
         file_list = this.importAll(require.context('../../csv_files', false,  /\.csv$/));
         var file_string = this.importAllNames(require.context('../../csv_files', false,  /\.csv$/));
+        console.log("File String:" + file_string);
         //file_names = file_string.split("/");
 
         const {callBack} = this.props
         //callBack(file_list[1])
         
-       // for(int i = 0; i < file_li)
-        
-        file_list.forEach(function(element) {
-                       options.push({ label: element, value: element })
-                       });
+        for(var i = 0; i < file_list.length; i++){
+            options.push({ label: file_string[i], value: file_list[i]});
+        }
         
     }
     
     // Imports list of CSV files
     importAll(r) {
         return r.keys().map(r);
-        //r.keys().forEach(module => { files.push(r(module).default) });
-        // r.keys().map((item, index) => { files[item.replace('./', '')] = r(item); });
     }
     
     // Imports list of CSV file names (readable), to be used for selection
