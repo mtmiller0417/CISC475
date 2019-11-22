@@ -3,7 +3,7 @@
 	src: url("../../Fonts/Greycliff-CF-Regular.otf");
 }
 
-.metadata {
+.LoadData {
 	text-align: left;
 	border: 1px solid #f5f5f5;
 	border-top-right-radius: 1px;
@@ -12,17 +12,17 @@
 	margin: 1px auto;
 }
 
-.metadataInfo {
+.LoadDataInfo {
 	font-size: 10px;
 	padding: 5px;
 }
 
-.metadataHeader {
+.LoadDataHeader {
 	font-size: 16px;
 	padding: 5px;
 }
 
-.metadataGrid {
+.LoadDataGrid {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 }

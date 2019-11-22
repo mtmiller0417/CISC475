@@ -3,16 +3,21 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"chart.js": "^2.8.0",
+		"@material-ui/core": "latest",
+		"@material-ui/icons": "latest",
+		"canvas": "^2.6.0",
+		"babel-plugin-wildcard": "^5.0.0",
+		"chart.js": "^2.9.1",
 		"d3": "^5.12.0",
 		"d3-fetch": "1.1.2",
+		"fs": "0.0.1-security",
 		"node-sass": "^4.12.0",
 		"react": "^16.9.0",
 		"react-chartjs-2": "^2.8.0",
 		"react-dom": "^16.9.0",
 		"react-scripts": "3.1.2",
-		"@material-ui/core": "latest",
-		"@material-ui/icons": "latest"
+		"react-select": "^3.0.8",
+		"require-context": "^1.1.0"
 	},
 	"scripts": {
 		"start": "react-scripts start",
