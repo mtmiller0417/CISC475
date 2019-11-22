@@ -21,59 +21,23 @@ export default class Metadata extends React.Component {
 		};
 	}
 
-	componentWillMount() {
-		let ecg_ID = [];
-		let patient_ID = [];
-		let gender = [];
-		let race = [];
-		let age = [];
-		let height = [];
-		let weight = [];
-		let ac_Date = [];
-		let ac_Time = [];
-		let sample_base = [];
+	// Can not call this.setState b/c this method is static
+	static getDerivedStateFromProps(next_props, prev_state){
+		let props = next_props.metadata;
 
-		var csvData = d3.csv(data, function(data) {
-			return {
-				ECGID: data["ECG ID"],
-				PatientID: data["Patient ID"],
-				Gender: data["Gender"],
-				Race: data["Race"],
-				Age: data["Age"],
-				Height: data["Height (in)"],
-				Weight: data["Weight "],
-				AcquisitionDate: data["Acquisition Date"],
-				AcquisitionTime: data["Acquisition Time"],
-				SampleBase: data["Sample Base"]
-			};
-		});
-
-		csvData.then(data => {
-			//console.log(data);
-
-			ecg_ID.push(data[1].ECGID);
-			patient_ID.push(data[1].PatientID);
-			gender.push(data[1].Gender);
-			race.push(data[1].Race);
-			age.push(data[1].Age);
-			height.push(data[1].Height);
-			weight.push(data[1].Weight);
-			ac_Date.push(data[1].AcquisitionDate);
-			ac_Time.push(data[1].AcquisitionTime);
-			sample_base.push(data[1].SampleBase);
-
-			this.setState({
-				patientID: patient_ID,
-				scanID: ecg_ID,
-				gender: gender,
-				age: age,
-				race: race,
-				height: height,
-				weight: weight,
-				acquisitionDateTime: ac_Date + " @ " + ac_Time,
-				sampleBase: sample_base
-			});
-		});
+		// The state is set from what is returned from this
+		// This also causes a re-render of the new information
+		return{
+			patientID: props.patientID,
+			scanID: props.scanID,
+			gender: props.gender,
+			age: props.age,
+			race: props.race,
+			height: props.height,
+			weight: props.weight,
+			acquisitionDateTime: props.acquisitionDateTime,
+			sampleBase: props.sampleBase
+		}
 	}
 
 	render() {
