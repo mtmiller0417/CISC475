@@ -5,10 +5,10 @@ import Grid from "../Grid/Grid";
 import GridItem from "../Grid/GridItem/GridItem";
 import Metadata from "../Metadata/Metadata";
 import metaData from "../Metadata/meta.csv"
+import LoadData from "../LoadData/LoadData";
 import Header from "../Header/Header";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import * as d3 from 'd3';
-import data from '../../csv_files/13013356000.csv'; // Hard coded in...
 import csv_p from '../../csv_files/Annotattion/P.csv';
 import csv_q from '../../csv_files/Annotattion/Q.csv';
 import csv_r from '../../csv_files/Annotattion/R.csv';
@@ -17,7 +17,7 @@ import csv_t from '../../csv_files/Annotattion/T.csv';
 //import Canvas from 'canvas'
 import { fontWeight } from "@material-ui/system";
 
-import fs from 'fs'
+let data = ""
 
 export default class MainContainer extends React.Component {
 
@@ -25,6 +25,9 @@ export default class MainContainer extends React.Component {
 
 	constructor(props){
         super(props);
+        
+        // Bind callback function, used in LoadData
+        this.dataCallBack = this.dataCallBack.bind(this)
 
         // Set initial state 
         this.state={
@@ -49,6 +52,18 @@ export default class MainContainer extends React.Component {
 			    sampleBase: 0
             }
         }
+    }
+    
+    // Callback function passed to LoadData, to get which CSV to load in
+    dataCallBack(update){
+        console.log(update)
+        data = update
+        this.parseData()
+        this.setState({
+                      data: update
+                      })
+        
+       this.forceUpdate();
     }
 
     //Function to generalize the loading of annotation files
@@ -203,33 +218,37 @@ export default class MainContainer extends React.Component {
         let lead_v5 = [];
         let lead_v6 = [];
 
+        /*let annotation_p = [];
+         let annotation_q = [];
+         let annotation_r = [];
+         let annotation_s = [];
+         let annotation_t = [];*/
         let labels = [];
-
+        
         //Define Min/Max trackers
         let max = 0;
         let min = 0;
-
-        //Parse the CSV into an array of objects where each object represents a row
         var parsed_csv = d3.csv(data, function(d)
-        {
-            //Function is neccessary to handle the fact that the CSV has spaces AND commas
-            //The left hand side of each line defines a new field to handle spaces before field names
-            //The + is used to convert each data point to an integer since they are read in as strings w/ leading space
-            return {
-                I: +d["I"],
-                II: +d[" II"],
-                III: +d[" III"],
-                aVR: +d[" aVR"],
-                aVL: +d[" aVL"],
-                aVF: +d[" aVF"],
-                V1: +d[" V1"],
-                V2: +d[" V2"],
-                V3: +d[" V3"],
-                V4: +d[" V4"],
-                V5: +d[" V5"],
-                V6: +d[" V6"]
-            }
-        });
+                                {
+                                //console.log(this.state.data)
+                                //Function is neccessary to handle the fact that the CSV has spaces AND commas
+                                //The left hand side of each line defines a new field to handle spaces before field names
+                                //The + is used to convert each data point to an integer since they are read in as strings w/ leading space
+                                return {
+                                I: +d["I"],
+                                II: +d[" II"],
+                                III: +d[" III"],
+                                aVR: +d[" aVR"],
+                                aVL: +d[" aVL"],
+                                aVF: +d[" aVF"],
+                                V1: +d[" V1"],
+                                V2: +d[" V2"],
+                                V3: +d[" V3"],
+                                V4: +d[" V4"],
+                                V5: +d[" V5"],
+                                V6: +d[" V6"]
+                                }
+                                });
         
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
@@ -399,6 +418,7 @@ export default class MainContainer extends React.Component {
 		return (
 			<div className={styles.container}>
 				<Grid>
+                    <LoadData callBack={this.dataCallBack}/>
 					<Header />
 				</Grid>
 
