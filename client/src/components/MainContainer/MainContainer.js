@@ -418,16 +418,17 @@ export default class MainContainer extends React.Component {
 	render() {
 		return (
 			<div className={styles.container}>
-				<Grid>
-                    <LoadData callBack={this.dataCallBack}/>
-					<Header />
-				</Grid>
-
-				<Grid >
-                    <div className={control_styles.metadataGrid}>
-                        <Metadata metadata= {this.state.metadata}/>
+                <div className={styles.headerGrid}>
+                    <Header />
+                    <div className={styles.directions}>
+                        <h2 className={styles.directionText}>Please select a file from the dropdown below</h2>
                     </div>
-                    
+                </div>
+                <div className={styles.metadataGrid}>
+                    <Metadata metadata= {this.state.metadata}/>
+                    <LoadData callBack={this.dataCallBack} className={styles.loadData}/>
+                </div>
+				<Grid >
                     <div className={styles.graphBackground} style = {{ backgroundImage: 'url('+this.base64String+')', backgroundRepeat: 'repeat'}}>
                     <div><b>I</b></div>
 					<GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
