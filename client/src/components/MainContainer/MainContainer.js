@@ -51,17 +51,23 @@ export default class MainContainer extends React.Component {
 			    weight: 0,
 			    acquisitionDateTime: '',
 			    sampleBase: 0
-            }
+            },
+            annotations_all: []
         }
     }
     
     // Callback function passed to LoadData, to get which CSV to load in
-    dataCallBack(update){
+    dataCallBack(update, annotations){
         console.log(update)
         data = update
-        this.parseData()
+        this.parseData();
+       // annotations.forEach(element => {
+                    //        parseAnnotations(element[0], element[1], element[2], element[3], element[4])
+                    //        })
+        
         this.setState({
-                      data: update
+                      data: update,
+                      annotations_all: annotations
                       })
         
        this.forceUpdate();
@@ -203,7 +209,7 @@ export default class MainContainer extends React.Component {
         console.log()
     }
 
-    parseData(){
+    parseData(annotations){
 
         //Define arrays
         let lead_i = [];
@@ -375,7 +381,7 @@ export default class MainContainer extends React.Component {
         })
     }
 
-    parseAnnotations(){
+    parseAnnotations(p_ann, q_ann, r_ann, s_ann, t_ann){
         this.parseAnnotationCsv(csv_p).then(data => {
             this.setState({
                 p: data

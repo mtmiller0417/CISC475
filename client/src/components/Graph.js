@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
+import * as d3 from 'd3';
 import cloneDeep from 'lodash/cloneDeep';
 
 // Set constant colors here
@@ -163,6 +164,51 @@ class Graph extends Component{
             });
         }
     }
+    
+    parseAnnotations(annotations){
+        this.parseAnnotationCsv(annotations[0]).then(data => {
+                                            this.setState({
+                                                          p: data
+                                                          })
+                                            })
+        this.parseAnnotationCsv(annotations[1]).then(data => {
+                                            this.setState({
+                                                          q: data
+                                                          })
+                                            })
+        this.parseAnnotationCsv(annotations[2]).then(data => {
+                                            this.setState({
+                                                          r: data
+                                                          })
+                                            })
+        this.parseAnnotationCsv(annotations[3]).then(data => {
+                                            this.setState({
+                                                          s: data
+                                                          })
+                                            })
+        this.parseAnnotationCsv(annotations[4]).then(data => {
+                                            this.setState({
+                                                          t: data
+                                                          })
+                                            })
+    }
+    
+    parseAnnotationCsv(inputCsv)
+    {
+        var parsed_val = d3.text(inputCsv, function(text) {
+                                 var data = d3.csv.parseRows(text, function(d) {
+                                                             return d.map(Number);
+                                                             });
+                                 });
+        
+        return parsed_val.then(data => {
+                               return data.split(',').map(function(item){
+                                                          return parseInt(item,10);
+                                                          })
+                               });
+    }
+    
+    
 
     // Can't use 'this.' because this is a static function
     // The state is updated through what is returned from this function
