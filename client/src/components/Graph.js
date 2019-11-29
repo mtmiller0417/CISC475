@@ -15,6 +15,7 @@ let pastelGreen = 'rgba(133,222,119,1)';
 let pastelGreenLightOpacity = 'rgba(133,222,119,' + lightOpacity + ')';
 let pastelPurple = 'rgba(178,157,217,1)';
 let pastelPurpleLightOpacity = 'rgba(178,157,217,' + lightOpacity + ')';
+let annotations_list = [0,0,0,0,0]
 
 class Graph extends Component{
 
@@ -23,6 +24,8 @@ class Graph extends Component{
 
         this.ref = React.createRef()
 
+        annotations_list = props.inputArr.annotations_all
+        console.log("annos: " + annotations_list)
         this.state = ({
             data:{
                 datasets:{
@@ -49,9 +52,14 @@ class Graph extends Component{
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
                 min:this.props.inputArr.extra_info.min, 
-                parent_width: 0
+                parent_width: 0,
+                p: [], q: [], r: [], s: [], t: [],
+                Input_Annotations: []
+                    
             }
         })
+        
+       // this.parseannotations = this.parseAnnotations.bind(this);
     }
 
     deleteAnnotation(annotationArray, arraryIndex, event){
@@ -165,35 +173,44 @@ class Graph extends Component{
         }
     }
     
-    parseAnnotations(annotations){
-        this.parseAnnotationCsv(annotations[0]).then(data => {
-                                            this.setState({
-                                                          p: data
-                                                          })
+    static parseAnnotations(annotations){
+        let p = [], q = [], r = [], s = [], t = []
+        let resolved_a = []
+        
+        console.log("...:" + annotations)
+        var p1 = this.parseAnnotationCsv(annotations[0]).then(data => {
+                                            return data
                                             })
-        this.parseAnnotationCsv(annotations[1]).then(data => {
-                                            this.setState({
-                                                          q: data
-                                                          })
+        var p2 = this.parseAnnotationCsv(annotations[1]).then(data => {
+                                            return data
                                             })
-        this.parseAnnotationCsv(annotations[2]).then(data => {
-                                            this.setState({
-                                                          r: data
-                                                          })
+        var p3 = this.parseAnnotationCsv(annotations[2]).then(data => {
+                                            return data
                                             })
-        this.parseAnnotationCsv(annotations[3]).then(data => {
-                                            this.setState({
-                                                          s: data
-                                                          })
+        var p4 = this.parseAnnotationCsv(annotations[3]).then(data => {
+                                            return data
                                             })
-        this.parseAnnotationCsv(annotations[4]).then(data => {
-                                            this.setState({
-                                                          t: data
-                                                          })
+        var p5 = this.parseAnnotationCsv(annotations[4]).then(data => {
+                                            return data
                                             })
+      
+        return Promise.all([p1,p2,p3,p4,p5]).then(arr => {
+                                     return arr
+                                     });
+        //return [p,q,r,s,t]
+        
+        
+        //return [p,q,r,s,t];
+        //console.log("pqrst:" + [p,q,r,s,t])
+        //return [p,q,r,s,t];
     }
     
-    parseAnnotationCsv(inputCsv)
+    //Function to generalize the loading of annotation files
+    //Since the logic for all 5 is the exact same
+    //Receives a CSV file and an array for output
+    //Processes the CSV file into the specified array
+    //Returns nothing
+    static parseAnnotationCsv(inputCsv)
     {
         var parsed_val = d3.text(inputCsv, function(text) {
                                  var data = d3.csv.parseRows(text, function(d) {
@@ -209,7 +226,6 @@ class Graph extends Component{
     }
     
     
-
     // Can't use 'this.' because this is a static function
     // The state is updated through what is returned from this function
     // This loads metadata... but sometimes doesnt load all of them? is kinda random...
@@ -217,56 +233,72 @@ class Graph extends Component{
     //
    // static getDerivedStateFromProps
     static getDerivedStateFromProps(next_props, prev_state){
-        var freq = next_props.inputArr.freq
-
-        let props_array = next_props.inputArr;
         
+        var freq = next_props.inputArr.freq
         let p_pair = [];
         let q_pair = [];
         let r_pair = [];
         let s_pair = [];
         let t_pair = [];
-        var x = 0;
-        // p_pair
-        for(let i = 0; i < props_array.p.length; i++){
-            x++;
-            p_pair.push({
-                x: props_array.p[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.p[i]]
-            });
-        }
-        // q_pair
-        for(let i = 0; i < props_array.q.length; i++){
-            q_pair.push({
-                x: props_array.q[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.q[i]]
-            });
-        }
-        // r_pair
-        for(let i = 0; i < props_array.r.length; i++){
-            r_pair.push({
-                x: props_array.r[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.r[i]]
-            });
-        }
-        // s_pair
-        for(let i = 0; i < props_array.s.length; i++){
-            s_pair.push({
-                x: props_array.s[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.s[i]]
-            });
-        }
-        // t_pair
-        for(let i = 0; i < props_array.t.length; i++){
-            t_pair.push({
-                x: props_array.t[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.t[i]]
-            });
-        }
         
-        return{
-            data:{
-                datasets:{
+        let props_array = next_props.inputArr;
+        if (typeof next_props.inputArr.annotations_all !== 'undefined' && next_props.inputArr.annotations_all.length > 4) {
+            
+            var annos = Graph.parseAnnotations(next_props.inputArr.annotations_all).then(annotations => {
+                                                                                return annotations
+                                                                             })
+
+            
+            annos.then(annotations => {
+                        let p = annotations[0];
+                        let q = annotations[1];
+                        let r = annotations[2];
+                        let s = annotations[3]
+                        let t = annotations[4];
+                       
+                       var x = 0;
+                       // p_pair
+                       for(let i = 0; i <  p.length; i++){
+                           x++;
+                           p_pair.push({
+                                       x: p[i] * (1/freq),
+                                       y: next_props.inputArr.data[p[i]]
+                                       });
+                       }
+                       // q_pair
+                       for(let i = 0; i < q.length; i++){
+                           q_pair.push({
+                                       x: q[i] * (1/freq),
+                                       y: next_props.inputArr.data[q[i]]
+                                       });
+                       }
+                       // r_pair
+                       for(let i = 0; i < r.length; i++){
+                           r_pair.push({
+                                       x: r[i] * (1/freq),
+                                       y: next_props.inputArr.data[r[i]]
+                                       });
+                       }
+                       // s_pair
+                       for(let i = 0; i < s.length; i++){
+                           s_pair.push({
+                                       x: s[i] * (1/freq),
+                                       y: next_props.inputArr.data[s[i]]
+                                       });
+                       }
+                       // t_pair
+                       for(let i = 0; i < t.length; i++){
+                           t_pair.push({
+                                       x: t[i] * (1/freq),
+                                       y: next_props.inputArr.data[t[i]]
+                                       });
+                       }
+                    })
+ 
+
+            return{
+                    data:{
+                    datasets:{
                     radius: 0, // Makes the dots go away
                     label: next_props.inputArr.title,
                     fill: false,
@@ -274,20 +306,48 @@ class Graph extends Component{
                     data: next_props.inputArr.data,
                     backgroundColor:['rgba(255,99,132,0.6)',],
                     borderWidth: 1
-                },
-                annotation:{
+                    },
+                    annotation:{
                     p:p_pair,
                     q:q_pair,
                     r:r_pair,
                     s:s_pair,
                     t:t_pair
-                }, 
-                freq: freq, 
-                min: next_props.inputArr.extra_info.min, 
-                max: next_props.inputArr.extra_info.max, 
-                parent_width: next_props.width
+                    },
+                    freq: freq,
+                    min: next_props.inputArr.extra_info.min,
+                    max: next_props.inputArr.extra_info.max,
+                    parent_width: next_props.width
+                    }
+            }
+        } else{
+            return{
+                    data:{
+                    datasets:{
+                    radius: 0, // Makes the dots go away
+                    label: next_props.inputArr.title,
+                    fill: false,
+                    borderColor: ['black'],
+                    data: next_props.inputArr.data,
+                    backgroundColor:['rgba(255,99,132,0.6)',],
+                    borderWidth: 1
+                    },
+                    annotation:{
+                    p:p_pair,
+                    q:q_pair,
+                    r:r_pair,
+                    s:s_pair,
+                    t:t_pair
+                    },
+                    freq: freq,
+                    min: next_props.inputArr.extra_info.min,
+                    max: next_props.inputArr.extra_info.max,
+                    parent_width: next_props.width
+                    }
             }
         }
+        
+        
     }
 
     //Render the graph

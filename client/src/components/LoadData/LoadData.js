@@ -106,7 +106,8 @@ export default class LoadData extends React.Component {
                           }
                     })
         
-        let all_annotations = [lead_i, lead_ii, lead_iii, lead_avr, lead_avl, lead_avf, lead_v1, lead_v2, lead_v3, lead_v4, lead_v5, lead_v6]
+        let all_annotations = [lead_i, lead_avl, lead_ii, lead_iii, lead_avf, lead_avr, lead_v1, lead_v2, lead_v3, lead_v4, lead_v5, lead_v6]
+        //let all_annotations = [lead_i, lead_ii, lead_iii, lead_avr, lead_avl, lead_avf, lead_v1, lead_v2, lead_v3, lead_v4, lead_v5, lead_v6]
     
         console.log("correct: " + correct_a)
         return all_annotations

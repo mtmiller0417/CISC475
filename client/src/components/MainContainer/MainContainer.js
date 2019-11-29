@@ -61,9 +61,6 @@ export default class MainContainer extends React.Component {
         console.log(update)
         data = update
         this.parseData();
-       // annotations.forEach(element => {
-                    //        parseAnnotations(element[0], element[1], element[2], element[3], element[4])
-                    //        })
         
         this.setState({
                       data: update,
@@ -73,25 +70,6 @@ export default class MainContainer extends React.Component {
        this.forceUpdate();
     }
 
-    //Function to generalize the loading of annotation files
-    //Since the logic for all 5 is the exact same
-    //Receives a CSV file and an array for output
-    //Processes the CSV file into the specified array
-    //Returns nothing
-    parseAnnotationCsv(inputCsv)
-    {
-        var parsed_val = d3.text(inputCsv, function(text) {
-                var data = d3.csv.parseRows(text, function(d) {
-                                            return d.map(Number);
-                                            });
-                });
-        
-        return parsed_val.then(data => {
-                               return data.split(',').map(function(item){
-                                            return parseInt(item,10);
-                                                                    })
-                                            });
-    }
 
     parseMetaData(){
         let ecg_ID = [];
@@ -381,33 +359,6 @@ export default class MainContainer extends React.Component {
         })
     }
 
-    parseAnnotations(p_ann, q_ann, r_ann, s_ann, t_ann){
-        this.parseAnnotationCsv(csv_p).then(data => {
-            this.setState({
-                p: data
-            })
-        })
-        this.parseAnnotationCsv(csv_q).then(data => {
-            this.setState({
-                q: data
-            })
-        })
-        this.parseAnnotationCsv(csv_r).then(data => {
-            this.setState({
-                r: data
-            })
-        })
-        this.parseAnnotationCsv(csv_s).then(data => {
-            this.setState({
-                s: data
-            })
-        })
-        this.parseAnnotationCsv(csv_t).then(data => {
-            this.setState({
-                t: data
-            })
-        })
-    }
 
     componentWillMount(){
 
@@ -417,11 +368,10 @@ export default class MainContainer extends React.Component {
         // Parse the data
         this.parseData();
 
-        // Parse the annotations
-        this.parseAnnotations();
     }
 	
 	render() {
+        console.log("hhh : " + this.state.annotations_all)
 		return (
 			<div className={styles.container}>
 				<Grid>
@@ -436,29 +386,30 @@ export default class MainContainer extends React.Component {
                     
                     <div className={styles.graphBackground} style = {{ backgroundImage: 'url('+this.base64String+')', backgroundRepeat: 'repeat'}}>
                     <div><b>I</b></div>
-					<GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, annotations_all: this.state.annotations_all[0], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
 					<div ><b>aVL</b></div>
-                    <GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                    <div><b>II</b></div>
-                    <GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div><b>III</b></div>
-                    <GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div><b>aVF</b></div>
-                    <GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div><b>aVR</b></div>
-                    <GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div><b>V1</b></div>
-                    <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div><b>V2</b></div>
-                    <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div><b>V3</b></div>
-                    <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div><b>V4</b></div>
-                    <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div><b>V5</b></div>
-                    <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div><b>V6</b></div>
-                    <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, annotations_all: this.state.annotations_all[1], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>II</b></div>
+                <GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, annotations_all: this.state.annotations_all[2], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>III</b></div>
+                <GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, annotations_all: this.state.annotations_all[3], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>aVF</b></div>
+                <GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, annotations_all: this.state.annotations_all[4], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>aVR</b></div>
+                <GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, annotations_all: this.state.annotations_all[5], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>V1</b></div>
+                <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, annotations_all: this.state.annotations_all[6], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>V2</b></div>
+                <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, annotations_all: this.state.annotations_all[7], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>V3</b></div>
+                <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>V4</b></div>
+                <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, annotations_all: this.state.annotations_all[9], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>V5</b></div>
+                <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, annotations_all: this.state.annotations_all[10], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <div ><b>V6</b></div>
+                <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, annotations_all: this.state.annotations_all[11], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                
                     </div>
                 </Grid>
 			</div>

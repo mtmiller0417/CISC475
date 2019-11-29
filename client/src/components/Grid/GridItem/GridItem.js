@@ -23,6 +23,7 @@ export default class GridItem extends React.Component {
   }
 
   render() {
+      console.log("hello:" + this.props.inputArr.annotations)
     return(
       <div ref="reference" className={styles.gridItem}>
         <Graph inputArr={this.props.inputArr} width={this.state.width}/>
