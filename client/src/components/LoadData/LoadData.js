@@ -21,12 +21,8 @@ export default class LoadData extends React.Component {
     
         file_list = this.importAll(require.context('../../csv_files', false,  /\.csv$/));
         var file_string = this.importAllNames(require.context('../../csv_files', false,  /\.csv$/));
-        //console.log("Files: " + file_list)
-        console.log("File String:" + file_string);
-        //file_names = file_string.split("/");
 
         const {callBack} = this.props
-        //callBack(file_list[1])
         
         for(var i = 0; i < file_list.length; i++){
             options.push({ label: file_string[i], value: file_list[i]});
@@ -65,8 +61,6 @@ export default class LoadData extends React.Component {
         // Get full list of annotations
         let annotations = this.importAll(require.context('../../annotations', false,  /\.csv$/));
         
-        console.log("csv:" + csv_spliced)
-        console.log("anno:" + annotations);
         let correct_a = [];
         
         // Correct_a saves annotations for the correct graph
@@ -78,7 +72,6 @@ export default class LoadData extends React.Component {
                             });
         
         correct_a.forEach(element => {
-                         // let csv_spliced
                           if(element.includes("I", 0)){
                                 lead_i.push(element)
                           } else if(element.includes("aVL", 0)){
@@ -106,13 +99,23 @@ export default class LoadData extends React.Component {
                           }
                     })
         
+        // Sorts them in alphabetical order, so they match (P,Q,R,S,T indices)
+        lead_i.sort()
+        lead_ii.sort()
+        lead_iii.sort()
+        lead_avl.sort()
+        lead_avf.sort()
+        lead_avr.sort()
+        lead_v1.sort()
+        lead_v2.sort()
+        lead_v3.sort()
+        lead_v4.sort()
+        lead_v5.sort()
+        lead_v6.sort()
+        
         let all_annotations = [lead_i, lead_avl, lead_ii, lead_iii, lead_avf, lead_avr, lead_v1, lead_v2, lead_v3, lead_v4, lead_v5, lead_v6]
-        //let all_annotations = [lead_i, lead_ii, lead_iii, lead_avr, lead_avl, lead_avf, lead_v1, lead_v2, lead_v3, lead_v4, lead_v5, lead_v6]
     
-        console.log("correct: " + correct_a)
         return all_annotations
-        
-        
     }
     
     
@@ -123,7 +126,7 @@ export default class LoadData extends React.Component {
     handleChange = selectedOption => {
         this.setState(
                       { selectedOption },
-                      () => this.props.callBack(this.state.selectedOption.value, this.importAnnotations(this.state.selectedOption.label))// this.props.callBack(this.state.selectedOption.value)
+                      () => this.props.callBack(this.state.selectedOption.value, this.importAnnotations(this.state.selectedOption.label))
                       );
     };
     

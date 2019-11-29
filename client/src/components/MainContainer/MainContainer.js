@@ -10,11 +10,6 @@ import LoadData from "../LoadData/LoadData";
 import Header from "../Header/Header";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import * as d3 from 'd3';
-import csv_p from '../../csv_files/Annotattion/P.csv';
-import csv_q from '../../csv_files/Annotattion/Q.csv';
-import csv_r from '../../csv_files/Annotattion/R.csv';
-import csv_s from '../../csv_files/Annotattion/S.csv';
-import csv_t from '../../csv_files/Annotattion/T.csv';
 //import Canvas from 'canvas'
 import { fontWeight } from "@material-ui/system";
 
@@ -202,12 +197,7 @@ export default class MainContainer extends React.Component {
         let lead_v4 = [];
         let lead_v5 = [];
         let lead_v6 = [];
-
-        /*let annotation_p = [];
-         let annotation_q = [];
-         let annotation_r = [];
-         let annotation_s = [];
-         let annotation_t = [];*/
+        
         let labels = [];
         
         //Define Min/Max trackers
@@ -371,7 +361,6 @@ export default class MainContainer extends React.Component {
     }
 	
 	render() {
-        console.log("hhh : " + this.state.annotations_all)
 		return (
 			<div className={styles.container}>
 				<Grid>

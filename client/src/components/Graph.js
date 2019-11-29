@@ -15,7 +15,6 @@ let pastelGreen = 'rgba(133,222,119,1)';
 let pastelGreenLightOpacity = 'rgba(133,222,119,' + lightOpacity + ')';
 let pastelPurple = 'rgba(178,157,217,1)';
 let pastelPurpleLightOpacity = 'rgba(178,157,217,' + lightOpacity + ')';
-let annotations_list = [0,0,0,0,0]
 
 class Graph extends Component{
 
@@ -24,8 +23,6 @@ class Graph extends Component{
 
         this.ref = React.createRef()
 
-        annotations_list = props.inputArr.annotations_all
-        console.log("annos: " + annotations_list)
         this.state = ({
             data:{
                 datasets:{
@@ -38,11 +35,11 @@ class Graph extends Component{
                     borderWidth: 1
                 },
                 annotation:{
-                    p: '',
-                    q: '',
-                    r: '',
-                    s: '',
-                    t: '',
+                    p: [''],
+                    q: [''],
+                    r: [''],
+                    s: [''],
+                    t: [''],
                     oldP: [''],
                     oldQ: [''],
                     oldR: [''],
@@ -52,14 +49,9 @@ class Graph extends Component{
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
                 min:this.props.inputArr.extra_info.min, 
-                parent_width: 0,
-                p: [], q: [], r: [], s: [], t: [],
-                Input_Annotations: []
-                    
+                parent_width: 0
             }
         })
-        
-       // this.parseannotations = this.parseAnnotations.bind(this);
     }
 
     deleteAnnotation(annotationArray, arraryIndex, event){
@@ -174,10 +166,6 @@ class Graph extends Component{
     }
     
     static parseAnnotations(annotations){
-        let p = [], q = [], r = [], s = [], t = []
-        let resolved_a = []
-        
-        console.log("...:" + annotations)
         var p1 = this.parseAnnotationCsv(annotations[0]).then(data => {
                                             return data
                                             })
@@ -197,12 +185,6 @@ class Graph extends Component{
         return Promise.all([p1,p2,p3,p4,p5]).then(arr => {
                                      return arr
                                      });
-        //return [p,q,r,s,t]
-        
-        
-        //return [p,q,r,s,t];
-        //console.log("pqrst:" + [p,q,r,s,t])
-        //return [p,q,r,s,t];
     }
     
     //Function to generalize the loading of annotation files
@@ -346,8 +328,6 @@ class Graph extends Component{
                     }
             }
         }
-        
-        
     }
 
     //Render the graph
