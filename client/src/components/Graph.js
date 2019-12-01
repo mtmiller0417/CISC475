@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
 import cloneDeep from 'lodash/cloneDeep';
+import styles from "./MainContainer/MainContainer.module.scss";
 
 // Set constant colors here
 let lightOpacity = .2
@@ -388,7 +389,17 @@ class Graph extends Component{
         return(
         <React.Fragment>
             {
-                <div className="graph" style={{width: full_width}}>
+                <div className="wrapper" style={{position: 'relative'}}>
+
+                    <ul class="legend" style = {{ position: 'absolute', top: 0, right: 0, fontSize: 15 }}>
+                        <div><span class={styles.p}></span>P</div>
+                        <div><span class={styles.q}></span>Q</div>
+                        <div><span class={styles.r}></span>R</div>
+                        <div><span class={styles.s}></span>S</div>
+                        <div><span class={styles.t}></span>T</div>
+                    </ul>
+
+                <div className="graph" style={{position:'relative', top: 0, left: 0, width: full_width, height: HEIGHT}}>
                     <Scatter 
                         data={dat}
                         redraw={true} 
@@ -439,7 +450,7 @@ class Graph extends Component{
                                 position:'left'
                             },
                             legend: {
-                                display:true,
+                                display:false,
                                 position: 'right',
                                 labels: {
                                     // generateLabel
@@ -481,6 +492,7 @@ class Graph extends Component{
                             }
                         }}
                     />
+                </div>
                 </div>
             }
         </React.Fragment>)
