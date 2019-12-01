@@ -389,9 +389,12 @@ class Graph extends Component{
         return(
         <React.Fragment>
             {
-                <div className="wrapper" style={{position: 'relative'}}>
 
-                    <ul style = {{ position: 'absolute', top: 0, right: 0, fontSize: 15 }}>
+                <div className="wrapper" style={{position: 'relative', height:HEIGHT}}>
+
+                    <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
+                    
+                    <ul style = {{ position: 'absolute', top: 0, right: 0, fontSize: '9px', fontWeight: 'bold' }}> 
                         <div><span class={styles.p}></span>P</div>
                         <div><span class={styles.q}></span>Q</div>
                         <div><span class={styles.r}></span>R</div>
@@ -399,7 +402,7 @@ class Graph extends Component{
                         <div><span class={styles.t}></span>T</div>
                     </ul>
 
-                <div className="graph" style={{position:'relative', top: 0, left: 0, width: full_width, height: HEIGHT}}>
+                <div className="graph" style={{position:'absolute', top: 0, left: 0, width: full_width}}>
                     <Scatter 
                         data={dat}
                         redraw={true} 
@@ -479,7 +482,7 @@ class Graph extends Component{
                                     ticks: {
                                         display: false,
                                         min: this.state.data.min,
-                                        max: this.state.data.max
+                                        max: this.state.data.max + 50
                                     },
                                     gridLines: {
                                         display: false
