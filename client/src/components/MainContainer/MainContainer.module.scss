@@ -57,12 +57,10 @@
 	margin: 2px; 
 }
 
-.box { border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; }
-
 // These are the colors for each of the legends in each graph
 
-.p { background-color: rgba(255,105,97,1); } // pastel red
-.q { background-color: rgba(178,157,217,1); } // pastel purple
-.r { background-color: rgba(255,180,71,1); } // pastel orange
-.s { background-color: rgba(88,148,156,1); } // pastel blue
-.t { background-color: rgba(133,222,119,1); } // pastel green
+.p { background-color: rgba(255,105,97,1); border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; } // pastel red
+.q { background-color: rgba(178,157,217,1); border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; } // pastel purple
+.r { background-color: rgba(255,180,71,1); border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; } // pastel orange
+.s { background-color: rgba(88,148,156,1); border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; } // pastel blue
+.t { background-color: rgba(133,222,119,1); border: 1px solid #ccc; float: left; width: 12px; height: 12px; margin: 2px; } // pastel green

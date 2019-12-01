@@ -391,7 +391,7 @@ class Graph extends Component{
             {
                 <div className="wrapper" style={{position: 'relative'}}>
 
-                    <ul class="legend" style = {{ position: 'absolute', top: 0, right: 0, fontSize: 15 }}>
+                    <ul style = {{ position: 'absolute', top: 0, right: 0, fontSize: 15 }}>
                         <div><span class={styles.p}></span>P</div>
                         <div><span class={styles.q}></span>Q</div>
                         <div><span class={styles.r}></span>R</div>
