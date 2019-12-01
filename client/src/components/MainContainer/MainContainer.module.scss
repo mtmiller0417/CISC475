@@ -44,3 +44,11 @@
 .loadData {
 	grid-column: span 2;
 }
+
+// These create boxes and color them as appropriate
+
+.p { background-color: rgba(255,105,97,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel red
+.q { background-color: rgba(178,157,217,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel purple
+.r { background-color: rgba(255,180,71,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel orange
+.s { background-color: rgba(88,148,156,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel blue
+.t { background-color: rgba(133,222,119,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel green
