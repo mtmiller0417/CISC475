@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
 import cloneDeep from 'lodash/cloneDeep';
 import styles from "./MainContainer/MainContainer.module.scss";
+import CustomContext from "./CustomContext/CustomContext.js"
 
 // Set constant colors here
 let lightOpacity = .2
@@ -49,10 +50,39 @@ class Graph extends Component{
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
                 min:this.props.inputArr.extra_info.min, 
-                parent_width: 0
+                parent_width: 0,
+                menu: [
+                    {label: "Item 1", callback: this.itemCallback},
+                    {label: "Menu item 2", callback: this.item2Callback},
+                    {label: "Apple", callback: this.appleCallback},
+                    {label: "This is orange", callback: this.orangeCallback},
+                    {label: "Context menu is fun", },
+                    {label: "Cool", callback: this.coolCallback}
+                ]
             }
         })
     }
+
+    itemCallback() {
+        alert('clicked on Item 1')
+        }
+        
+    item2Callback() {
+        alert('clicked on Item 2')
+        }
+        
+    appleCallback() {
+        alert('clicked on Apple')
+        }
+
+    orangeCallback() {
+        alert('clicked on Orange')
+        }
+
+    coolCallback(){
+        alert('clicked on Cool')
+        }
+
 
     deleteAnnotation(annotationArray, arraryIndex, event){
         //annotationArray[arraryIndex] = ""; // Dont delete, just make it empty
@@ -403,6 +433,7 @@ class Graph extends Component{
                     </ul>
 
                 <div className="graph" style={{position:'absolute', top: 0, left: 0, width: full_width}}>
+                    <CustomContext items={this.state.data.menu}></CustomContext>
                     <Scatter 
                         data={dat}
                         redraw={true} 
