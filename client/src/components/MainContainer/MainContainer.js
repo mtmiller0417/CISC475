@@ -29,6 +29,8 @@ export default class MainContainer extends React.Component {
         
         // Bind callback function, used in LoadData
         this.dataCallBack = this.dataCallBack.bind(this)
+        // Bind changeForm function, used when a form is changed
+        this.changeForm = this.changeForm.bind(this);
 
         // Set initial state 
         this.state={
@@ -40,6 +42,7 @@ export default class MainContainer extends React.Component {
             extra_info: {
                 min: 0, 
                 max: 0, 
+                selectedAnnotation: -1
             },
             metadata: {
                 patientID: 0,
@@ -415,9 +418,41 @@ export default class MainContainer extends React.Component {
         this.parseAnnotations();
     }
 
+    // Call a function in another component? so it doesnt override annotations
+    changeForm(event){
+        console.log('event');
+        console.log(event.target.value);
+        this.setState({
+            extra_info:{
+                min: this.state.extra_info.min, 
+                max: this.state.extra_info.max,
+                selectedAnnotation: Number(event.target.value)
+            }
+        });
+    }
+
     // <div ><b>aVL</b></div> // Use this if you want some more spacing between
-	
+
+       /**<div style={radioStyle} onChange={this.changeForm.bind(this)}>
+                    <div style={{position:'absolute'}}>
+                        P <input type="radio" value="0" name="annotation"/><br />
+                        Q <input type="radio" value="1" name="annotation"/><br />
+                        R <input type="radio" value="2" name="annotation"/><br />
+                        S <input type="radio" value="3" name="annotation"/><br />
+                        T <input type="radio" value="4" name="annotation"/><br />
+                    </div>
+                </div> */
+
 	render() {
+        // Style json for the outer style of the radio button
+        const radioStyle= {
+            position: 'sticky',
+            marginLeft: -40,
+            top: 50,
+            width: 30,
+            height: 10,
+            fontWeight: 'bold'
+        };
 		return (
 			<div className={styles.container}>
                 <div className={styles.headerGrid}>
@@ -430,6 +465,29 @@ export default class MainContainer extends React.Component {
                     <Metadata metadata= {this.state.metadata}/>
                     <LoadData callBack={this.dataCallBack} className={styles.loadData}/>
                 </div>
+
+                <div style={radioStyle} onChange={this.changeForm.bind(this)}>
+                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)'}}>
+                        <input type="radio" value="0" name="annotation"/> P
+                    </div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: -10}}>
+                        <input type="radio" value="1" name="annotation"/> Q
+                    </div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: -20}}>
+                        <input type="radio" value="2" name="annotation"/> R
+                    </div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: -30}}>
+                        <input type="radio" value="3" name="annotation"/> S
+                    </div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: -40}}>
+                        <input type="radio" value="4" name="annotation"/> T
+                    </div>
+                </div>
+
 				<Grid >
                     <div className={styles.graphBackground} style = {{ backgroundImage: 'url('+this.base64String+')', backgroundRepeat: 'repeat'}}>
                     

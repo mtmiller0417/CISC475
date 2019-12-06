@@ -21,7 +21,7 @@ class Graph extends Component{
     constructor(props){
         super(props);
 
-        this.ref = React.createRef()
+        this.chartRef = React.createRef();
 
         this.state = ({
             data:{
@@ -35,6 +35,7 @@ class Graph extends Component{
                     borderWidth: 1
                 },
                 annotation:{
+                    selectedAnnotation: this.props.inputArr.extra_info.selectedAnnotation,
                     p: '',
                     q: '',
                     r: '',
@@ -96,6 +97,11 @@ class Graph extends Component{
 
     modifyGraph(e) {
         console.log(e);
+
+        const node = this.chartRef.current;
+        console.log("NODE");
+        console.log(node);
+
         let arrIndex = e[0]._index;
         let dataSet = e[0]._datasetIndex;
         let coordinates = this.state.data.datasets.data[arrIndex];
@@ -108,7 +114,14 @@ class Graph extends Component{
                 //Let the user select the type of point to add from some menu 
                 //and set the response to this variable
                 //Hardcoded to 0 now to inidicate P
-                let inputChoice = 0;
+                let inputChoice = this.state.data.annotation.selectedAnnotation;
+                console.log('inputChoice')
+                console.log(inputChoice)
+                if(inputChoice === -1){
+                    console.log('break')
+                    break;
+                }
+                
                 
                 //User wants to add P
                 if(inputChoice === 0){
@@ -231,6 +244,7 @@ class Graph extends Component{
                     borderWidth: 1
                 },
                 annotation:{
+                    selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation,
                     p:p_pair,
                     q:q_pair,
                     r:r_pair,
@@ -393,7 +407,7 @@ class Graph extends Component{
                 <div className="wrapper" style={{position: 'relative', height:HEIGHT}}>
 
                     <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
-                    
+
                     <ul style = {{ position: 'absolute', top: 0, right: 0, fontSize: '9px', fontWeight: 'bold' }}> 
                         <div><span class={styles.p}></span>P</div>
                         <div><span class={styles.q}></span>Q</div>
@@ -407,6 +421,7 @@ class Graph extends Component{
                         data={dat}
                         redraw={true} 
                         height={HEIGHT}
+                        ref={this.chartRef}
                         getElementAtEvent={(point) =>{
                             if(point.length > 0){
                                 this.modifyGraph(point);
@@ -414,14 +429,6 @@ class Graph extends Component{
                         }}
                         options={{
                             maintainAspectRatio: false,
-                            /*layout: {
-                                padding: {
-                                    left: 0,
-                                    right: 0,
-                                    top: 0,
-                                    bottom: 0
-                                }
-                            },*/
                             tooltips:{
                                 enabled: true,
                                 mode: 'nearest',
