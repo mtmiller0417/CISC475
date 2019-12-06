@@ -35,7 +35,7 @@ class Graph extends Component{
                     borderWidth: 1
                 },
                 annotation:{
-                    p: [''],
+                      p: [{x:0,y:0}],
                     q: [''],
                     r: [''],
                     s: [''],
@@ -49,7 +49,8 @@ class Graph extends Component{
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
                 min:this.props.inputArr.extra_info.min, 
-                parent_width: 0
+                parent_width: 0,
+                p_pair: [], q_pair:[], r_pair: [], s_pair:  [], t_pair: []  //temp
             }
         })
     }
@@ -223,8 +224,17 @@ class Graph extends Component{
         let s_pair = [];
         let t_pair = [];
         
+
         let props_array = next_props.inputArr;
+        
+        if(prev_state !== 'undefined'){
+//        if(prev_state.data.annotations.p === 'undefined' || prev_state.data.annotations.q === 'undefined' ||
+//           prev_state.data.annotations.r === 'undefined' || prev_state.data.annotations.s === 'undefined' ||
+//           prev_state.data.annotations.t === 'undefined'){
+            console.log("test");
+          //  console.log( "testing " + next_props.inputArr.annotations.all.length )
         if (typeof next_props.inputArr.annotations_all !== 'undefined' && next_props.inputArr.annotations_all.length > 4) {
+            console.log("here")
             
             var annos = Graph.parseAnnotations(next_props.inputArr.annotations_all).then(annotations => {
                                                                                 return annotations
@@ -246,6 +256,7 @@ class Graph extends Component{
                                        x: p[i] * (1/freq),
                                        y: next_props.inputArr.data[p[i]]
                                        });
+                       console.log("p_pairs: " + p_pair[i].x + "," + p_pair[i].y)
                        }
                        // q_pair
                        for(let i = 0; i < q.length; i++){
@@ -277,6 +288,7 @@ class Graph extends Component{
                        }
                     })
  
+           // console.log("p_pair: " + p_pair)
 
             return{
                     data:{
@@ -315,17 +327,44 @@ class Graph extends Component{
                     borderWidth: 1
                     },
                     annotation:{
-                    p:p_pair,
-                    q:q_pair,
-                    r:r_pair,
-                    s:s_pair,
-                    t:t_pair
+                    p:{x:0, y:0},
+                    q:{x:0, y:0},
+                    r:{x:0, y:0},
+                    s:{x:0, y:0},
+                    t:{x:0, y:0},
                     },
                     freq: freq,
                     min: next_props.inputArr.extra_info.min,
                     max: next_props.inputArr.extra_info.max,
                     parent_width: next_props.width
                     }
+            }
+        }
+        } else {
+            
+            return{
+            data:{
+            datasets:{
+            radius: 0, // Makes the dots go away
+            label: next_props.inputArr.title,
+            fill: false,
+            borderColor: ['black'],
+            data: next_props.inputArr.data,
+            backgroundColor:['rgba(255,99,132,0.6)',],
+            borderWidth: 1
+            },
+            annotation:{
+            p:{x:0, y:0},
+            q:{x:0, y:0},
+            r:{x:0, y:0},
+            s:{x:0, y:0},
+            t:{x:0, y:0},
+            },
+            freq: freq,
+            min: next_props.inputArr.extra_info.min,
+            max: next_props.inputArr.extra_info.max,
+            parent_width: next_props.width
+            }
             }
         }
     }
