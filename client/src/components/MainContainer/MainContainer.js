@@ -60,14 +60,10 @@ export default class MainContainer extends React.Component {
     
     // Callback function passed to LoadData, to get which CSV to load in
     dataCallBack(update){
-        console.log(update)
         data = update
         this.parseData()
-        this.setState({
-                      data: update
-                      })
-        
-       this.forceUpdate();
+        this.setState({ data: update })
+        this.forceUpdate();
     }
 
     //Function to generalize the loading of annotation files
@@ -75,8 +71,7 @@ export default class MainContainer extends React.Component {
     //Receives a CSV file and an array for output
     //Processes the CSV file into the specified array
     //Returns nothing
-    parseAnnotationCsv(inputCsv)
-    {
+    parseAnnotationCsv(inputCsv){
         var parsed_val = d3.text(inputCsv, function(text) {
                 var data = d3.csv.parseRows(text, function(d) {
                                             return d.map(Number);
@@ -144,7 +139,7 @@ export default class MainContainer extends React.Component {
             });
             
             // Reparse the data bc the frequency has been updated...
-            this.parseData();
+            //this.parseData();
             this.createBackgroundImage(this.state.metadata.sampleBase)
 
 		});
@@ -159,7 +154,7 @@ export default class MainContainer extends React.Component {
 
     createBackgroundImage(freq){
         let canvas = document.createElement('canvas');
-        console.log(freq)
+        //console.log(freq)
 
         const CONSTANT = 15
         const TIME = 10
@@ -168,11 +163,8 @@ export default class MainContainer extends React.Component {
         let actualWidth = containerSize - CONSTANT
         const boxesper10 = (TIME/0.2) 
 
-
         // Calculate the correct size of the box
-        let side_length = Math.ceil(actualWidth/boxesper10) - 2//34\
-        console.log("side_length")
-        console.log(side_length)
+        let side_length = Math.ceil(actualWidth/boxesper10) - 2
     
         canvas.height = side_length;
         canvas.width = side_length;
@@ -203,11 +195,11 @@ export default class MainContainer extends React.Component {
 
         // Convert to base64 and set as variable
         this.base64String = canvas.toDataURL("grid_background/png"); 
-        console.log()
     }
 
     parseData(){
 
+        console.log('parseData() entered');
         //Define arrays
         let lead_i = [];
         let lead_ii = [];
@@ -256,11 +248,12 @@ export default class MainContainer extends React.Component {
         
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
+        console.log('parsing data csv');
         parsed_csv.then((data) => {
             let freq = Number(this.state.metadata.sampleBase);
-
-            for(var i = 0; i < data.length; i++)
-            {
+            //console.log("data[0]");
+            //console.log(data[0]);
+            for(var i = 0; i < data.length; i++){
                 labels.push(i);
                 // Way to create scatterplot data
                 lead_i.push({
@@ -412,7 +405,7 @@ export default class MainContainer extends React.Component {
         this.parseMetaData();
 
         // Parse the data
-        this.parseData();
+        //this.parseData();
 
         // Parse the annotations
         this.parseAnnotations();

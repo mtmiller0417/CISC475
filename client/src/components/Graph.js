@@ -23,12 +23,6 @@ class Graph extends Component{
 
         this.chartRef = React.createRef();
 
-        this.p_flag = false;
-        this.q_flag = false;
-        this.r_flag = false;
-        this.s_flag = false;
-        this.t_flag = false;
-
         this.state = ({
             data:{
                 datasets:{
@@ -161,7 +155,6 @@ class Graph extends Component{
                 break;
             case 1:
                 this.deleteAnnotation(this.state.data.annotation.p, arrIndex, e);
-
                 break;
             case 2:
                 this.deleteAnnotation(this.state.data.annotation.q, arrIndex, e);
@@ -199,57 +192,51 @@ class Graph extends Component{
         var freq = next_props.inputArr.freq
 
         let props_array = next_props.inputArr;
-        console.log('\nprops_array y-value');
-        console.log(props_array.p[0]);
-        if(props_array.data[props_array.p[0]])
-            console.log(props_array.data[props_array.p[0]].y);
-        
+
         let p_pair = [];
         let q_pair = [];
         let r_pair = [];
         let s_pair = [];
         let t_pair = [];
-        var x = 0;
-
-        // p_pair
+        
+        // Check if there is data, if so create the annotations
+        if(next_props.inputArr.data){
+                // p_pair
         for(let i = 0; i < props_array.p.length; i++){
-            x++;
             p_pair.push({
                 x: props_array.p[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.p[i]]
+                y: next_props.inputArr.data[props_array.p[i]].y
             });
         }
         // q_pair
         for(let i = 0; i < props_array.q.length; i++){
             q_pair.push({
                 x: props_array.q[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.q[i]]
+                y: next_props.inputArr.data[props_array.q[i]].y
              });
         }
         // r_pair
         for(let i = 0; i < props_array.r.length; i++){
             r_pair.push({
                 x: props_array.r[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.r[i]]
+                y: next_props.inputArr.data[props_array.r[i]].y
             });
         }
         // s_pair
         for(let i = 0; i < props_array.s.length; i++){
             s_pair.push({
                 x: props_array.s[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.s[i]]
+                y: next_props.inputArr.data[props_array.s[i]].y
             });
         }
         // t_pair
         for(let i = 0; i < props_array.t.length; i++){
             t_pair.push({
                 x: props_array.t[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.t[i]]
+                y: next_props.inputArr.data[props_array.t[i]].y
             });
         }
-
-        //console.log('previous state');
-        //console.log(prev_state.data.annotation.p);
+        }
 
         // Set default value of flag variables
         let p_flag = prev_state.data.annotation.p_flag
@@ -258,29 +245,7 @@ class Graph extends Component{
         let s_flag = prev_state.data.annotation.s_flag
         let t_flag = prev_state.data.annotation.t_flag
 
-        if(!p_flag){
-            console.log('P_FLAG IS FALSE');
-        }
-
-        // Set flag to true if the data has been loaded
-        if(!p_flag && prev_state.data.annotation.p !== '')
-            p_flag = true;
-
-        if(!q_flag && prev_state.data.annotation.q !== '')
-            q_flag = true;
-
-        if(!r_flag && prev_state.data.annotation.r !== '')
-            r_flag = true;
-
-        if(!s_flag && prev_state.data.annotation.s !== '')
-            s_flag = true;
-
-        if(!t_flag && prev_state.data.annotation.t !== '')
-            t_flag = true;
-
-        // If the flag for an annotation has been set, dont update its annotations
-
-        /*
+        // If the flag was set before, dont change the data
         if(p_flag)
             p_pair = prev_state.data.annotation.p;
         if(q_flag)
@@ -291,7 +256,25 @@ class Graph extends Component{
             s_pair = prev_state.data.annotation.s;
         if(t_flag)
             t_pair = prev_state.data.annotation.t;
-        */
+        
+
+        // Set flag to true if the data has been loaded
+        if(!p_flag && p_pair.length > 0)
+            p_flag = true;
+
+        if(!q_flag && q_pair.length > 0)
+            q_flag = true;
+
+        if(!r_flag && r_pair.length > 0)
+            r_flag = true;
+
+        if(!s_flag && s_pair.length > 0)
+            s_flag = true;
+
+        if(!t_flag && t_pair.length > 0)
+            t_flag = true;
+
+        // If the flag for an annotation has been set, dont update its annotations
 
         return{
             data:{
@@ -435,12 +418,8 @@ class Graph extends Component{
         const SECONDS_PER_WIDTH_MAX = 10
         const TIME_PER_WIDTH = Math.min(SECONDS_PER_WIDTH_MAX, total_time) // Number of seconds to fit on the screen at a time
 
-        //let between_tick = dataLen / ticks_on_x
-        let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 
-
         // The amount of the width/height that is not part of the graph
-        const width_offset = 86 // 79     (75 + 10 + 1 + 1) = offset = 86
-        const height_offset = 60 // 60   (30 + 1 + 1) = offset = 32
+        const width_offset = 86 //     (75 + 10 + 1 + 1) = offset = 86
 
         // The fixed width of the container on the screen
         const parent_width = this.state.data.parent_width - width_offset
@@ -449,22 +428,8 @@ class Graph extends Component{
         const px_per_second = parent_width / TIME_PER_WIDTH;
 
         // Calculates the width of the graph(can be greater than the fixed width, scrollable allow the excess to be seen)
-        const width = total_time * px_per_second;
-
-        // The true height/width px on the screen
-        const true_width = parent_width              // 1571px 1564px
-        const true_height = HEIGHT - height_offset   // 165px 193
-
-        const ticks_per_width = Math.min(TIME_PER_WIDTH, total_time) / INTERVAL; // 25
-        const ratio = true_height / (true_width / ticks_per_width); // Solve 1571/25 = 165/x
-        const round_up_ratio = Math.ceil(ratio)
-        const y_step = Math.round(range / ratio)
-
-        const max_y = (y_step * round_up_ratio) - Math.abs(this.state.data.min)
-
-        // Add the width_offset and 'px' to the width to be set in the graph div
-        let full_width = width+width_offset
-        full_width += 'px'
+        let width = total_time * px_per_second;
+        width += 'px'
 
         return(
         <React.Fragment>
@@ -482,7 +447,7 @@ class Graph extends Component{
                         <div><span class={styles.t}></span>T</div>
                     </ul>
 
-                <div className="graph" style={{position:'absolute', top: 0, left: 0, width: full_width}}>
+                <div className="graph" style={{position:'absolute', top: 0, left: 0, width: width}}>
                     <Scatter 
                         data={dat}
                         redraw={true} 
