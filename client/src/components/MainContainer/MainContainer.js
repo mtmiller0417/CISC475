@@ -407,7 +407,7 @@ export default class MainContainer extends React.Component {
     }
 
     componentWillMount(){
-
+        console.log('componentWillMount()')
         // Parse the metaData
         this.parseMetaData();
 
@@ -444,7 +444,7 @@ export default class MainContainer extends React.Component {
                 </div> */
 
 	render() {
-        // Style json for the outer style of the radio button
+        // Style json for radio button
         const radioStyle= {
             position: 'sticky',
             marginLeft: -40,
@@ -453,6 +453,7 @@ export default class MainContainer extends React.Component {
             height: 10,
             fontWeight: 'bold'
         };
+
 		return (
 			<div className={styles.container}>
                 <div className={styles.headerGrid}>

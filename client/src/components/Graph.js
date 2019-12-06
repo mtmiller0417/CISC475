@@ -23,6 +23,12 @@ class Graph extends Component{
 
         this.chartRef = React.createRef();
 
+        this.p_flag = false;
+        this.q_flag = false;
+        this.r_flag = false;
+        this.s_flag = false;
+        this.t_flag = false;
+
         this.state = ({
             data:{
                 datasets:{
@@ -45,7 +51,12 @@ class Graph extends Component{
                     oldQ: [''],
                     oldR: [''],
                     oldS: [''],
-                    oldT: ['']
+                    oldT: [''],
+                    p_flag: false,
+                    q_flag: false,
+                    r_flag: false,
+                    s_flag: false,
+                    t_flag: false,
                 }, 
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
@@ -188,6 +199,10 @@ class Graph extends Component{
         var freq = next_props.inputArr.freq
 
         let props_array = next_props.inputArr;
+        console.log('\nprops_array y-value');
+        console.log(props_array.p[0]);
+        if(props_array.data[props_array.p[0]])
+            console.log(props_array.data[props_array.p[0]].y);
         
         let p_pair = [];
         let q_pair = [];
@@ -195,6 +210,7 @@ class Graph extends Component{
         let s_pair = [];
         let t_pair = [];
         var x = 0;
+
         // p_pair
         for(let i = 0; i < props_array.p.length; i++){
             x++;
@@ -208,7 +224,7 @@ class Graph extends Component{
             q_pair.push({
                 x: props_array.q[i] * (1/freq),
                 y: next_props.inputArr.data[props_array.q[i]]
-            });
+             });
         }
         // r_pair
         for(let i = 0; i < props_array.r.length; i++){
@@ -231,7 +247,52 @@ class Graph extends Component{
                 y: next_props.inputArr.data[props_array.t[i]]
             });
         }
-        
+
+        //console.log('previous state');
+        //console.log(prev_state.data.annotation.p);
+
+        // Set default value of flag variables
+        let p_flag = prev_state.data.annotation.p_flag
+        let q_flag = prev_state.data.annotation.q_flag
+        let r_flag = prev_state.data.annotation.r_flag
+        let s_flag = prev_state.data.annotation.s_flag
+        let t_flag = prev_state.data.annotation.t_flag
+
+        if(!p_flag){
+            console.log('P_FLAG IS FALSE');
+        }
+
+        // Set flag to true if the data has been loaded
+        if(!p_flag && prev_state.data.annotation.p !== '')
+            p_flag = true;
+
+        if(!q_flag && prev_state.data.annotation.q !== '')
+            q_flag = true;
+
+        if(!r_flag && prev_state.data.annotation.r !== '')
+            r_flag = true;
+
+        if(!s_flag && prev_state.data.annotation.s !== '')
+            s_flag = true;
+
+        if(!t_flag && prev_state.data.annotation.t !== '')
+            t_flag = true;
+
+        // If the flag for an annotation has been set, dont update its annotations
+
+        /*
+        if(p_flag)
+            p_pair = prev_state.data.annotation.p;
+        if(q_flag)
+            q_pair = prev_state.data.annotation.q;
+        if(r_flag)
+            r_pair = prev_state.data.annotation.r;
+        if(s_flag)
+            s_pair = prev_state.data.annotation.s;
+        if(t_flag)
+            t_pair = prev_state.data.annotation.t;
+        */
+
         return{
             data:{
                 datasets:{
@@ -249,7 +310,12 @@ class Graph extends Component{
                     q:q_pair,
                     r:r_pair,
                     s:s_pair,
-                    t:t_pair
+                    t:t_pair, 
+                    p_flag:p_flag,
+                    q_flag:q_flag,
+                    r_flag:r_flag,
+                    s_flag:s_flag,
+                    t_flag:t_flag
                 }, 
                 freq: freq, 
                 min: next_props.inputArr.extra_info.min, 
