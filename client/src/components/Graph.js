@@ -26,6 +26,7 @@ class Graph extends Component{
         this.state = ({
             data:{
                 datasets:{
+                    dataRead: false,
                     radius: 0, // Makes the dots go away
                     label: this.props.inputArr.title,
                     fill: false,
@@ -198,9 +199,13 @@ class Graph extends Component{
         let r_pair = [];
         let s_pair = [];
         let t_pair = [];
+
+        let dataRead = prev_state.data.datasets.dataRead
         
-        // Check if there is data, if so create the annotations
-        if(next_props.inputArr.data){
+        // Check if there is data, if so create the annotations(and if the data hasnt already been read)
+        if(next_props.inputArr.data && !dataRead){
+            // Stops the data from being read each time new add_annotation is selected
+            dataRead = true;
                 // p_pair
         for(let i = 0; i < props_array.p.length; i++){
             p_pair.push({
@@ -279,6 +284,7 @@ class Graph extends Component{
         return{
             data:{
                 datasets:{
+                    dataRead: dataRead,
                     radius: 0, // Makes the dots go away
                     label: next_props.inputArr.title,
                     fill: false,
@@ -442,11 +448,11 @@ class Graph extends Component{
 
                     <div style={{position: 'absolute', top:0, right:0}}>
                     <ul style = {{ position: 'relative', fontSize: '9px', fontWeight: 'bold' , marginLeft: -10}}> 
-                        <div><span class={styles.p} ></span>P</div>
-                        <div><span class={styles.q}></span>Q</div>
-                        <div><span class={styles.r}></span>R</div>
-                        <div><span class={styles.s}></span>S</div>
-                        <div><span class={styles.t}></span>T</div>
+                        <div><span className={styles.p} ></span>P</div>
+                        <div><span className={styles.q}></span>Q</div>
+                        <div><span className={styles.r}></span>R</div>
+                        <div><span className={styles.s}></span>S</div>
+                        <div><span className={styles.t}></span>T</div>
                     </ul>
                     </div>
 

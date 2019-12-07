@@ -17,6 +17,7 @@ import csv_s from '../../csv_files/Annotattion/S.csv';
 import csv_t from '../../csv_files/Annotattion/T.csv';
 //import Canvas from 'canvas'
 import { fontWeight } from "@material-ui/system";
+import  KeyHandler,{ KEYPRESS } from 'react-key-handler';
 
 let data = ""
 
@@ -26,10 +27,17 @@ export default class MainContainer extends React.Component {
 
 	constructor(props){
         super(props);
+
+        this.pRef = React.createRef();
+        this.qRef = React.createRef();
+        this.rRef = React.createRef();
+        this.sRef = React.createRef();
+        this.tRef = React.createRef();
         
-        // Bind callback function, used in LoadData
+        // Bind functions to 'this'
         this.dataCallBack = this.dataCallBack.bind(this)
-        // Bind changeForm function, used when a form is changed
+        this.changeForm = this.changeForm.bind(this);
+        this.setRadioButton = this.setRadioButton.bind(this);
         this.changeForm = this.changeForm.bind(this);
 
         // Set initial state 
@@ -411,17 +419,47 @@ export default class MainContainer extends React.Component {
         this.parseAnnotations();
     }
 
-    // Call a function in another component? so it doesnt override annotations
-    changeForm(event){
-        console.log('event');
-        console.log(event.target.value);
+    // Takes a number, not an event
+    // The number should be from 0-4 and is gotten in the event from event.target.value
+    // Theses are the values of the radioButtons and will tell which annotation set to add
+    changeForm(value){
         this.setState({
             extra_info:{
                 min: this.state.extra_info.min, 
                 max: this.state.extra_info.max,
-                selectedAnnotation: Number(event.target.value)
+                selectedAnnotation: Number(value)
             }
         });
+    }
+
+    setRadioButton(event){
+        // Check the selected button as well as make sure to call the 
+        // function that changes the state to reflect the button change
+        if(event.key === 'p'){
+            this.pRef.current.checked = true;
+            //this.pRef.current.focus();
+            this.changeForm('0');
+        }
+        else if(event.key === 'q'){
+            this.qRef.current.checked = true;
+            //this.qRef.current.focus();
+            this.changeForm('1');
+        }
+        else if(event.key === 'r'){
+            this.rRef.current.checked = true;
+            //this.rRef.current.focus();
+            this.changeForm('2');
+        }
+        else if(event.key === 's'){
+            this.sRef.current.checked = true;
+            //this.sRef.current.focus();
+            this.changeForm('3');
+        }
+        else if(event.key === 't'){
+            this.tRef.current.checked = true;
+            //this.tRef.current.focus();
+            this.changeForm('4');
+        } 
     }
 
     // <div ><b>aVL</b></div> // Use this if you want some more spacing between
@@ -448,6 +486,34 @@ export default class MainContainer extends React.Component {
         };
 
 		return (
+            <React.Fragment>
+
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="p"
+                onKeyHandle={this.setRadioButton}
+            />
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="q"
+                onKeyHandle={this.setRadioButton}
+            />
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="r"
+                onKeyHandle={this.setRadioButton}
+            />
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="s"
+                onKeyHandle={this.setRadioButton}
+            />
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="t"
+                onKeyHandle={this.setRadioButton}
+            />
+
 			<div className={styles.container}>
                 <div className={styles.headerGrid}>
                     <Header />
@@ -460,25 +526,27 @@ export default class MainContainer extends React.Component {
                     <LoadData callBack={this.dataCallBack} className={styles.loadData}/>
                 </div>
 
-                <div style={radioStyle} onChange={this.changeForm.bind(this)}>
-                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)'}}>
-                        <input type="radio" value="0" name="annotation"/> P
+                <div style={radioStyle} onChange={(e) => this.changeForm(e.target.value)}>
+                    <div style={{position:'absolute', fontWeight: 'bold'}}>ADD</div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)', marginTop: -10}}>
+                        <input type="radio" ref={this.pRef} value="0" name="annotation"/> P
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: -10}}>
-                        <input type="radio" value="1" name="annotation"/> Q
+                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: -20}}>
+                        <input type="radio" ref={this.qRef} value="1" name="annotation"/> Q
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: -20}}>
-                        <input type="radio" value="2" name="annotation"/> R
+                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: -30}}>
+                        <input type="radio" ref={this.rRef} value="2" name="annotation"/> R
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: -30}}>
-                        <input type="radio" value="3" name="annotation"/> S
+                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: -40}}>
+                        <input type="radio" ref={this.sRef} value="3" name="annotation"/> S
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: -40}}>
-                        <input type="radio" value="4" name="annotation"/> T
+                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: -50}}>
+                        <input type="radio" ref={this.tRef} value="4" name="annotation"/> T
                     </div>
                 </div>
 
@@ -511,6 +579,7 @@ export default class MainContainer extends React.Component {
                     </div>
                 </Grid>
 			</div>
+            </React.Fragment>
 		);
 	}
 }
