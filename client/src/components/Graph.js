@@ -21,11 +21,12 @@ class Graph extends Component{
     constructor(props){
         super(props);
 
-        this.ref = React.createRef()
+        this.chartRef = React.createRef();
 
         this.state = ({
             data:{
                 datasets:{
+                    dataRead: false,
                     radius: 0, // Makes the dots go away
                     label: this.props.inputArr.title,
                     fill: false,
@@ -35,6 +36,7 @@ class Graph extends Component{
                     borderWidth: 1
                 },
                 annotation:{
+                    selectedAnnotation: this.props.inputArr.extra_info.selectedAnnotation,
                     p: '',
                     q: '',
                     r: '',
@@ -44,7 +46,12 @@ class Graph extends Component{
                     oldQ: [''],
                     oldR: [''],
                     oldS: [''],
-                    oldT: ['']
+                    oldT: [''],
+                    p_flag: false,
+                    q_flag: false,
+                    r_flag: false,
+                    s_flag: false,
+                    t_flag: false,
                 }, 
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
@@ -96,6 +103,11 @@ class Graph extends Component{
 
     modifyGraph(e) {
         console.log(e);
+
+        const node = this.chartRef.current;
+        console.log("NODE");
+        console.log(node);
+
         let arrIndex = e[0]._index;
         let dataSet = e[0]._datasetIndex;
         let coordinates = this.state.data.datasets.data[arrIndex];
@@ -108,7 +120,14 @@ class Graph extends Component{
                 //Let the user select the type of point to add from some menu 
                 //and set the response to this variable
                 //Hardcoded to 0 now to inidicate P
-                let inputChoice = 0;
+                let inputChoice = this.state.data.annotation.selectedAnnotation;
+                console.log('inputChoice')
+                console.log(inputChoice)
+                if(inputChoice === -1){
+                    console.log('break')
+                    break;
+                }
+                
                 
                 //User wants to add P
                 if(inputChoice === 0){
@@ -137,7 +156,6 @@ class Graph extends Component{
                 break;
             case 1:
                 this.deleteAnnotation(this.state.data.annotation.p, arrIndex, e);
-
                 break;
             case 2:
                 this.deleteAnnotation(this.state.data.annotation.q, arrIndex, e);
@@ -175,53 +193,98 @@ class Graph extends Component{
         var freq = next_props.inputArr.freq
 
         let props_array = next_props.inputArr;
-        
+
         let p_pair = [];
         let q_pair = [];
         let r_pair = [];
         let s_pair = [];
         let t_pair = [];
-        var x = 0;
-        // p_pair
+
+        let dataRead = prev_state.data.datasets.dataRead
+        
+        // Check if there is data, if so create the annotations(and if the data hasnt already been read)
+        if(next_props.inputArr.data && !dataRead){
+            // Stops the data from being read each time new add_annotation is selected
+            dataRead = true;
+                // p_pair
         for(let i = 0; i < props_array.p.length; i++){
-            x++;
             p_pair.push({
                 x: props_array.p[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.p[i]]
+                y: next_props.inputArr.data[props_array.p[i]].y
             });
         }
         // q_pair
         for(let i = 0; i < props_array.q.length; i++){
             q_pair.push({
                 x: props_array.q[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.q[i]]
-            });
+                y: next_props.inputArr.data[props_array.q[i]].y
+             });
         }
         // r_pair
         for(let i = 0; i < props_array.r.length; i++){
             r_pair.push({
                 x: props_array.r[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.r[i]]
+                y: next_props.inputArr.data[props_array.r[i]].y
             });
         }
         // s_pair
         for(let i = 0; i < props_array.s.length; i++){
             s_pair.push({
                 x: props_array.s[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.s[i]]
+                y: next_props.inputArr.data[props_array.s[i]].y
             });
         }
         // t_pair
         for(let i = 0; i < props_array.t.length; i++){
             t_pair.push({
                 x: props_array.t[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.t[i]]
+                y: next_props.inputArr.data[props_array.t[i]].y
             });
         }
+        }
+
+        // Set default value of flag variables
+        let p_flag = prev_state.data.annotation.p_flag
+        let q_flag = prev_state.data.annotation.q_flag
+        let r_flag = prev_state.data.annotation.r_flag
+        let s_flag = prev_state.data.annotation.s_flag
+        let t_flag = prev_state.data.annotation.t_flag
+
+        // If the flag was set before, dont change the data
+        if(p_flag)
+            p_pair = prev_state.data.annotation.p;
+        if(q_flag)
+            q_pair = prev_state.data.annotation.q;
+        if(r_flag)
+            r_pair = prev_state.data.annotation.r;
+        if(s_flag)
+            s_pair = prev_state.data.annotation.s;
+        if(t_flag)
+            t_pair = prev_state.data.annotation.t;
         
+
+        // Set flag to true if the data has been loaded
+        if(!p_flag && p_pair.length > 0)
+            p_flag = true;
+
+        if(!q_flag && q_pair.length > 0)
+            q_flag = true;
+
+        if(!r_flag && r_pair.length > 0)
+            r_flag = true;
+
+        if(!s_flag && s_pair.length > 0)
+            s_flag = true;
+
+        if(!t_flag && t_pair.length > 0)
+            t_flag = true;
+
+        // If the flag for an annotation has been set, dont update its annotations
+
         return{
             data:{
                 datasets:{
+                    dataRead: dataRead,
                     radius: 0, // Makes the dots go away
                     label: next_props.inputArr.title,
                     fill: false,
@@ -231,11 +294,17 @@ class Graph extends Component{
                     borderWidth: 1
                 },
                 annotation:{
+                    selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation,
                     p:p_pair,
                     q:q_pair,
                     r:r_pair,
                     s:s_pair,
-                    t:t_pair
+                    t:t_pair, 
+                    p_flag:p_flag,
+                    q_flag:q_flag,
+                    r_flag:r_flag,
+                    s_flag:s_flag,
+                    t_flag:t_flag
                 }, 
                 freq: freq, 
                 min: next_props.inputArr.extra_info.min, 
@@ -355,12 +424,8 @@ class Graph extends Component{
         const SECONDS_PER_WIDTH_MAX = 10
         const TIME_PER_WIDTH = Math.min(SECONDS_PER_WIDTH_MAX, total_time) // Number of seconds to fit on the screen at a time
 
-        //let between_tick = dataLen / ticks_on_x
-        let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 
-
         // The amount of the width/height that is not part of the graph
-        const width_offset = 86 // 79     (75 + 10 + 1 + 1) = offset = 86
-        const height_offset = 60 // 60   (30 + 1 + 1) = offset = 32
+        const width_offset = 86 //     (75 + 10 + 1 + 1) = offset = 86
 
         // The fixed width of the container on the screen
         const parent_width = this.state.data.parent_width - width_offset
@@ -369,22 +434,9 @@ class Graph extends Component{
         const px_per_second = parent_width / TIME_PER_WIDTH;
 
         // Calculates the width of the graph(can be greater than the fixed width, scrollable allow the excess to be seen)
-        const width = total_time * px_per_second;
-
-        // The true height/width px on the screen
-        const true_width = parent_width              // 1571px 1564px
-        const true_height = HEIGHT - height_offset   // 165px 193
-
-        const ticks_per_width = Math.min(TIME_PER_WIDTH, total_time) / INTERVAL; // 25
-        const ratio = true_height / (true_width / ticks_per_width); // Solve 1571/25 = 165/x
-        const round_up_ratio = Math.ceil(ratio)
-        const y_step = Math.round(range / ratio)
-
-        const max_y = (y_step * round_up_ratio) - Math.abs(this.state.data.min)
-
-        // Add the width_offset and 'px' to the width to be set in the graph div
-        let full_width = width+width_offset
-        full_width += 'px'
+        let width = total_time * px_per_second;
+        width += width_offset
+        width += 'px'
 
         return(
         <React.Fragment>
@@ -393,20 +445,23 @@ class Graph extends Component{
                 <div className="wrapper" style={{position: 'relative', height:HEIGHT}}>
 
                     <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
-                    
-                    <ul style = {{ position: 'absolute', top: 0, right: 0, fontSize: '9px', fontWeight: 'bold' }}> 
-                        <div><span class={styles.p}></span>P</div>
-                        <div><span class={styles.q}></span>Q</div>
-                        <div><span class={styles.r}></span>R</div>
-                        <div><span class={styles.s}></span>S</div>
-                        <div><span class={styles.t}></span>T</div>
-                    </ul>
 
-                <div className="graph" style={{position:'absolute', top: 0, left: 0, width: full_width}}>
+                    <div style={{position: 'absolute', top:0, right:0}}>
+                    <ul style = {{ position: 'relative', fontSize: '9px', fontWeight: 'bold' , marginLeft: -10}}> 
+                        <div><span className={styles.p} ></span>P</div>
+                        <div><span className={styles.q}></span>Q</div>
+                        <div><span className={styles.r}></span>R</div>
+                        <div><span className={styles.s}></span>S</div>
+                        <div><span className={styles.t}></span>T</div>
+                    </ul>
+                    </div>
+
+                <div className="graph" style={{position:'absolute', top: 0, left: 0, width: width}}>
                     <Scatter 
                         data={dat}
                         redraw={true} 
                         height={HEIGHT}
+                        ref={this.chartRef}
                         getElementAtEvent={(point) =>{
                             if(point.length > 0){
                                 this.modifyGraph(point);
@@ -414,14 +469,6 @@ class Graph extends Component{
                         }}
                         options={{
                             maintainAspectRatio: false,
-                            /*layout: {
-                                padding: {
-                                    left: 0,
-                                    right: 0,
-                                    top: 0,
-                                    bottom: 0
-                                }
-                            },*/
                             tooltips:{
                                 enabled: true,
                                 mode: 'nearest',

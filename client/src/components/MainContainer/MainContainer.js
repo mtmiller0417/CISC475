@@ -17,6 +17,7 @@ import csv_s from '../../csv_files/Annotattion/S.csv';
 import csv_t from '../../csv_files/Annotattion/T.csv';
 //import Canvas from 'canvas'
 import { fontWeight } from "@material-ui/system";
+import  KeyHandler,{ KEYPRESS } from 'react-key-handler';
 
 let data = ""
 
@@ -26,9 +27,18 @@ export default class MainContainer extends React.Component {
 
 	constructor(props){
         super(props);
+
+        this.pRef = React.createRef();
+        this.qRef = React.createRef();
+        this.rRef = React.createRef();
+        this.sRef = React.createRef();
+        this.tRef = React.createRef();
         
-        // Bind callback function, used in LoadData
+        // Bind functions to 'this'
         this.dataCallBack = this.dataCallBack.bind(this)
+        this.changeForm = this.changeForm.bind(this);
+        this.setRadioButton = this.setRadioButton.bind(this);
+        this.changeForm = this.changeForm.bind(this);
 
         // Set initial state 
         this.state={
@@ -40,6 +50,7 @@ export default class MainContainer extends React.Component {
             extra_info: {
                 min: 0, 
                 max: 0, 
+                selectedAnnotation: -1
             },
             metadata: {
                 patientID: 0,
@@ -57,14 +68,10 @@ export default class MainContainer extends React.Component {
     
     // Callback function passed to LoadData, to get which CSV to load in
     dataCallBack(update){
-        console.log(update)
         data = update
         this.parseData()
-        this.setState({
-                      data: update
-                      })
-        
-       this.forceUpdate();
+        this.setState({ data: update })
+        this.forceUpdate();
     }
 
     //Function to generalize the loading of annotation files
@@ -72,8 +79,7 @@ export default class MainContainer extends React.Component {
     //Receives a CSV file and an array for output
     //Processes the CSV file into the specified array
     //Returns nothing
-    parseAnnotationCsv(inputCsv)
-    {
+    parseAnnotationCsv(inputCsv){
         var parsed_val = d3.text(inputCsv, function(text) {
                 var data = d3.csv.parseRows(text, function(d) {
                                             return d.map(Number);
@@ -141,7 +147,7 @@ export default class MainContainer extends React.Component {
             });
             
             // Reparse the data bc the frequency has been updated...
-            this.parseData();
+            //this.parseData();
             this.createBackgroundImage(this.state.metadata.sampleBase)
 
 		});
@@ -156,7 +162,7 @@ export default class MainContainer extends React.Component {
 
     createBackgroundImage(freq){
         let canvas = document.createElement('canvas');
-        console.log(freq)
+        //console.log(freq)
 
         const CONSTANT = 15
         const TIME = 10
@@ -165,11 +171,8 @@ export default class MainContainer extends React.Component {
         let actualWidth = containerSize - CONSTANT
         const boxesper10 = (TIME/0.2) 
 
-
         // Calculate the correct size of the box
-        let side_length = Math.ceil(actualWidth/boxesper10) - 2//34\
-        console.log("side_length")
-        console.log(side_length)
+        let side_length = Math.ceil(actualWidth/boxesper10) - 2
     
         canvas.height = side_length;
         canvas.width = side_length;
@@ -196,15 +199,15 @@ export default class MainContainer extends React.Component {
                 }
             }
         }
-        //context.stroke(); // Draw all the minor rectangles
+        context.stroke(); // Draw all the minor rectangles
 
         // Convert to base64 and set as variable
         this.base64String = canvas.toDataURL("grid_background/png"); 
-        console.log()
     }
 
     parseData(){
 
+        console.log('parseData() entered');
         //Define arrays
         let lead_i = [];
         let lead_ii = [];
@@ -253,11 +256,12 @@ export default class MainContainer extends React.Component {
         
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
+        console.log('parsing data csv');
         parsed_csv.then((data) => {
             let freq = Number(this.state.metadata.sampleBase);
-
-            for(var i = 0; i < data.length; i++)
-            {
+            //console.log("data[0]");
+            //console.log(data[0]);
+            for(var i = 0; i < data.length; i++){
                 labels.push(i);
                 // Way to create scatterplot data
                 lead_i.push({
@@ -404,21 +408,112 @@ export default class MainContainer extends React.Component {
     }
 
     componentWillMount(){
-
+        console.log('componentWillMount()')
         // Parse the metaData
         this.parseMetaData();
 
         // Parse the data
-        this.parseData();
+        //this.parseData();
 
         // Parse the annotations
         this.parseAnnotations();
     }
 
+    // Takes a number, not an event
+    // The number should be from 0-4 and is gotten in the event from event.target.value
+    // Theses are the values of the radioButtons and will tell which annotation set to add
+    changeForm(value){
+        this.setState({
+            extra_info:{
+                min: this.state.extra_info.min, 
+                max: this.state.extra_info.max,
+                selectedAnnotation: Number(value)
+            }
+        });
+    }
+
+    setRadioButton(event){
+        // Check the selected button as well as make sure to call the 
+        // function that changes the state to reflect the button change
+        if(event.key === 'p'){
+            this.pRef.current.checked = true;
+            //this.pRef.current.focus();
+            this.changeForm('0');
+        }
+        else if(event.key === 'q'){
+            this.qRef.current.checked = true;
+            //this.qRef.current.focus();
+            this.changeForm('1');
+        }
+        else if(event.key === 'r'){
+            this.rRef.current.checked = true;
+            //this.rRef.current.focus();
+            this.changeForm('2');
+        }
+        else if(event.key === 's'){
+            this.sRef.current.checked = true;
+            //this.sRef.current.focus();
+            this.changeForm('3');
+        }
+        else if(event.key === 't'){
+            this.tRef.current.checked = true;
+            //this.tRef.current.focus();
+            this.changeForm('4');
+        } 
+    }
+
     // <div ><b>aVL</b></div> // Use this if you want some more spacing between
-	
+
+       /**<div style={radioStyle} onChange={this.changeForm.bind(this)}>
+                    <div style={{position:'absolute'}}>
+                        P <input type="radio" value="0" name="annotation"/><br />
+                        Q <input type="radio" value="1" name="annotation"/><br />
+                        R <input type="radio" value="2" name="annotation"/><br />
+                        S <input type="radio" value="3" name="annotation"/><br />
+                        T <input type="radio" value="4" name="annotation"/><br />
+                    </div>
+                </div> */
+
 	render() {
+        // Style json for radio button
+        const radioStyle= {
+            position: 'sticky',
+            marginLeft: -40,
+            top: 50,
+            width: 30,
+            height: 10,
+            fontWeight: 'bold'
+        };
+
 		return (
+            <React.Fragment>
+
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="p"
+                onKeyHandle={this.setRadioButton}
+            />
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="q"
+                onKeyHandle={this.setRadioButton}
+            />
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="r"
+                onKeyHandle={this.setRadioButton}
+            />
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="s"
+                onKeyHandle={this.setRadioButton}
+            />
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue="t"
+                onKeyHandle={this.setRadioButton}
+            />
+
 			<div className={styles.container}>
                 <div className={styles.headerGrid}>
                     <Header />
@@ -430,6 +525,31 @@ export default class MainContainer extends React.Component {
                     <Metadata metadata= {this.state.metadata}/>
                     <LoadData callBack={this.dataCallBack} className={styles.loadData}/>
                 </div>
+
+                <div style={radioStyle} onChange={(e) => this.changeForm(e.target.value)}>
+                    <div style={{position:'absolute', fontWeight: 'bold'}}>ADD</div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)', marginTop: -10}}>
+                        <input type="radio" ref={this.pRef} value="0" name="annotation"/> P
+                    </div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: -20}}>
+                        <input type="radio" ref={this.qRef} value="1" name="annotation"/> Q
+                    </div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: -30}}>
+                        <input type="radio" ref={this.rRef} value="2" name="annotation"/> R
+                    </div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: -40}}>
+                        <input type="radio" ref={this.sRef} value="3" name="annotation"/> S
+                    </div>
+                    <br />
+                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: -50}}>
+                        <input type="radio" ref={this.tRef} value="4" name="annotation"/> T
+                    </div>
+                </div>
+
 				<Grid >
                     <div className={styles.graphBackground} style = {{ backgroundImage: 'url('+this.base64String+')', backgroundRepeat: 'repeat'}}>
                     
@@ -459,6 +579,7 @@ export default class MainContainer extends React.Component {
                     </div>
                 </Grid>
 			</div>
+            </React.Fragment>
 		);
 	}
 }
