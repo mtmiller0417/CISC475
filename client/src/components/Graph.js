@@ -35,8 +35,8 @@ class Graph extends Component{
                     borderWidth: 1
                 },
                 annotation:{
-                    p: [{x:0,y:10000}],
-                    q: [{x:0,y:10000}],
+                    p: [{x:0,y:10000}], // y's need an initial point, which is outside of range of graph
+                    q: [{x:0,y:10000}], // however, they are removed on the first update
                     r: [{x:0,y:10000}],
                     s: [{x:0,y:10000}],
                     t: [{x:0,y:10000}]
@@ -204,105 +204,65 @@ class Graph extends Component{
                                                           })
                                });
     }
-
-   addToPairs(anno, next_props, freq, pair){
- 
-        console.log("pair1:" + pair)
-        console.log("anno[0]" + anno[0])
+    
+    // Function to build pairs for graphing
+    // Used by ComponentDidUpdate
+   addToPairs(anno, freq, pair){
         for(let i = 0; i <  anno.length; i++){
-            if(typeof this.state.data.datasets !== 'undefined'){
             pair.push({
                         x: anno[i] * (1/freq),
                         y: this.state.data.datasets.data[anno[i]]
                         });
             }
-           // console.log("hmm" + pair[i].x)
-                                  console.log("p_pairs: " + pair[i].x + "," + pair[i].y)
-        }
         return pair;
     }
     
+    // Runs after render and will re-render
+    // If annotations are passed in
     componentDidUpdate(next_props, prevState){
-        var freq = next_props.inputArr.freq
+            var freq = next_props.inputArr.freq
+            let props_array = next_props.inputArr;
         
-        
-        console.log("do I get here")
-        
-        let props_array = next_props.inputArr;
-        
-       // if(typeof prev_state !== 'undefined'){
-        console.log("test: " + this.state.data.annos)
             if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4 && this.props !== next_props) {
-                console.log("hi2")
-                var annos = Graph.parseAnnotations(this.state.data.annos).then(annotations => {
-                                                                                             return annotations
-                                                                                             })
+                var annos = Graph.parseAnnotations(this.state.data.annos).then(annotations => { return annotations })
                 
+                // Resolves a promise  made above and returns a new
+                // promise, containing the annotation pairs
                 let parsed_anno = annos.then(annotations => {
-                                             let p_pair = [];
-                                             let q_pair = [];
-                                             let r_pair = [];
-                                             let s_pair = [];
-                                             let t_pair = [];
-                                             let p = annotations[0];
-                                             let q = annotations[1];
-                                             let r = annotations[2];
-                                             let s = annotations[3]
-                                             let t = annotations[4];
-                                             
-                                             var p1 = this.addToPairs(p, next_props, freq, p_pair)
-                                             var p2 = this.addToPairs(q, next_props, freq, q_pair)
-                                             var p3 = this.addToPairs(r, next_props, freq, r_pair)
-                                             var p4 = this.addToPairs(s, next_props, freq, s_pair)
-                                             var p5 = this.addToPairs(t, next_props, freq, t_pair)
-                                             console.log("p1: " + p1[0].x)
-                                             
-                                             return [p1,p2,p3,p4,p5]
-                                          //   return Promise.all([p1,p2,p3,p4,p5]).then(arr => {
-                                           //                                            console.log("TEST3:" + arr)
-                                           //                                           // return Promise.resolve(arr)
-                                            //                                           return arr
-                                             //                                          });
-                                             })
-                
-                //console.log(parsed_anno[0][)
-                
-                //console.log("parsed anno:" + parsed_anno[0])
-                
+                             let p_pair = [];
+                             let q_pair = [];
+                             let r_pair = [];
+                             let s_pair = [];
+                             let t_pair = [];
+                             let p = annotations[0];
+                             let q = annotations[1];
+                             let r = annotations[2];
+                             let s = annotations[3]
+                             let t = annotations[4];
+                             
+                             var p1 = this.addToPairs(p, freq, p_pair)
+                             var p2 = this.addToPairs(q, freq, q_pair)
+                             var p3 = this.addToPairs(r, freq, r_pair)
+                             var p4 = this.addToPairs(s, freq, s_pair)
+                             var p5 = this.addToPairs(t, freq, t_pair)
+                             
+                             return [p1,p2,p3,p4,p5]
+                    })
+
+                // Resolves the promise made above, and sets the state
+                // With the new annotations
                 parsed_anno.then(anno =>{
-                                 console.log(anno[0][0].x)
                                  this.setState({
-                              data:{
-                              annotation:{
-                              p: anno[0],
-                              q: anno[1],
-                              r: anno[2],
-                              s: anno[3],
-                              t: anno[4]
-                              }
-                              }})
-                                 this.forceUpdate()
-                                   // this.forceUpdate()
+                                      data:{
+                                          annotation:{
+                                              p: anno[0],
+                                              q: anno[1],
+                                              r: anno[2],
+                                              s: anno[3],
+                                              t: anno[4]
+                                          }}})
                                  })
-                
-                console.log("p state: " + this.state.data.annotation.p)
-                
-//                parsed_anno.then(arr => {
-//                                                                                         console.log("test2:" + arr[0])
-//                                 this.setState({
-//                data:{
-//                    annotation:{
-//                                               p: [{x: 0, y:10}],
-//                        q: arr[1],
-//                        r: arr[2],
-//                        s: arr[3],
-//                        t: arr[4]
-//                        }
-//                    }
-//                });
-//                                 //this.forceUpdate()
-//                                 })
-            }}//}
+            }}
 
 //    // Can't use 'this.' because this is a static function
 //    // The state is updated through what is returned from this function
@@ -317,248 +277,28 @@ class Graph extends Component{
         let props_array = next_props.inputArr;
 
             return{
-            data:{
-            datasets:{
-            radius: 0, // Makes the dots go away
-            label: next_props.inputArr.title,
-            fill: false,
-            borderColor: ['black'],
-            data: next_props.inputArr.data,
-            backgroundColor:['rgba(255,99,132,0.6)',],
-            borderWidth: 1
-            },
-            annotation: prev_state.data.annotation,
-            freq: freq,
-            min: next_props.inputArr.extra_info.min,
-            max: next_props.inputArr.extra_info.max,
-            parent_width: next_props.width,
-            annos: next_props.inputArr.annotations_all
-            }
+                data:{
+                    datasets:{
+                        radius: 0, // Makes the dots go away
+                        label: next_props.inputArr.title,
+                        fill: false,
+                        borderColor: ['black'],
+                        data: next_props.inputArr.data,
+                        backgroundColor:['rgba(255,99,132,0.6)',],
+                        borderWidth: 1
+                    },
+                    annotation: prev_state.data.annotation,
+                    freq: freq,
+                    min: next_props.inputArr.extra_info.min,
+                    max: next_props.inputArr.extra_info.max,
+                    parent_width: next_props.width,
+                    annos: next_props.inputArr.annotations_all
+                }
         }
     }
-        
-//        if(typeof next_props.inputArr.annotations_all !== 'undefined' && next_props.inputArr.annotations_all.length > 4){
-//            return{
-//            data:{
-//            datasets:{
-//            radius: 0, // Makes the dots go away
-//            label: next_props.inputArr.title,
-//            fill: false,
-//            borderColor: ['black'],
-//            data: next_props.inputArr.data,
-//            backgroundColor:['rgba(255,99,132,0.6)',],
-//            borderWidth: 1
-//            },
-//            freq: freq,
-//            min: next_props.inputArr.extra_info.min,
-//            max: next_props.inputArr.extra_info.max,
-//            parent_width: next_props.width,
-//            annos: next_props.inputArr.annotations_all
-//            }}
-//        } else{
-//            return{
-//            data:{
-//            datasets:{
-//            radius: 0, // Makes the dots go away
-//            label: next_props.inputArr.title,
-//            fill: false,
-//            borderColor: ['black'],
-//            data: next_props.inputArr.data,
-//            backgroundColor:['rgba(255,99,132,0.6)',],
-//            borderWidth: 1
-//            },
-//            annotation:{
-//            p:{x:0, y:0}, // temps
-//            q:{x:0, y:0}, // temps
-//            r:{x:0, y:0}, // temps
-//            s:{x:0, y:0}, // temps
-//            t:{x:0, y:0}, // temps
-//            },
-//            freq: freq,
-//            min: next_props.inputArr.extra_info.min,
-//            max: next_props.inputArr.extra_info.max,
-//            parent_width: next_props.width,
-//            annos: next_props.inputArr.annotations_all
-//            }}
-//        }
-
-//        if(prev_state !== 'undefined'){
-//            // if (typeof next_props.inputArr.annotations_all !== 'undefined' && //next_props.inputArr.annotations_all.length > 4) {
-//
-//            console.log("ANNOS: " + next_props.inputArr.annotations_all)
-//            return{
-//            data:{
-//            datasets:{
-//            radius: 0, // Makes the dots go away
-//            label: next_props.inputArr.title,
-//            fill: false,
-//            borderColor: ['black'],
-//            data: next_props.inputArr.data,
-//            backgroundColor:['rgba(255,99,132,0.6)',],
-//            borderWidth: 1
-//            },
-//            annotation:{
-//            p:{x:0, y:0}, // temps
-//            q:{x:0, y:0}, // temps
-//            r:{x:0, y:0}, // temps
-//            s:{x:0, y:0}, // temps
-//            t:{x:0, y:0}, // temps
-//            },
-//            freq: freq,
-//            min: next_props.inputArr.extra_info.min,
-//            max: next_props.inputArr.extra_info.max,
-//            parent_width: next_props.width,
-//            annos: next_props.inputArr.annotations_all
-//            }
-//            }
-//            //  }
-//        } else{
-//            return{
-//            data:{
-//            datasets:{
-//            radius: 0, // Makes the dots go away
-//            label: next_props.inputArr.title,
-//            fill: false,
-//            borderColor: ['black'],
-//            data: next_props.inputArr.data,
-//            backgroundColor:['rgba(255,99,132,0.6)',],
-//            borderWidth: 1
-//            },
-//            annotation:{
-//            p:{x:0, y:0}, // temps
-//            q:{x:0, y:0}, // temps
-//            r:{x:0, y:0}, // temps
-//            s:{x:0, y:0}, // temps
-//            t:{x:0, y:0}, // temps
-//            },
-//            freq: freq,
-//            min: next_props.inputArr.extra_info.min,
-//            max: next_props.inputArr.extra_info.max,
-//            parent_width: next_props.width,
-//            annos: next_props.inputArr.annotations_all
-//            }}}
-       // }
-//        if (typeof next_props.inputArr.annotations_all !== 'undefined' && next_props.inputArr.annotations_all.length > 4) {
-////
-////            var annos = Graph.parseAnnotations(next_props.inputArr.annotations_all).then(annotations => {
-////                                                                                return annotations
-////                                                                             })
-////
-//            return{
-//            data:{
-//            datasets:{
-//            radius: 1,
-//            label: next_props.inputArr.title,
-//            fill: false,
-//            borderColor: ['black'],
-//            data: next_props.inputArr.data,
-//            backgroundColor:['rgba(255,99,132,0.6)',],
-//            borderWidth: 1
-//            },
-//            annos: next_props.inputArr.annotatins_all,
-//            freq: freq,
-//            min: next_props.inputArr.extra_info.min,
-//            max: next_props.inputArr.extra_info.max,
-//            parent_width: next_props.width
-//            }
-//            }
-//            let parsed_anno = annos.then(annotations => {
-//                           let p_pair = [];
-//                           let q_pair = [];
-//                           let r_pair = [];
-//                           let s_pair = [];
-//                           let t_pair = [];
-//                           let p = annotations[0];
-//                           let q = annotations[1];
-//                           let r = annotations[2];
-//                           let s = annotations[3]
-//                           let t = annotations[4];
-//
-//                            var p1 = Graph.addToPairs(p, next_props, freq, p_pair)
-//                            var p2 = Graph.addToPairs(q, next_props, freq, q_pair)
-//                            var p3 = Graph.addToPairs(r, next_props, freq, r_pair)
-//                            var p4 = Graph.addToPairs(s, next_props, freq, s_pair)
-//                            var p5 = Graph.addToPairs(t, next_props, freq, t_pair)
-//
-//                            return Promise.all([p1,p2,p3,p4,p5]).then(arr => {
-//                                                                      console.log(arr)
-//                                                                      return Promise.resolve(arr)
-//                                                                        });
-////                    })
-//
-//            return{
-//                data:{
-//                    datasets:{
-//                    radius: 1,
-//                    label: next_props.inputArr.title,
-//                    fill: false,
-//                   borderColor: ['black'],
-//                    data: next_props.inputArr.data,
-//                    backgroundColor:['rgba(255,99,132,0.6)',],
-//                    borderWidth: 1
-//                    },
-//                annotation:{
-//                p: [{x:0,y:0}],
-//                q: [{x:0,y:0}],
-//                r: [{x:0,y:0}],
-//                s: [{x:0,y:0}],
-//                t: [{x:0,y:0}]
-//                },
-//                    freq: freq,
-//                    min: next_props.inputArr.extra_info.min,
-//                    max: next_props.inputArr.extra_info.max,
-//                    parent_width: next_props.width
-//                }
-//            }
-//        } else{
-//            return{
-//            data:{
-//            datasets:{
-//            radius: 0,
-//            label: next_props.inputArr.title,
-//            fill: false,
-//            borderColor: ['black'],
-//            data: next_props.inputArr.data,
-//            backgroundColor:['rgba(255,99,132,0.6)',],
-//            borderWidth: 1
-//            },
-//            annotation:{
-//                p: [{x:0,y:0}],
-//                q: [{x:0,y:0}],
-//                r: [{x:0,y:0}],
-//                s: [{x:0,y:0}],
-//                t: [{x:0,y:0}]
-//            },
-//            freq: freq,
-//            min: next_props.inputArr.extra_info.min,
-//            max: next_props.inputArr.extra_info.max,
-//            parent_width: next_props.width
-//            }}
-//
-//        }
-//        } else {
-//            return{
-//            data:{
-//            datasets:{
-//            radius: 0,
-//            label: next_props.inputArr.title,
-//            fill: false,
-//            borderColor: ['black'],
-//            data: next_props.inputArr.data,
-//            backgroundColor:['rgba(255,99,132,0.6)',],
-//            borderWidth: 1
-//            },
-//            freq: freq,
-//            min: next_props.inputArr.extra_info.min,
-//            max: next_props.inputArr.extra_info.max,
-//            parent_width: next_props.width
-//            }}
-//        }
-   // }
 
     //Render the graph
     render(){
-        console.log("rendering")
         const dat = {
             type:'Scatter',
             datasets: [
