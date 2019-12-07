@@ -429,6 +429,7 @@ class Graph extends Component{
 
         // Calculates the width of the graph(can be greater than the fixed width, scrollable allow the excess to be seen)
         let width = total_time * px_per_second;
+        width += width_offset
         width += 'px'
 
         return(
@@ -439,13 +440,15 @@ class Graph extends Component{
 
                     <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
 
-                    <ul style = {{ position: 'absolute', top: 0, right: 0, fontSize: '9px', fontWeight: 'bold' }}> 
-                        <div><span class={styles.p}></span>P</div>
+                    <div style={{position: 'absolute', top:0, right:0}}>
+                    <ul style = {{ position: 'fixed', fontSize: '9px', fontWeight: 'bold' , marginLeft: -10}}> 
+                        <div><span class={styles.p} ></span>P</div>
                         <div><span class={styles.q}></span>Q</div>
                         <div><span class={styles.r}></span>R</div>
                         <div><span class={styles.s}></span>S</div>
                         <div><span class={styles.t}></span>T</div>
                     </ul>
+                    </div>
 
                 <div className="graph" style={{position:'absolute', top: 0, left: 0, width: width}}>
                     <Scatter 
