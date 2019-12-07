@@ -51,6 +51,8 @@ class Graph extends Component{
                 min:this.props.inputArr.extra_info.min, 
                 parent_width: 0,
                 annos: [],
+                shouldUpdate: false,
+                events: '',
                 p_pair: [], q_pair:[], r_pair: [], s_pair:  [], t_pair: []  //temp
             }
         })
@@ -193,7 +195,6 @@ class Graph extends Component{
     //Since the logic for all 5 is the exact same
     //Receives a CSV file and an array for output
     //Processes the CSV file into the specified array
-    //Returns nothing
     static parseAnnotationCsv(inputCsv)
     {
         var parsed_val = d3.text(inputCsv, function(text) {
@@ -209,180 +210,25 @@ class Graph extends Component{
                                });
     }
     
+    //componentDidUpdate
     
-    componentDidUpdate(next_props, prev_state){
-        console.log("ANNOS2: " + this.state.annos)
-        if (typeof this.state.annos !== 'undefined' && this.state.annos.length > 4) {
-            let p_pair = [];
-            let q_pair = [];
-            let r_pair = [];
-            let s_pair = [];
-            let t_pair = [];
-            
-            var annos = Graph.parseAnnotations(this.state.annos).then(annotations => {
-                                                                                         return annotations
-                                                                                         })
-            annos.then(annotations => {
-                       let p = annotations[0];
-                       let q = annotations[1];
-                       let r = annotations[2];
-                       let s = annotations[3]
-                       let t = annotations[4];
-                       
-                       var x = 0;
-                       // p_pair
-                       for(let i = 0; i <  p.length; i++){
-                       x++;
-                       p_pair.push({
-                                   x: p[i] * (1/this.state.freq),
-                                   y: this.state.data[p[i]]
-                                   });
-                       //console.log("p_pairs: " + p_pair[i].x + "," + p_pair[i].y)
-                       }
-                       // q_pair
-                       for(let i = 0; i < q.length; i++){
-                       q_pair.push({
-                                   x: q[i] * (1/this.state.freq),
-                                   y: this.state.data[q[i]]
-                                   });
-                       }
-                       // r_pair
-                       for(let i = 0; i < r.length; i++){
-                       r_pair.push({
-                                   x: r[i] * (1/this.state.freq),
-                                   y: this.state.data[r[i]]
-                                   });
-                       }
-                       // s_pair
-                       for(let i = 0; i < s.length; i++){
-                       s_pair.push({
-                                   x: s[i] * (1/this.state.freq),
-                                   y: this.state.data[s[i]]
-                                   });
-                       }
-                       // t_pair
-                       for(let i = 0; i < t.length; i++){
-                       t_pair.push({
-                                   x: t[i] * (1/this.state.freq),
-                                   y: this.state.data[t[i]]
-                                   });
-                       }
-                       })
-            
-                        this.setState = ({
-                                         data:{
-                                         annotation:{
-                                         p: this.state.data.annotation.p,
-                                         q: this.state.data.annotation.q,
-                                         r: this.state.data.annotation.r,
-                                         s: this.state.data.annotation.s,
-                                         t: this.state.data.annotation.t
-                                         }
-                                         }})
-            }
-    }
-            
-    // Can't use 'this.' because this is a static function
-    // The state is updated through what is returned from this function
-    // This loads metadata... but sometimes doesnt load all of them? is kinda random...
-    // Fills the data properly
-    //
-    // static getDerivedStateFromProps
-    static getDerivedStateFromProps(next_props, prev_state){
-        var freq = next_props.inputArr.freq
-        if(prev_state !== 'undefined'){
-           // if (typeof next_props.inputArr.annotations_all !== 'undefined' && //next_props.inputArr.annotations_all.length > 4) {
-            
-            console.log("ANNOS: " + next_props.inputArr.annotations_all)
-                    return{
-                            data:{
-                            datasets:{
-                            radius: 0, // Makes the dots go away
-                            label: next_props.inputArr.title,
-                            fill: false,
-                            borderColor: ['black'],
-                            data: next_props.inputArr.data,
-                            backgroundColor:['rgba(255,99,132,0.6)',],
-                            borderWidth: 1
-                            },
-                            annotation:{
-                            p:{x:0, y:0}, // temps
-                            q:{x:0, y:0}, // temps
-                            r:{x:0, y:0}, // temps
-                            s:{x:0, y:0}, // temps
-                            t:{x:0, y:0}, // temps
-                            },
-                            freq: freq,
-                            min: next_props.inputArr.extra_info.min,
-                            max: next_props.inputArr.extra_info.max,
-                            parent_width: next_props.width,
-                            annos: next_props.inputArr.annotations_all
-                            }
-                    }
-          //  }
-        } else{
-            return{
-            data:{
-            datasets:{
-            radius: 0, // Makes the dots go away
-            label: next_props.inputArr.title,
-            fill: false,
-            borderColor: ['black'],
-            data: next_props.inputArr.data,
-            backgroundColor:['rgba(255,99,132,0.6)',],
-            borderWidth: 1
-            },
-            annotation:{
-            p:{x:0, y:0}, // temps
-            q:{x:0, y:0}, // temps
-            r:{x:0, y:0}, // temps
-            s:{x:0, y:0}, // temps
-            t:{x:0, y:0}, // temps
-            },
-            freq: freq,
-            min: next_props.inputArr.extra_info.min,
-            max: next_props.inputArr.extra_info.max,
-            parent_width: next_props.width,
-          //  annos: next_props.inputArr.annotations_all
-            }
-            }
-        }
-    }
     
- 
-//    
-    
-//    // Can't use 'this.' because this is a static function
-//    // The state is updated through what is returned from this function
-//    // This loads metadata... but sometimes doesnt load all of them? is kinda random...
-//    // Fills the data properly
-//    //
-//   // static getDerivedStateFromProps
-//    static getDerivedStateFromProps(next_props, prev_state){
+//    //componentWillUpdate(next_props, prev_state){
+//    getSnapshotBeforeUpdate(){
+//   // UNSAFE_componentMount(){
 //
-//        var freq = next_props.inputArr.freq
-//        let p_pair = [];
-//        let q_pair = [];
-//        let r_pair = [];
-//        let s_pair = [];
-//        let t_pair = [];
+//    console.log("ANNOS2: " + this.state.data.annos)
+//        if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4) {
+//            let p_pair = [];
+//            let q_pair = [];
+//            let r_pair = [];
+//            let s_pair = [];
+//            let t_pair = [];
 //
-//
-//        let props_array = next_props.inputArr;
-//
-//        if(prev_state !== 'undefined'){
-////        if(prev_state.data.annotations.p === 'undefined' || prev_state.data.annotations.q === 'undefined' ||
-////           prev_state.data.annotations.r === 'undefined' || prev_state.data.annotations.s === 'undefined' ||
-////           prev_state.data.annotations.t === 'undefined'){
-//            console.log("test");
-//          //  console.log( "testing " + next_props.inputArr.annotations.all.length )
-//        if (typeof next_props.inputArr.annotations_all !== 'undefined' && next_props.inputArr.annotations_all.length > 4) {
-//
-//            var annos = Graph.parseAnnotations(next_props.inputArr.annotations_all).then(annotations => {
-//                                                                                return annotations
-//                                                                             })
-//
-//            annos.then(annotations => {
+//            var annos = Graph.parseAnnotations(this.state.data.annos).then(annotations => {
+//                                                                                         return annotations
+//                                                                                         })
+//            var ando = annos.then(annotations => {
 //                       let p = annotations[0];
 //                       let q = annotations[1];
 //                       let r = annotations[2];
@@ -392,12 +238,212 @@ class Graph extends Component{
 //                       var x = 0;
 //                       // p_pair
 //                       for(let i = 0; i <  p.length; i++){
+//                       x++;
+//                       p_pair.push({
+//                                   x: p[i] * (1/this.state.freq),
+//                                   y: this.state.data[p[i]]
+//                                   });
+//                       //console.log("p_pairs: " + p_pair[i].x + "," + p_pair[i].y)
+//                       }
+//                       // q_pair
+//                       for(let i = 0; i < q.length; i++){
+//                       q_pair.push({
+//                                   x: q[i] * (1/this.state.freq),
+//                                   y: this.state.data[q[i]]
+//                                   });
+//                       }
+//                       // r_pair
+//                       for(let i = 0; i < r.length; i++){
+//                       r_pair.push({
+//                                   x: r[i] * (1/this.state.freq),
+//                                   y: this.state.data[r[i]]
+//                                   });
+//                       }
+//                       // s_pair
+//                       for(let i = 0; i < s.length; i++){
+//                       s_pair.push({
+//                                   x: s[i] * (1/this.state.freq),
+//                                   y: this.state.data[s[i]]
+//                                   });
+//                       }
+//                       // t_pair
+//                       for(let i = 0; i < t.length; i++){
+//                       t_pair.push({
+//                                   x: t[i] * (1/this.state.freq),
+//                                   y: this.state.data[t[i]]
+//                                   });
+//                       }
+//                       })
+//
+//            ando.then(annotations => {
+//                      console.log("here")
+//                      this.setState = ({
+//                                       data:{
+//                                       annotation:{
+//                                       p: p_pair,
+//                                       q: q_pair,
+//                                       r: r_pair,
+//                                       s: s_pair,
+//                                       t: t_pair
+//                                       }
+//                                       }
+//                                       });
+//                      if(typeof this.state.data.events !== 'undefined'){
+//                      console.log("test")
+//                        this.state.data.events[0]._chart.chart.update();
+//                      }
+//                     // this.forceUpdate()
+//                      })
+//            }
+//    }
+//
+//    // Can't use 'this.' because this is a static function
+//    // The state is updated through what is returned from this function
+//    // This loads metadata... but sometimes doesnt load all of them? is kinda random...
+//    // Fills the data properly
+//    //
+//    // static getDerivedStateFromProps
+//    static getDerivedStateFromProps(next_props, prev_state){
+//        var freq = next_props.inputArr.freq
+//        if(typeof prev_state !== 'undefined'){
+//           // if (typeof next_props.inputArr.annotations_all !== 'undefined' && //next_props.inputArr.annotations_all.length > 4) {
+//
+//            console.log("ANNOS: " + next_props.inputArr.annotations_all)
+//                    return{
+//                            data:{
+//                            annos: next_props.inputArr.annotations_all,
+//                            datasets:{
+//                            radius: 0, // Makes the dots go away
+//                            label: next_props.inputArr.title,
+//                            fill: false,
+//                            borderColor: ['black'],
+//                            data: next_props.inputArr.data,
+//                            backgroundColor:['rgba(255,99,132,0.6)',],
+//                            borderWidth: 1
+//                            },
+//                            annotation:{
+//                            p:{x:0, y:0}, // temps
+//                            q:{x:0, y:0}, // temps
+//                            r:{x:0, y:0}, // temps
+//                            s:{x:0, y:0}, // temps
+//                            t:{x:0, y:0}, // temps
+//                            },
+//                            freq: freq,
+//                            min: next_props.inputArr.extra_info.min,
+//                            max: next_props.inputArr.extra_info.max,
+//                            parent_width: next_props.width,
+//                            shouldUpdate: true
+//                            }
+//                    }
+//          //  }
+//        } else{
+//            return{
+//            data:{
+//            datasets:{
+//            radius: 0, // Makes the dots go away
+//            label: next_props.inputArr.title,
+//            fill: false,
+//            borderColor: ['black'],
+//            data: next_props.inputArr.data,
+//            backgroundColor:['rgba(255,99,132,0.6)',],
+//            borderWidth: 1
+//            },
+//            annotation:{
+//            p:{x:0, y:0}, // temps
+//            q:{x:0, y:0}, // temps
+//            r:{x:0, y:0}, // temps
+//            s:{x:0, y:0}, // temps
+//            t:{x:0, y:0}, // temps
+//            },
+//            freq: freq,
+//            min: next_props.inputArr.extra_info.min,
+//            max: next_props.inputArr.extra_info.max,
+//            parent_width: next_props.width,
+//            shouldUpdate:false
+//          //  annos: next_props.inputArr.annotations_all
+//            }
+//            }
+//        }
+//    }
+
+    static addToPairs(anno, next_props, freq, pair){
+        for(let i = 0; i <  anno.length; i++){
+            pair.push({
+                        x: anno[i] * (1/freq),
+                        y: next_props.inputArr.data[anno[i]]
+                        });
+        }
+        return pair;
+    }
+    
+    componentDidUpdate(prevProps, prevState) {
+        // only update chart if the data has changed
+        console.log("hi")
+        if (prevProps.data !== this.props.data) {
+            this.forceUpdate()
+        }
+    }
+ 
+    
+//    shouldComponentUpdate(nextProps, nextState) {
+//        if(this.state.data.annotations !== nextState.data.annotations){
+//           this.forceUpdate()
+//        } else{
+//            console.log("dont")
+//        }
+//        return this.state.data.annotations !== nextState.data.annotations;
+//    }
+//
+    
+//    // Can't use 'this.' because this is a static function
+//    // The state is updated through what is returned from this function
+//    // This loads metadata... but sometimes doesnt load all of them? is kinda random...
+//    // Fills the data properly
+//    //
+   // static getDerivedStateFromProps
+    static getDerivedStateFromProps(next_props, prev_state){
+
+        var freq = next_props.inputArr.freq
+
+
+
+        let props_array = next_props.inputArr;
+
+        if(typeof prev_state !== 'undefined'){
+        if (typeof next_props.inputArr.annotations_all !== 'undefined' && next_props.inputArr.annotations_all.length > 4) {
+
+            var annos = Graph.parseAnnotations(next_props.inputArr.annotations_all).then(annotations => {
+                                                                                return annotations
+                                                                             })
+
+            let parsed_anno = annos.then(annotations => {
+                           let p_pair = [];
+                           let q_pair = [];
+                           let r_pair = [];
+                           let s_pair = [];
+                           let t_pair = [];
+                           let p = annotations[0];
+                           let q = annotations[1];
+                           let r = annotations[2];
+                           let s = annotations[3]
+                           let t = annotations[4];
+
+                            var p1 = Graph.addToPairs(p, next_props, freq, p_pair)
+                            var p2 = Graph.addToPairs(q, next_props, freq, q_pair)
+                            var p3 = Graph.addToPairs(r, next_props, freq, r_pair)
+                            var p4 = Graph.addToPairs(s, next_props, freq, s_pair)
+                            var p5 = Graph.addToPairs(t, next_props, freq, t_pair)
+                                       
+                            return Promise.all([p1,p2,p3,p4,p5]).then(arr => {
+                                                                      console.log(arr)
+                                                                      return Promise.resolve(arr)
+                                                                        });
+//                       for(let i = 0; i <  p.length; i++){
 //                           x++;
 //                           p_pair.push({
 //                                       x: p[i] * (1/freq),
 //                                       y: next_props.inputArr.data[p[i]]
 //                                       });
-//                       //console.log("p_pairs: " + p_pair[i].x + "," + p_pair[i].y)
 //                       }
 //                       // q_pair
 //                       for(let i = 0; i < q.length; i++){
@@ -427,43 +473,45 @@ class Graph extends Component{
 //                                       y: next_props.inputArr.data[t[i]]
 //                                       });
 //                       }
-//                    })
 //
-//            return prev_state
-//        } else{
-//            return{
-//                    data:{
-//                    datasets:{
-//                    radius: 0, // Makes the dots go away
-//                    label: next_props.inputArr.title,
-//                    fill: false,
-//                    borderColor: ['black'],
-//                    data: next_props.inputArr.data,
-//                    backgroundColor:['rgba(255,99,132,0.6)',],
-//                    borderWidth: 1
-//                    },
-//                    annotation:{
-//                    p:{x:0, y:0},
-//                    q:{x:0, y:0},
-//                    r:{x:0, y:0},
-//                    s:{x:0, y:0},
-//                    t:{x:0, y:0},
-//                    },
-//                    freq: freq,
-//                    min: next_props.inputArr.extra_info.min,
-//                    max: next_props.inputArr.extra_info.max,
-//                    parent_width: next_props.width
-//                    }
-//            }
-//        }
-//        } else {
-//
-//            return prev_state
-//        }
-//    }
+                    })
+
+            return{
+                data:{
+                    datasets:{
+                    radius: 0,
+                    label: next_props.inputArr.title,
+                    fill: false,
+                    borderColor: ['black'],
+                    data: next_props.inputArr.data,
+                    backgroundColor:['rgba(255,99,132,0.6)',],
+                    borderWidth: 1
+                    },
+                    annotation:{
+                        p: parsed_anno[0],
+                        q: parsed_anno[1],
+                        r: parsed_anno[2],
+                        s: parsed_anno[3],
+                        t: parsed_anno[4]
+                    },
+                    freq: freq,
+                    min: next_props.inputArr.extra_info.min,
+                    max: next_props.inputArr.extra_info.max,
+                    parent_width: next_props.width
+                }
+            }
+        } else{
+            return prev_state
+        }
+        } else {
+
+            return prev_state
+        }
+    }
 
     //Render the graph
     render(){
+        console.log("rendering")
         const dat = {
             type:'Scatter',
             datasets: [
@@ -614,6 +662,12 @@ class Graph extends Component{
                         getElementAtEvent={(point) =>{
                             if(point.length > 0){
                                 this.modifyGraph(point);
+                                this.setState({
+                                            data:{
+                                            events: point
+                                                }
+                                            });
+               
                             }
                         }}
                         options={{
