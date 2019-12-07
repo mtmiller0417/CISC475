@@ -441,7 +441,7 @@ class Graph extends Component{
                     <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
 
                     <div style={{position: 'absolute', top:0, right:0}}>
-                    <ul style = {{ position: 'fixed', fontSize: '9px', fontWeight: 'bold' , marginLeft: -10}}> 
+                    <ul style = {{ position: 'relative', fontSize: '9px', fontWeight: 'bold' , marginLeft: -10}}> 
                         <div><span class={styles.p} ></span>P</div>
                         <div><span class={styles.q}></span>Q</div>
                         <div><span class={styles.r}></span>R</div>

@@ -191,7 +191,7 @@ export default class MainContainer extends React.Component {
                 }
             }
         }
-        //context.stroke(); // Draw all the minor rectangles
+        context.stroke(); // Draw all the minor rectangles
 
         // Convert to base64 and set as variable
         this.base64String = canvas.toDataURL("grid_background/png"); 
