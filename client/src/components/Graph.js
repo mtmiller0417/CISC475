@@ -233,6 +233,7 @@ class Graph extends Component{
 
 
         let props_array = next_props.inputArr;
+        //let parsed_anno = '';
 
         if(typeof prev_state !== 'undefined'){
         if (typeof next_props.inputArr.annotations_all !== 'undefined' && next_props.inputArr.annotations_all.length > 4) {
