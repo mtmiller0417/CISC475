@@ -10,9 +10,13 @@ var file_list = [];
 var file_names = [];
 const options = [];
 
-
-
-
+/**
+ * This component defines the search bar that enables dynamic loading of CSV files
+ * CSV files must be added to the 'csv_files' folder located at '../../csv_files'
+ * 
+ * Changing the first argument of the file_list and file_string variables below will 
+ * change where the component searches for CSV files.
+ */
 export default class LoadData extends React.Component {
     
     // Loads first CSV and imports the list of CSVs
