@@ -16,8 +16,14 @@ let pastelGreenLightOpacity = 'rgba(133,222,119,' + lightOpacity + ')';
 let pastelPurple = 'rgba(178,157,217,1)';
 let pastelPurpleLightOpacity = 'rgba(178,157,217,' + lightOpacity + ')';
 
+/**
+ * This component defines the individual graphs for each lead and annotation set
+ */
 class Graph extends Component{
 
+    /**
+     * Constructor is used here to create a ref and set initial state according to the props
+     */
     constructor(props){
         super(props);
 
@@ -61,6 +67,15 @@ class Graph extends Component{
         })
     }
 
+    /**
+     * 
+     * @brief This method deletes the annotation from annotationArray at arrayIndex.
+     * After deletion the state is updated and chart rerendered
+     * 
+     * @param {[]} annotationArray representing the data array for a given annotation
+     * @param {int} arraryIndex representing the index for deletion in the given array
+     * @param {Event} event representing the click event returned by chartJS
+     */
     deleteAnnotation(annotationArray, arraryIndex, event){
         //annotationArray[arraryIndex] = ""; // Dont delete, just make it empty
         annotationArray.splice(arraryIndex, 1)
@@ -81,6 +96,15 @@ class Graph extends Component{
         event[0]._chart.chart.update();
     }
 
+    /**
+     * 
+     * @brief This method adds an annotation located at the coordinates of the point parameter
+     * to the passed in annotationArray. It also causes a rerender and updates state after addition
+     * 
+     * @param {[]} annotationArray representing the data array for a given annotation
+     * @param {Event} event representing the click event returned by chartJS
+     * @param {Object} point representing the (x,y) coordinates of the click
+     */
     addAnnotation(annotationArray, event, point)
     {
         annotationArray.push({x: point.x, y: point});
@@ -101,6 +125,13 @@ class Graph extends Component{
         event[0]._chart.chart.update();
     }
 
+    /**
+     * 
+     * @brief Method that is called whenever a point is clicked on the graph, where e is the click event.
+     * This method handles determining whether to add or remove an annotation and calls the required method
+     * 
+     * @param {Event} e which is the click event returned by chartJS
+     */
     modifyGraph(e) {
         console.log(e);
 
@@ -174,21 +205,15 @@ class Graph extends Component{
         }
     }
 
-    parseAnnotation(annotation, pair_array, props){
-        for(let i = 0; i < annotation.length; i++){
-            pair_array.push({
-                x: annotation[i],
-                y: props.inputArr.data[annotation[i]].y
-            });
-        }
-    }
-
-    // Can't use 'this.' because this is a static function
-    // The state is updated through what is returned from this function
-    // This loads metadata... but sometimes doesnt load all of them? is kinda random...
-    // Fills the data properly
-    //
-   // static getDerivedStateFromProps
+    /**
+     * 
+     * @brief React method that handles setting state when new props are passed from the parent container.
+     * Here we are using this method to take annotation data passed in a props and format it correctly
+     * for display as a Scatter plot in Chartjs. Sets new state for the graph after processing the props
+     * 
+     * @param {props} next_props 
+     * @param {props} prev_state 
+     */
     static getDerivedStateFromProps(next_props, prev_state){
         var freq = next_props.inputArr.freq
 
