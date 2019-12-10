@@ -252,6 +252,7 @@ class Graph extends Component{
                 // Resolves the promise made above, and sets the state
                 // With the new annotations
                 parsed_anno.then(anno =>{
+                                 console.log("hm")
                                  this.setState({
                                       data:{
                                           annotation:{
@@ -276,6 +277,7 @@ class Graph extends Component{
 
         let props_array = next_props.inputArr;
 
+        if(undefined !== next_props.inputArr.annotations_all && next_props.inputArr.annotations_all.length > 4){
             return{
                 data:{
                     datasets:{
@@ -295,7 +297,35 @@ class Graph extends Component{
                     annos: next_props.inputArr.annotations_all
                 }
         }
+        } else{
+            return{
+            data:{
+            datasets:{
+            radius: 0, // Makes the dots go away
+            label: next_props.inputArr.title,
+            fill: false,
+            borderColor: ['black'],
+            data: next_props.inputArr.data,
+            backgroundColor:['rgba(255,99,132,0.6)',],
+            borderWidth: 1
+            },
+            annotation:{
+            p: [{x:0,y:10000}], // y's need an initial point, which is outside of range of graph
+            q: [{x:0,y:10000}], // however, they are removed on the first update
+            r: [{x:0,y:10000}],
+            s: [{x:0,y:10000}],
+            t: [{x:0,y:10000}]
+            },
+            freq: freq,
+            min: next_props.inputArr.extra_info.min,
+            max: next_props.inputArr.extra_info.max,
+            parent_width: next_props.width,
+            annos: prev_state.annos
+            }
+            }
+        }
     }
+
 
     //Render the graph
     render(){
