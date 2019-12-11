@@ -136,7 +136,7 @@ export default class LoadData extends React.Component {
         const { file_names } = this.state;
         
         return (
-                <div>
+                <div className={styles.LoadData}>
                 <Select
                     value={selectedOption}
                     onChange={this.handleChange}

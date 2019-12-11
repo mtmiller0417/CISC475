@@ -1,8 +1,12 @@
+@font-face {
+	font-family: Greycliff_Bold;
+	src: url("../../Fonts/Greycliff-CF-Bold.otf");
+}
+
 .container {
 	//width: 95vw;
 	width: 95%;
 	margin: 0 auto;
-	//background-color: lightblue;
 }
 
 .graphBackground{
@@ -11,3 +15,41 @@
 	background-repeat: repeat;
 	//background-color: aquamarine;
 }
+
+.metadataGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
+.headerGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-column: span 1;
+	align-items: center;
+	justify-items: center;
+}
+
+.directionText {
+	font-family: Greycliff_Bold;
+	align-items: center;
+	justify-items: center;
+	display: flex;
+}
+
+.directions {
+	grid-column: span 2;
+}
+
+.loadData {
+	grid-column: span 2;
+}
+
+// These create boxes and color them as appropriate
+
+.p { background-color: rgba(255,105,97,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel red
+.q { background-color: rgba(178,157,217,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel purple
+.r { background-color: rgba(255,180,71,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel orange
+.s { background-color: rgba(88,148,156,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel blue
+.t { background-color: rgba(133,222,119,1); border: 1px solid #ccc; float: left; width: 8px; height: 8px; } // pastel green
+
+
