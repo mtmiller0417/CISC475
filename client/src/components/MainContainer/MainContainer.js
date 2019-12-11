@@ -394,7 +394,6 @@ export default class MainContainer extends React.Component {
         this.parseMetaData();
 
         // Parse the data
-        
         this.parseData();
 
     }
