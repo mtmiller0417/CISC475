@@ -16,10 +16,19 @@ import  KeyHandler,{ KEYPRESS } from 'react-key-handler';
 
 let data = ""
 
+/**
+ * The MainContainer component is the outermost component in the heirarchy and contains the Grid,
+ * Metadata, LoadData and Header components. Much of the setup for the application, parsing of CVS,
+ * and data passing are done in this file
+ */
 export default class MainContainer extends React.Component {
 
     base64String = '';
 
+    /**
+     * Constructor is used to set the format for initial state which is later set and passed 
+     * to downstream components. It also defines some React references and function bindings 
+     */
 	constructor(props){
         super(props);
 
@@ -72,10 +81,17 @@ export default class MainContainer extends React.Component {
                       data: update,
                       annotations_all: annotations
                       })
-        
        this.forceUpdate();
     }
 
+    /**
+     * @brief Method that parses a metadata CSV whose location is hardcoded in the metaData global variable
+     * Right now this method is primarily being used to get the SampleBase from the Metadata file so it can
+     * be used to render the correct gridlines. 
+     * 
+     * The method first processes the input CSV and then sets state after resolving the promise returned by d3.csv
+     * After resolving the promise it sets state and calls createBackgroundImage() to setup gridlines
+     */
     parseMetaData(){
         let ecg_ID = [];
 		let patient_ID = [];
@@ -88,6 +104,7 @@ export default class MainContainer extends React.Component {
 		let ac_Time = [];
         let sample_base = [];
         
+        //metaData is a globle variable containing the hardcoded location of the same metadata CSV
         var metadata = d3.csv(metaData, function(metaData) {
 			return {
 				ECGID: metaData["ECG ID"],
@@ -143,6 +160,9 @@ export default class MainContainer extends React.Component {
         }
     }
 
+    /**
+     * @brief This method is used to dynamically size the background grid based on sampling frequency 
+     */
     createBackgroundImage(freq){
         let canvas = document.createElement('canvas');
         //console.log(freq)
@@ -188,7 +208,13 @@ export default class MainContainer extends React.Component {
         this.base64String = canvas.toDataURL("grid_background/png"); 
     }
 
-    parseData(annotations){
+
+    /**
+     * @brief This method handles parsing the data of a selected CSV using d3.csv
+     * After parsing, it sets the state accordingly. It also saves the max and min
+     * input values for a data set which we leverage to dynamically size graphs in graph.js
+     */
+    parseData(){
 
         console.log('parseData() entered');
         //Define arrays
@@ -357,7 +383,10 @@ export default class MainContainer extends React.Component {
         })
     }
 
-
+    /**
+     * @brief React method called here in order to ensure parseMetaData() and parseAnnotations()
+     * are called when the component is rendered. 
+     */
     componentWillMount(){
         console.log('componentWillMount()')
         // Parse the metaData
@@ -381,6 +410,13 @@ export default class MainContainer extends React.Component {
         });
     }
 
+    /**
+     * 
+     * @brief Method that takes an event representing a key press and correctly sets the radio selection
+     * representing which annotation will be added. Used to enable hotkey selection for rapid addition
+     * 
+     * @param {*} event 
+     */
     setRadioButton(event){
         // Check the selected button as well as make sure to call the 
         // function that changes the state to reflect the button change
@@ -478,23 +514,23 @@ export default class MainContainer extends React.Component {
                 <div style={radioStyle} onChange={(e) => this.changeForm(e.target.value)}>
                     <div style={{position:'absolute', fontWeight: 'bold'}}>ADD</div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)'}}>
+                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)', marginLeft: 10}}>
                         <input type="radio" ref={this.pRef} value="0" name="annotation"/> P
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)'}}>
+                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginLeft: 10}}>
                         <input type="radio" ref={this.qRef} value="1" name="annotation"/> Q
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)'}}>
+                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)',marginLeft: 10}}>
                         <input type="radio" ref={this.rRef} value="2" name="annotation"/> R
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)'}}>
+                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginLeft: 10}}>
                         <input type="radio" ref={this.sRef} value="3" name="annotation"/> S
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)'}}>
+                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginLeft: 10}}>
                         <input type="radio" ref={this.tRef} value="4" name="annotation"/> T
                     </div>
                 </div>
