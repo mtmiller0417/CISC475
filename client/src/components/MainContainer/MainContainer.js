@@ -465,8 +465,9 @@ export default class MainContainer extends React.Component {
         // Style json for radio button
         const radioStyle= {
             position: 'sticky',
-            marginLeft: -40,
+            marginRight: -40,
             top: 50,
+            float: 'right',
             width: 30,
             height: 10,
             fontWeight: 'bold'

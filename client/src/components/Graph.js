@@ -574,15 +574,8 @@ class Graph extends Component{
         width += width_offset
         width += 'px'
 
-        return(
-        <React.Fragment>
-            {
-
-                <div className="wrapper" style={{position: 'relative', height:HEIGHT}}>
-
-                    <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
-
-                    <div style={{position: 'absolute', top:0, right:0}}>
+        /** Legends within each graph
+         * <div style={{position: 'absolute', top:0, right:0}}>
                     <ul style = {{ position: 'relative', fontSize: '9px', fontWeight: 'bold' , marginLeft: -10}}> 
                         <div><span className={styles.p} ></span>P</div>
                         <div><span className={styles.q}></span>Q</div>
@@ -591,6 +584,17 @@ class Graph extends Component{
                         <div><span className={styles.t}></span>T</div>
                     </ul>
                     </div>
+         */
+
+        return(
+        <React.Fragment>
+            {
+
+                <div className="wrapper" style={{position: 'relative', height:HEIGHT}}>
+
+                    <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
+
+                    
 
                 <div className="graph" style={{position:'absolute', top: 0, left: 0, width: width}}>
                     <Scatter 
