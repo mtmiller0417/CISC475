@@ -29,6 +29,7 @@ class Graph extends Component{
         super(props);
 
         this.chartRef = React.createRef();
+        this.componentDidUpdate = this.componentDidUpdate.bind(this);
 
         this.state = ({
             data:{
@@ -285,6 +286,7 @@ class Graph extends Component{
             let dataRead = prev_state.data.datasets.dataRead
             
             if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4 && this.props !== next_props && !dataRead) {
+                dataRead = true;
                 var annos = Graph.parseAnnotations(this.state.data.annos).then(annotations => { return annotations })
                 
                 // Resolves a promise  made above and returns a new
@@ -313,7 +315,7 @@ class Graph extends Component{
 
                 // Resolves the promise made above, and sets the state
                 // With the new annotations
-                parsed_anno.then(anno =>{
+                parsed_anno.then(anno => {
                                  let p_flag = prev_state.data.annotation.p_flag
                                  let q_flag = prev_state.data.annotation.q_flag
                                  let r_flag = prev_state.data.annotation.r_flag
@@ -350,6 +352,7 @@ class Graph extends Component{
                                  
                                  this.setState({
                                       data:{
+                                          dataRead: dataRead,
                                           annotation:{
                                                   p: anno[0],
                                                   q: anno[1],
