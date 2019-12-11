@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
 import * as d3 from 'd3';
 import cloneDeep from 'lodash/cloneDeep';
+import styles from "./MainContainer/MainContainer.module.scss";
 
 // Set constant colors here
 let lightOpacity = .2
@@ -16,16 +17,24 @@ let pastelGreenLightOpacity = 'rgba(133,222,119,' + lightOpacity + ')';
 let pastelPurple = 'rgba(178,157,217,1)';
 let pastelPurpleLightOpacity = 'rgba(178,157,217,' + lightOpacity + ')';
 
+/**
+ * This component defines the individual graphs for each lead and annotation set
+ */
 class Graph extends Component{
 
+    /**
+     * Constructor is used here to create a ref and set initial state according to the props
+     */
     constructor(props){
         super(props);
 
-        this.ref = React.createRef()
+        this.chartRef = React.createRef();
+        this.componentDidUpdate = this.componentDidUpdate.bind(this);
 
         this.state = ({
             data:{
                 datasets:{
+                    dataRead: false,
                     radius: 0, // Makes the dots go away
                     label: this.props.inputArr.title,
                     fill: false,
@@ -35,16 +44,22 @@ class Graph extends Component{
                     borderWidth: 1
                 },
                 annotation:{
-                      p: [{x:0,y:0}],
-                    q: [''],
-                    r: [''],
-                    s: [''],
-                    t: [''],
+                    p: [{x:0,y:10000}], // y's need an initial point, which is outside of range of graph
+                    q: [{x:0,y:10000}], // however, they are removed on the first update
+                    r: [{x:0,y:10000}],
+                    s: [{x:0,y:10000}],
+                    t: [{x:0,y:10000}],
+                    selectedAnnotation: this.props.inputArr.extra_info.selectedAnnotation,
                     oldP: [''],
                     oldQ: [''],
                     oldR: [''],
                     oldS: [''],
-                    oldT: ['']
+                    oldT: [''],
+                    p_flag: false,
+                    q_flag: false,
+                    r_flag: false,
+                    s_flag: false,
+                    t_flag: false,
                 }, 
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
@@ -58,48 +73,54 @@ class Graph extends Component{
         })
     }
 
+    /**
+     * 
+     * @brief This method deletes the annotation from annotationArray at arrayIndex.
+     * After deletion the state is updated and chart rerendered
+     * 
+     * @param {[]} annotationArray representing the data array for a given annotation
+     * @param {int} arraryIndex representing the index for deletion in the given array
+     * @param {Event} event representing the click event returned by chartJS
+     */
     deleteAnnotation(annotationArray, arraryIndex, event){
         //annotationArray[arraryIndex] = ""; // Dont delete, just make it empty
         annotationArray.splice(arraryIndex, 1)
         console.log(annotationArray);
 
-        this.setState = ({
-            data:{ 
-                annotation:{
-                    p: this.state.data.annotation.p,
-                    q: this.state.data.annotation.q,
-                    r: this.state.data.annotation.r,
-                    s: this.state.data.annotation.s,
-                    t: this.state.data.annotation.t    
-                }
-            }
-        });
-
         event[0]._chart.chart.update();
     }
 
+    /**
+     * 
+     * @brief This method adds an annotation located at the coordinates of the point parameter
+     * to the passed in annotationArray. It also causes a rerender and updates state after addition
+     * 
+     * @param {[]} annotationArray representing the data array for a given annotation
+     * @param {Event} event representing the click event returned by chartJS
+     * @param {Object} point representing the (x,y) coordinates of the click
+     */
     addAnnotation(annotationArray, event, point)
     {
         annotationArray.push({x: point.x, y: point});
         console.log(annotationArray);
 
-        this.setState = ({
-            data:{ 
-                annotation:{
-                    p: this.state.data.annotation.p,
-                    q: this.state.data.annotation.q,
-                    r: this.state.data.annotation.r,
-                    s: this.state.data.annotation.s,
-                    t: this.state.data.annotation.t    
-                }
-            }
-        });
-
-        event[0]._chart.chart.update();
+       event[0]._chart.chart.update();
     }
 
+    /**
+     * 
+     * @brief Method that is called whenever a point is clicked on the graph, where e is the click event.
+     * This method handles determining whether to add or remove an annotation and calls the required method
+     * 
+     * @param {Event} e which is the click event returned by chartJS
+     */
     modifyGraph(e) {
         console.log(e);
+
+        const node = this.chartRef.current;
+        console.log("NODE");
+        console.log(node);
+
         let arrIndex = e[0]._index;
         let dataSet = e[0]._datasetIndex;
         let coordinates = this.state.data.datasets.data[arrIndex];
@@ -109,11 +130,18 @@ class Graph extends Component{
                 console.log(this.state.data.datasets.data);
                 console.log(coordinates);
 
-                //Let the user select the type of point to add from some menu 
+                //Let the user select the type of point to add from some menu
                 //and set the response to this variable
                 //Hardcoded to 0 now to inidicate P
-                let inputChoice = 0;
-                
+                let inputChoice = this.state.data.annotation.selectedAnnotation;
+                console.log('inputChoice')
+                console.log(inputChoice)
+                if(inputChoice === -1){
+                    console.log('break')
+                    break;
+                }
+
+
                 //User wants to add P
                 if(inputChoice === 0){
                     //Duplicate the current state
@@ -141,7 +169,6 @@ class Graph extends Component{
                 break;
             case 1:
                 this.deleteAnnotation(this.state.data.annotation.p, arrIndex, e);
-
                 break;
             case 2:
                 this.deleteAnnotation(this.state.data.annotation.q, arrIndex, e);
@@ -157,9 +184,13 @@ class Graph extends Component{
                 break;
             default:
                 console.log("Point not in any available dataset.");
-        }
+       }
     }
 
+    //Function to generalize the loading of annotation files
+    //Since the logic for all 5 is the exact same
+    //Receives a CSV file and an array for output
+    //Processes the CSV file into the specified array
     parseAnnotation(annotation, pair_array, props){
         for(let i = 0; i < annotation.length; i++){
             pair_array.push({
@@ -209,98 +240,218 @@ class Graph extends Component{
                                                           })
                                });
     }
-
-    static addToPairs(anno, next_props, freq, pair){
+    
+    // Function to build pairs for graphing
+    // Used by ComponentDidUpdate
+   addToPairs(anno, freq, pair){
         for(let i = 0; i <  anno.length; i++){
             pair.push({
                         x: anno[i] * (1/freq),
-                        y: next_props.inputArr.data[anno[i]]
+                        y: this.state.data.datasets.data[anno[i]]
                         });
-        }
+            }
         return pair;
     }
+    
+    // Runs after render and will re-render
+    // If annotations are passed in
+    componentDidUpdate(next_props, prev_state){
+            var freq = next_props.inputArr.freq
+            let props_array = next_props.inputArr;
 
-//    // Can't use 'this.' because this is a static function
-//    // The state is updated through what is returned from this function
-//    // This loads metadata... but sometimes doesnt load all of them? is kinda random...
-//    // Fills the data properly
-//    //
-   // static getDerivedStateFromProps
+            let dataRead = prev_state.data.datasets.dataRead
+        
+
+            console.log("ranx1")
+            if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4 && this.props !== next_props && this.state.data.annotation !== prev_state.annotation && !dataRead) {
+                console.log("ran")
+                dataRead = true;
+                var annos = Graph.parseAnnotations(this.state.data.annos).then(annotations => { return annotations })
+
+                // Resolves a promise  made above and returns a new
+                // promise, containing the annotation pairs
+                let parsed_anno = annos.then(annotations => {
+                             let p_pair = [];
+                             let q_pair = [];
+                             let r_pair = [];
+                             let s_pair = [];
+                             let t_pair = [];
+                             let p = annotations[0];
+                             let q = annotations[1];
+                             let r = annotations[2];
+                             let s = annotations[3]
+                             let t = annotations[4];
+
+
+                             var p1 = this.addToPairs(p, freq, p_pair)
+                             var p2 = this.addToPairs(q, freq, q_pair)
+                             var p3 = this.addToPairs(r, freq, r_pair)
+                             var p4 = this.addToPairs(s, freq, s_pair)
+                             var p5 = this.addToPairs(t, freq, t_pair)
+
+                             return [p1,p2,p3,p4,p5, this]
+                    })
+
+               // var newContext = this
+                
+                //this.setState({})
+
+                // Resolves the promise made above, and sets the state
+                // With the new annotations
+                parsed_anno.then(anno => {
+                                 let p_flag = prev_state.data.annotation.p_flag
+                                 let q_flag = prev_state.data.annotation.q_flag
+                                 let r_flag = prev_state.data.annotation.r_flag
+                                 let s_flag = prev_state.data.annotation.s_flag
+                                 let t_flag = prev_state.data.annotation.t_flag
+
+                                 // If the flag was set before, dont change the data
+                                 if(p_flag)
+                                 anno[0] = prev_state.data.annotation.p;
+                                 if(q_flag)
+                                 anno[1] = prev_state.data.annotation.q;
+                                 if(r_flag)
+                                 anno[2] = prev_state.data.annotation.r;
+                                 if(s_flag)
+                                 anno[3] = prev_state.data.annotation.s;
+                                 if(t_flag)
+                                 anno[4] = prev_state.data.annotation.t;
+
+                                 // Set flag to true if the data has been loaded
+                                 if(!p_flag && anno[0] > 0)
+                                 p_flag = true;
+
+                                 if(!q_flag && anno[1]> 0)
+                                 q_flag = true;
+
+                                 if(!r_flag && anno[2] > 0)
+                                 r_flag = true;
+
+                                 if(!s_flag && anno[3] > 0)
+                                 s_flag = true;
+
+                                 if(!t_flag && anno[4] > 0)
+                                 t_flag = true;
+
+                                this.setState({
+                                      data:{
+                                          dataRead: dataRead,
+                                          annotation:{
+                                                  p: anno[0],
+                                                  q: anno[1],
+                                                  r: anno[2],
+                                                  s: anno[3],
+                                                  t: anno[4],
+                                                  selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation,
+                                                   p_flag:p_flag,
+                                                   q_flag:q_flag,
+                                                   r_flag:r_flag,
+                                                   s_flag:s_flag,
+                                                   t_flag:t_flag
+
+                                               }}
+
+                                              })
+                                 })
+            }}
+
+    /**
+     * 
+     * @brief React method that handles setting state when new props are passed from the parent container.
+     * Here we are using this method to take annotation data passed in a props and format it correctly
+     * for display as a Scatter plot in Chartjs. Sets new state for the graph after processing the props
+     * 
+     * @param {props} next_props 
+     * @param {props} prev_state 
+     */
     static getDerivedStateFromProps(next_props, prev_state){
 
         var freq = next_props.inputArr.freq
 
-
-
         let props_array = next_props.inputArr;
         //let parsed_anno = '';
 
-        if(typeof prev_state !== 'undefined'){
-        if (typeof next_props.inputArr.annotations_all !== 'undefined' && next_props.inputArr.annotations_all.length > 4) {
-
-            var annos = Graph.parseAnnotations(next_props.inputArr.annotations_all).then(annotations => {
-                                                                                return annotations
-                                                                             })
-
-            let parsed_anno = annos.then(annotations => {
-                           let p_pair = [];
-                           let q_pair = [];
-                           let r_pair = [];
-                           let s_pair = [];
-                           let t_pair = [];
-                           let p = annotations[0];
-                           let q = annotations[1];
-                           let r = annotations[2];
-                           let s = annotations[3]
-                           let t = annotations[4];
-
-                            var p1 = Graph.addToPairs(p, next_props, freq, p_pair)
-                            var p2 = Graph.addToPairs(q, next_props, freq, q_pair)
-                            var p3 = Graph.addToPairs(r, next_props, freq, r_pair)
-                            var p4 = Graph.addToPairs(s, next_props, freq, s_pair)
-                            var p5 = Graph.addToPairs(t, next_props, freq, t_pair)
-                                       
-                            return Promise.all([p1,p2,p3,p4,p5]).then(arr => {
-                                                                      console.log(arr)
-                                                                      return Promise.resolve(arr)
-                                                                        });
-                    })
-
+        if(undefined !== next_props.inputArr.annotations_all && next_props.inputArr.annotations_all.length > 4){
             return{
                 data:{
                     datasets:{
-                    radius: 0,
-                    label: next_props.inputArr.title,
-                    fill: false,
-                    borderColor: ['black'],
-                    data: next_props.inputArr.data,
-                    backgroundColor:['rgba(255,99,132,0.6)',],
-                    borderWidth: 1
+                        radius: 0, // Makes the dots go away
+                        label: next_props.inputArr.title,
+                        fill: false,
+                        borderColor: ['black'],
+                        data: next_props.inputArr.data,
+                        backgroundColor:['rgba(255,99,132,0.6)',],
+                        borderWidth: 1
                     },
-                    annotation:{
-                        p: parsed_anno[0],
-                        q: parsed_anno[1],
-                        r: parsed_anno[2],
-                        s: parsed_anno[3],
-                        t: parsed_anno[4]
-                    },
+                annotation: {
+                                p: prev_state.data.annotation.p,
+                                    q: prev_state.data.annotation.q,
+                                    r: prev_state.data.annotation.r,
+                                    s: prev_state.data.annotation.s,
+                                    t: prev_state.data.annotation.t,
+                                    selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation,
+                                    oldP: [''],
+                                    oldQ: [''],
+                                    oldR: [''],
+                                    oldS: [''],
+                                    oldT: [''],
+                                    p_flag: prev_state.data.annotation.p_flag,
+                                    q_flag: prev_state.data.annotation.q_flag,
+                                    r_flag: prev_state.data.annotation.r_flag,
+                                    s_flag: prev_state.data.annotation.s_flag,
+                                    t_flag: prev_state.data.annotation.t_flag
+                        },
                     freq: freq,
                     min: next_props.inputArr.extra_info.min,
                     max: next_props.inputArr.extra_info.max,
-                    parent_width: next_props.width
+                    parent_width: next_props.width,
+                    annos: next_props.inputArr.annotations_all
                 }
-            }
-        } else{
-            return prev_state
         }
-        } else {
-            return prev_state
+        } else{
+            return{
+            data:{
+            datasets:{
+            radius: 0, // Makes the dots go away
+            label: next_props.inputArr.title,
+            fill: false,
+            borderColor: ['black'],
+            data: next_props.inputArr.data,
+            backgroundColor:['rgba(255,99,132,0.6)',],
+            borderWidth: 1
+            },
+            annotation:{
+            p: [{x:0,y:10000}], // y's need an initial point, which is outside of range of graph
+            q: [{x:0,y:10000}], // however, they are removed on the first update
+            r: [{x:0,y:10000}],
+            s: [{x:0,y:10000}],
+            t: [{x:0,y:10000}],
+            selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation,
+            oldP: [''],
+            oldQ: [''],
+            oldR: [''],
+            oldS: [''],
+            oldT: [''],
+            p_flag: false,
+            q_flag: false,
+            r_flag: false,
+            s_flag: false,
+            t_flag: false,
+            },
+            freq: freq,
+            min: next_props.inputArr.extra_info.min,
+            max: next_props.inputArr.extra_info.max,
+            parent_width: next_props.width,
+            annos: prev_state.annos
+            }
+            }
         }
     }
 
+
     //Render the graph
     render(){
-        console.log("rendering")
+       // console.log("oo")
         const dat = {
             type:'Scatter',
             datasets: [
@@ -409,12 +560,8 @@ class Graph extends Component{
         const SECONDS_PER_WIDTH_MAX = 10
         const TIME_PER_WIDTH = Math.min(SECONDS_PER_WIDTH_MAX, total_time) // Number of seconds to fit on the screen at a time
 
-        //let between_tick = dataLen / ticks_on_x
-        let range = Math.abs(this.state.data.min) + Math.abs(this.state.data.max) 
-
         // The amount of the width/height that is not part of the graph
-        const width_offset = 86 // 79     (75 + 10 + 1 + 1) = offset = 86
-        const height_offset = 60 // 60   (30 + 1 + 1) = offset = 32
+        const width_offset = 86 //     (75 + 10 + 1 + 1) = offset = 86
 
         // The fixed width of the container on the screen
         const parent_width = this.state.data.parent_width - width_offset
@@ -423,52 +570,42 @@ class Graph extends Component{
         const px_per_second = parent_width / TIME_PER_WIDTH;
 
         // Calculates the width of the graph(can be greater than the fixed width, scrollable allow the excess to be seen)
-        const width = total_time * px_per_second;
-
-        // The true height/width px on the screen
-        const true_width = parent_width              // 1571px 1564px
-        const true_height = HEIGHT - height_offset   // 165px 193
-
-        const ticks_per_width = Math.min(TIME_PER_WIDTH, total_time) / INTERVAL; // 25
-        const ratio = true_height / (true_width / ticks_per_width); // Solve 1571/25 = 165/x
-        const round_up_ratio = Math.ceil(ratio)
-        const y_step = Math.round(range / ratio)
-
-        const max_y = (y_step * round_up_ratio) - Math.abs(this.state.data.min)
-
-        // Add the width_offset and 'px' to the width to be set in the graph div
-        let full_width = width+width_offset
-        full_width += 'px'
+        let width = total_time * px_per_second;
+        width += width_offset
+        width += 'px'
 
         return(
         <React.Fragment>
             {
-                <div className="graph" style={{width: full_width}}>
+
+                <div className="wrapper" style={{position: 'relative', height:HEIGHT}}>
+
+                    <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
+
+                    <div style={{position: 'absolute', top:0, right:0}}>
+                    <ul style = {{ position: 'relative', fontSize: '9px', fontWeight: 'bold' , marginLeft: -10}}> 
+                        <div><span className={styles.p} ></span>P</div>
+                        <div><span className={styles.q}></span>Q</div>
+                        <div><span className={styles.r}></span>R</div>
+                        <div><span className={styles.s}></span>S</div>
+                        <div><span className={styles.t}></span>T</div>
+                    </ul>
+                    </div>
+
+                <div className="graph" style={{position:'absolute', top: 0, left: 0, width: width}}>
                     <Scatter 
                         data={dat}
                         redraw={true} 
                         height={HEIGHT}
+                        ref={this.chartRef}
                         getElementAtEvent={(point) =>{
                             if(point.length > 0){
                                 this.modifyGraph(point);
-                                this.setState({
-                                            data:{
-                                            events: point
-                                                }
-                                            });
                
                             }
                         }}
                         options={{
                             maintainAspectRatio: false,
-                            /*layout: {
-                                padding: {
-                                    left: 0,
-                                    right: 0,
-                                    top: 0,
-                                    bottom: 0
-                                }
-                            },*/
                             tooltips:{
                                 enabled: true,
                                 mode: 'nearest',
@@ -489,7 +626,7 @@ class Graph extends Component{
                                 callbacks: {
                                     label: function(tooltipItems, data) { 
                                         return tooltipItems.xLabel + ' s, ' + tooltipItems.yLabel + ' mv';
-                                    }
+                                    }.bind(this)
                                 }
                             },
                             title: {
@@ -500,7 +637,7 @@ class Graph extends Component{
                                 position:'left'
                             },
                             legend: {
-                                display:true,
+                                display:false,
                                 position: 'right',
                                 labels: {
                                     // generateLabel
@@ -508,7 +645,7 @@ class Graph extends Component{
                                     filter: function(item) {
                                         // Remove the legend of the main-data, keep the annotation legend
                                         return !item.text.includes('Main-Data');
-                                    }
+                                    }.bind(this)
                                 }
                             },
                             scales: {
@@ -529,7 +666,7 @@ class Graph extends Component{
                                     ticks: {
                                         display: false,
                                         min: this.state.data.min,
-                                        max: this.state.data.max
+                                        max: this.state.data.max + 50
                                     },
                                     gridLines: {
                                         display: false
@@ -543,9 +680,10 @@ class Graph extends Component{
                         }}
                     />
                 </div>
+                </div>
             }
         </React.Fragment>)
-    }
+        }
 
 }
 

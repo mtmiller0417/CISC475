@@ -15,6 +15,7 @@
 		"react": "^16.9.0",
 		"react-chartjs-2": "^2.8.0",
 		"react-dom": "^16.9.0",
+		"react-key-handler": "^1.2.0-beta.3",
 		"react-scripts": "3.1.2",
 		"react-select": "^3.0.8",
 		"require-context": "^1.1.0"

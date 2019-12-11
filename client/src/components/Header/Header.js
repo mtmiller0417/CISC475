@@ -1,11 +1,14 @@
 import React from 'react';
 import styles from './Header.module.scss';
 
+/**
+ * Simple component which defines the header text for the application page
+ */
 export default class Header extends React.Component{
     render() {
         return(
             <div className={styles.header}>
-                <h1 className={styles.headerText}>ECG Annotator</h1>
+                <h2 className={styles.headerText}>ECG Annotator</h2>
             </div>
         )
     }
