@@ -434,6 +434,7 @@ class Graph extends Component{
 
     //Render the graph
     render(){
+       // console.log("oo")
         const dat = {
             type:'Scatter',
             datasets: [

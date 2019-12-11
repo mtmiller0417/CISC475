@@ -1,3 +1,4 @@
+
 import React from "react";
 import styles from "./MainContainer.module.scss";
 import grid_styles from "../Grid/Grid.module.scss"
@@ -393,7 +394,8 @@ export default class MainContainer extends React.Component {
         this.parseMetaData();
 
         // Parse the data
-        //this.parseData();
+        
+        this.parseData();
 
     }
 
@@ -460,6 +462,7 @@ export default class MainContainer extends React.Component {
                 </div> */
 
 	render() {
+        //console.log("oo")
         // Style json for radio button
         const radioStyle= {
             position: 'sticky',
@@ -537,29 +540,17 @@ export default class MainContainer extends React.Component {
 
 				<Grid >
                     <div className={styles.graphBackground} style = {{ backgroundImage: 'url('+this.base64String+')', backgroundRepeat: 'repeat'}}>
-                    <div><b>I</b></div>
                 <GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, annotations_all: this.state.annotations_all[0], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					<div ><b>aVL</b></div>
                 <GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, annotations_all: this.state.annotations_all[1], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>II</b></div>
                 <GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, annotations_all: this.state.annotations_all[2], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>III</b></div>
                 <GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, annotations_all: this.state.annotations_all[3], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>aVF</b></div>
                 <GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, annotations_all: this.state.annotations_all[4], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>aVR</b></div>
                 <GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, annotations_all: this.state.annotations_all[5], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>V1</b></div>
                 <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, annotations_all: this.state.annotations_all[6], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>V2</b></div>
                 <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, annotations_all: this.state.annotations_all[7], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>V3</b></div>
                 <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>V4</b></div>
                 <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, annotations_all: this.state.annotations_all[9], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>V5</b></div>
                 <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, annotations_all: this.state.annotations_all[10], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <div ><b>V6</b></div>
                 <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, annotations_all: this.state.annotations_all[11], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                     </div>
                 </Grid>
