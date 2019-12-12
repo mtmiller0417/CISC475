@@ -76,14 +76,14 @@ export default class LoadData extends React.Component {
                             });
         
         correct_a.forEach(element => {
-                          if(element.includes("I", 0)){
-                                lead_i.push(element)
+                          if(element.includes("III", 0)){
+                                lead_iii.push(element)
                           } else if(element.includes("aVL", 0)){
                                 lead_avl.push(element)
                           } else if(element.includes("II", 0)){
                                 lead_ii.push(element)
-                          } else if(element.includes("III", 0)){
-                                lead_iii.push(element)
+                          } else if(element.includes("I", 0)){
+                                lead_i.push(element)
                           } else if(element.includes("aVF", 0)){
                                 lead_avf.push(element)
                           } else if(element.includes("aVR", 0)){

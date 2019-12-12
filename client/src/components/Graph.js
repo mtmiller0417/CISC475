@@ -260,9 +260,6 @@ class Graph extends Component{
             let props_array = next_props.inputArr;
 
             let dataRead = prev_state.data.datasets.dataRead
-        
-
-            console.log("ranx1")
             if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4 && this.props !== next_props && this.state.data.annotation !== prev_state.annotation && !dataRead) {
                 if(this.state.data.annotation.selectedAnnotation === prev_state.data.annotation.selectedAnnotation){
                 console.log("ran")
