@@ -24,6 +24,8 @@ export default class Metadata extends React.Component {
 	// Can not call this.setState b/c this method is static
 	static getDerivedStateFromProps(next_props, prev_state){
 		let props = next_props.metadata;
+        
+        console.log("props meta:" + props.patientID)
 
 		// The state is set from what is returned from this
 		// This also causes a re-render of the new information
