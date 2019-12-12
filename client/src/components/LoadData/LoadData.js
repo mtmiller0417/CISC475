@@ -130,7 +130,7 @@ export default class LoadData extends React.Component {
     handleChange = selectedOption => {
         this.setState(
                       { selectedOption },
-                      () => this.props.callBack(this.state.selectedOption.value, this.importAnnotations(this.state.selectedOption.label))
+                      () => this.props.callBack(this.state.selectedOption.value, this.importAnnotations(this.state.selectedOption.label), this.state.selectedOption.label)
                       );
     };
     

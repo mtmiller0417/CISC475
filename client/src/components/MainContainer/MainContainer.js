@@ -73,10 +73,12 @@ export default class MainContainer extends React.Component {
     }
     
     // Callback function passed to LoadData, to get which CSV to load in
-    dataCallBack(update, annotations){
+    dataCallBack(update, annotations, scan){
         console.log(update)
         data = update
         this.parseData();
+        //console.log("THIS is update: " + update)
+        this.parseMetaData(scan)
         
         this.setState({
                       data: update,
@@ -93,7 +95,9 @@ export default class MainContainer extends React.Component {
      * The method first processes the input CSV and then sets state after resolving the promise returned by d3.csv
      * After resolving the promise it sets state and calls createBackgroundImage() to setup gridlines
      */
-    parseMetaData(){
+    parseMetaData(scan){
+        let scanID = scan.replace(/\D/g,'');
+        console.log(patientID)
         let ecg_ID = [];
 		let patient_ID = [];
 		let gender = [];
@@ -391,7 +395,7 @@ export default class MainContainer extends React.Component {
     componentWillMount(){
         console.log('componentWillMount()')
         // Parse the metaData
-        this.parseMetaData();
+       // this.parseMetaData();
 
         // Parse the data
         this.parseData();
