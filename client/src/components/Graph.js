@@ -264,6 +264,7 @@ class Graph extends Component{
 
             console.log("ranx1")
             if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4 && this.props !== next_props && this.state.data.annotation !== prev_state.annotation && !dataRead) {
+                if(this.state.data.annotation.selectedAnnotation === prev_state.data.annotation.selectedAnnotation){
                 console.log("ran")
                 dataRead = true;
                 var annos = Graph.parseAnnotations(this.state.data.annos).then(annotations => { return annotations })
@@ -342,7 +343,7 @@ class Graph extends Component{
                                                   r: anno[2],
                                                   s: anno[3],
                                                   t: anno[4],
-                                                  selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation,
+                                                  selectedAnnotation: prev_state.data.annotation.selectedAnnotation,
                                                    p_flag:p_flag,
                                                    q_flag:q_flag,
                                                    r_flag:r_flag,
@@ -350,10 +351,22 @@ class Graph extends Component{
                                                    t_flag:t_flag
 
                                                }}
-
                                               })
                                  })
-            }}
+                } else{
+                    this.setState({
+                                  data:{
+                                  dataRead: dataRead,
+                                  annotation:{
+                                  p: prev_state.data.annotation.p,
+                                  q: prev_state.data.annotation.q,
+                                  r: prev_state.data.annotation.r,
+                                  s: prev_state.data.annotation.s,
+                                  t: prev_state.data.annotation.t,
+                                  selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation
+                                  }}
+                                  })
+                }}}
 
     /**
      * 
