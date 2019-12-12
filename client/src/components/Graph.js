@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
+import * as d3 from 'd3';
 import cloneDeep from 'lodash/cloneDeep';
 import styles from "./MainContainer/MainContainer.module.scss";
 
@@ -28,6 +29,7 @@ class Graph extends Component{
         super(props);
 
         this.chartRef = React.createRef();
+        this.componentDidUpdate = this.componentDidUpdate.bind(this);
 
         this.state = ({
             data:{
@@ -42,12 +44,12 @@ class Graph extends Component{
                     borderWidth: 1
                 },
                 annotation:{
+                    p: [{x:0,y:10000}], // y's need an initial point, which is outside of range of graph
+                    q: [{x:0,y:10000}], // however, they are removed on the first update
+                    r: [{x:0,y:10000}],
+                    s: [{x:0,y:10000}],
+                    t: [{x:0,y:10000}],
                     selectedAnnotation: this.props.inputArr.extra_info.selectedAnnotation,
-                    p: '',
-                    q: '',
-                    r: '',
-                    s: '',
-                    t: '',
                     oldP: [''],
                     oldQ: [''],
                     oldR: [''],
@@ -62,7 +64,11 @@ class Graph extends Component{
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
                 min:this.props.inputArr.extra_info.min, 
-                parent_width: 0
+                parent_width: 0,
+                annos: [],
+                shouldUpdate: false,
+                events: '',
+                p_pair: [], q_pair:[], r_pair: [], s_pair:  [], t_pair: []  //temp
             }
         })
     }
@@ -81,18 +87,6 @@ class Graph extends Component{
         annotationArray.splice(arraryIndex, 1)
         console.log(annotationArray);
 
-        this.setState = ({
-            data:{ 
-                annotation:{
-                    p: this.state.data.annotation.p,
-                    q: this.state.data.annotation.q,
-                    r: this.state.data.annotation.r,
-                    s: this.state.data.annotation.s,
-                    t: this.state.data.annotation.t    
-                }
-            }
-        });
-
         event[0]._chart.chart.update();
     }
 
@@ -110,19 +104,7 @@ class Graph extends Component{
         annotationArray.push({x: point.x, y: point});
         console.log(annotationArray);
 
-        this.setState = ({
-            data:{ 
-                annotation:{
-                    p: this.state.data.annotation.p,
-                    q: this.state.data.annotation.q,
-                    r: this.state.data.annotation.r,
-                    s: this.state.data.annotation.s,
-                    t: this.state.data.annotation.t    
-                }
-            }
-        });
-
-        event[0]._chart.chart.update();
+       event[0]._chart.chart.update();
     }
 
     /**
@@ -148,7 +130,7 @@ class Graph extends Component{
                 console.log(this.state.data.datasets.data);
                 console.log(coordinates);
 
-                //Let the user select the type of point to add from some menu 
+                //Let the user select the type of point to add from some menu
                 //and set the response to this variable
                 //Hardcoded to 0 now to inidicate P
                 let inputChoice = this.state.data.annotation.selectedAnnotation;
@@ -158,8 +140,8 @@ class Graph extends Component{
                     console.log('break')
                     break;
                 }
-                
-                
+
+
                 //User wants to add P
                 if(inputChoice === 0){
                     //Duplicate the current state
@@ -202,8 +184,189 @@ class Graph extends Component{
                 break;
             default:
                 console.log("Point not in any available dataset.");
+       }
+    }
+
+    //Function to generalize the loading of annotation files
+    //Since the logic for all 5 is the exact same
+    //Receives a CSV file and an array for output
+    //Processes the CSV file into the specified array
+    parseAnnotation(annotation, pair_array, props){
+        for(let i = 0; i < annotation.length; i++){
+            pair_array.push({
+                x: annotation[i],
+                y: props.inputArr.data[annotation[i]].y
+            });
         }
     }
+    
+    static parseAnnotations(annotations){
+        var p1 = this.parseAnnotationCsv(annotations[0]).then(data => {
+                                            return data
+                                            })
+        var p2 = this.parseAnnotationCsv(annotations[1]).then(data => {
+                                            return data
+                                            })
+        var p3 = this.parseAnnotationCsv(annotations[2]).then(data => {
+                                            return data
+                                            })
+        var p4 = this.parseAnnotationCsv(annotations[3]).then(data => {
+                                            return data
+                                            })
+        var p5 = this.parseAnnotationCsv(annotations[4]).then(data => {
+                                            return data
+                                            })
+      
+        return Promise.all([p1,p2,p3,p4,p5]).then(arr => {
+                                     return arr
+                                     });
+    }
+    
+    //Function to generalize the loading of annotation files
+    //Since the logic for all 5 is the exact same
+    //Receives a CSV file and an array for output
+    //Processes the CSV file into the specified array
+    static parseAnnotationCsv(inputCsv)
+    {
+        var parsed_val = d3.text(inputCsv, function(text) {
+                                 var data = d3.csv.parseRows(text, function(d) {
+                                                             return d.map(Number);
+                                                             });
+                                 });
+        
+        return parsed_val.then(data => {
+                               return data.split(',').map(function(item){
+                                                          return parseInt(item,10);
+                                                          })
+                               });
+    }
+    
+    // Function to build pairs for graphing
+    // Used by ComponentDidUpdate
+   addToPairs(anno, freq, pair){
+        for(let i = 0; i <  anno.length; i++){
+            pair.push({
+                        x: anno[i] * (1/freq),
+                        y: this.state.data.datasets.data[anno[i]]
+                        });
+            }
+        return pair;
+    }
+    
+    // Runs after render and will re-render
+    // If annotations are passed in
+    componentDidUpdate(next_props, prev_state){
+            var freq = next_props.inputArr.freq
+            let props_array = next_props.inputArr;
+
+            let dataRead = prev_state.data.datasets.dataRead
+        
+
+            console.log("ranx1")
+            if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4 && this.props !== next_props && this.state.data.annotation !== prev_state.annotation && !dataRead) {
+                if(this.state.data.annotation.selectedAnnotation === prev_state.data.annotation.selectedAnnotation){
+                console.log("ran")
+                dataRead = true;
+                var annos = Graph.parseAnnotations(this.state.data.annos).then(annotations => { return annotations })
+
+                // Resolves a promise  made above and returns a new
+                // promise, containing the annotation pairs
+                let parsed_anno = annos.then(annotations => {
+                             let p_pair = [];
+                             let q_pair = [];
+                             let r_pair = [];
+                             let s_pair = [];
+                             let t_pair = [];
+                             let p = annotations[0];
+                             let q = annotations[1];
+                             let r = annotations[2];
+                             let s = annotations[3]
+                             let t = annotations[4];
+
+
+                             var p1 = this.addToPairs(p, freq, p_pair)
+                             var p2 = this.addToPairs(q, freq, q_pair)
+                             var p3 = this.addToPairs(r, freq, r_pair)
+                             var p4 = this.addToPairs(s, freq, s_pair)
+                             var p5 = this.addToPairs(t, freq, t_pair)
+
+                             return [p1,p2,p3,p4,p5, this]
+                    })
+
+               // var newContext = this
+                
+                //this.setState({})
+
+                // Resolves the promise made above, and sets the state
+                // With the new annotations
+                parsed_anno.then(anno => {
+                                 let p_flag = prev_state.data.annotation.p_flag
+                                 let q_flag = prev_state.data.annotation.q_flag
+                                 let r_flag = prev_state.data.annotation.r_flag
+                                 let s_flag = prev_state.data.annotation.s_flag
+                                 let t_flag = prev_state.data.annotation.t_flag
+
+                                 // If the flag was set before, dont change the data
+                                 if(p_flag)
+                                 anno[0] = prev_state.data.annotation.p;
+                                 if(q_flag)
+                                 anno[1] = prev_state.data.annotation.q;
+                                 if(r_flag)
+                                 anno[2] = prev_state.data.annotation.r;
+                                 if(s_flag)
+                                 anno[3] = prev_state.data.annotation.s;
+                                 if(t_flag)
+                                 anno[4] = prev_state.data.annotation.t;
+
+                                 // Set flag to true if the data has been loaded
+                                 if(!p_flag && anno[0] > 0)
+                                 p_flag = true;
+
+                                 if(!q_flag && anno[1]> 0)
+                                 q_flag = true;
+
+                                 if(!r_flag && anno[2] > 0)
+                                 r_flag = true;
+
+                                 if(!s_flag && anno[3] > 0)
+                                 s_flag = true;
+
+                                 if(!t_flag && anno[4] > 0)
+                                 t_flag = true;
+
+                                this.setState({
+                                      data:{
+                                          dataRead: dataRead,
+                                          annotation:{
+                                                  p: anno[0],
+                                                  q: anno[1],
+                                                  r: anno[2],
+                                                  s: anno[3],
+                                                  t: anno[4],
+                                                  selectedAnnotation: prev_state.data.annotation.selectedAnnotation,
+                                                   p_flag:p_flag,
+                                                   q_flag:q_flag,
+                                                   r_flag:r_flag,
+                                                   s_flag:s_flag,
+                                                   t_flag:t_flag
+
+                                               }}
+                                              })
+                                 })
+                } else{
+                    this.setState({
+                                  data:{
+                                  dataRead: dataRead,
+                                  annotation:{
+                                  p: prev_state.data.annotation.p,
+                                  q: prev_state.data.annotation.q,
+                                  r: prev_state.data.annotation.r,
+                                  s: prev_state.data.annotation.s,
+                                  t: prev_state.data.annotation.t,
+                                  selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation
+                                  }}
+                                  })
+                }}}
 
     /**
      * 
@@ -215,132 +378,93 @@ class Graph extends Component{
      * @param {props} prev_state 
      */
     static getDerivedStateFromProps(next_props, prev_state){
+
         var freq = next_props.inputArr.freq
 
         let props_array = next_props.inputArr;
+        //let parsed_anno = '';
 
-        let p_pair = [];
-        let q_pair = [];
-        let r_pair = [];
-        let s_pair = [];
-        let t_pair = [];
-
-        let dataRead = prev_state.data.datasets.dataRead
-        
-        // Check if there is data, if so create the annotations(and if the data hasnt already been read)
-        if(next_props.inputArr.data && !dataRead){
-            // Stops the data from being read each time new add_annotation is selected
-            dataRead = true;
-                // p_pair
-        for(let i = 0; i < props_array.p.length; i++){
-            p_pair.push({
-                x: props_array.p[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.p[i]].y
-            });
+        if(undefined !== next_props.inputArr.annotations_all && next_props.inputArr.annotations_all.length > 4){
+            return{
+                data:{
+                    datasets:{
+                        radius: 0, // Makes the dots go away
+                        label: next_props.inputArr.title,
+                        fill: false,
+                        borderColor: ['black'],
+                        data: next_props.inputArr.data,
+                        backgroundColor:['rgba(255,99,132,0.6)',],
+                        borderWidth: 1
+                    },
+                annotation: {
+                                p: prev_state.data.annotation.p,
+                                    q: prev_state.data.annotation.q,
+                                    r: prev_state.data.annotation.r,
+                                    s: prev_state.data.annotation.s,
+                                    t: prev_state.data.annotation.t,
+                                    selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation,
+                                    oldP: [''],
+                                    oldQ: [''],
+                                    oldR: [''],
+                                    oldS: [''],
+                                    oldT: [''],
+                                    p_flag: prev_state.data.annotation.p_flag,
+                                    q_flag: prev_state.data.annotation.q_flag,
+                                    r_flag: prev_state.data.annotation.r_flag,
+                                    s_flag: prev_state.data.annotation.s_flag,
+                                    t_flag: prev_state.data.annotation.t_flag
+                        },
+                    freq: freq,
+                    min: next_props.inputArr.extra_info.min,
+                    max: next_props.inputArr.extra_info.max,
+                    parent_width: next_props.width,
+                    annos: next_props.inputArr.annotations_all
+                }
         }
-        // q_pair
-        for(let i = 0; i < props_array.q.length; i++){
-            q_pair.push({
-                x: props_array.q[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.q[i]].y
-             });
-        }
-        // r_pair
-        for(let i = 0; i < props_array.r.length; i++){
-            r_pair.push({
-                x: props_array.r[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.r[i]].y
-            });
-        }
-        // s_pair
-        for(let i = 0; i < props_array.s.length; i++){
-            s_pair.push({
-                x: props_array.s[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.s[i]].y
-            });
-        }
-        // t_pair
-        for(let i = 0; i < props_array.t.length; i++){
-            t_pair.push({
-                x: props_array.t[i] * (1/freq),
-                y: next_props.inputArr.data[props_array.t[i]].y
-            });
-        }
-        }
-
-        // Set default value of flag variables
-        let p_flag = prev_state.data.annotation.p_flag
-        let q_flag = prev_state.data.annotation.q_flag
-        let r_flag = prev_state.data.annotation.r_flag
-        let s_flag = prev_state.data.annotation.s_flag
-        let t_flag = prev_state.data.annotation.t_flag
-
-        // If the flag was set before, dont change the data
-        if(p_flag)
-            p_pair = prev_state.data.annotation.p;
-        if(q_flag)
-            q_pair = prev_state.data.annotation.q;
-        if(r_flag)
-            r_pair = prev_state.data.annotation.r;
-        if(s_flag)
-            s_pair = prev_state.data.annotation.s;
-        if(t_flag)
-            t_pair = prev_state.data.annotation.t;
-        
-
-        // Set flag to true if the data has been loaded
-        if(!p_flag && p_pair.length > 0)
-            p_flag = true;
-
-        if(!q_flag && q_pair.length > 0)
-            q_flag = true;
-
-        if(!r_flag && r_pair.length > 0)
-            r_flag = true;
-
-        if(!s_flag && s_pair.length > 0)
-            s_flag = true;
-
-        if(!t_flag && t_pair.length > 0)
-            t_flag = true;
-
-        // If the flag for an annotation has been set, dont update its annotations
-
-        return{
+        } else{
+            return{
             data:{
-                datasets:{
-                    dataRead: dataRead,
-                    radius: 0, // Makes the dots go away
-                    label: next_props.inputArr.title,
-                    fill: false,
-                    borderColor: ['black'],
-                    data: next_props.inputArr.data,
-                    backgroundColor:['rgba(255,99,132,0.6)',],
-                    borderWidth: 1
-                },
-                annotation:{
-                    selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation,
-                    p:p_pair,
-                    q:q_pair,
-                    r:r_pair,
-                    s:s_pair,
-                    t:t_pair, 
-                    p_flag:p_flag,
-                    q_flag:q_flag,
-                    r_flag:r_flag,
-                    s_flag:s_flag,
-                    t_flag:t_flag
-                }, 
-                freq: freq, 
-                min: next_props.inputArr.extra_info.min, 
-                max: next_props.inputArr.extra_info.max, 
-                parent_width: next_props.width
+            datasets:{
+            radius: 0, // Makes the dots go away
+            label: next_props.inputArr.title,
+            fill: false,
+            borderColor: ['black'],
+            data: next_props.inputArr.data,
+            backgroundColor:['rgba(255,99,132,0.6)',],
+            borderWidth: 1
+            },
+            annotation:{
+            p: [{x:0,y:10000}], // y's need an initial point, which is outside of range of graph
+            q: [{x:0,y:10000}], // however, they are removed on the first update
+            r: [{x:0,y:10000}],
+            s: [{x:0,y:10000}],
+            t: [{x:0,y:10000}],
+            selectedAnnotation: next_props.inputArr.extra_info.selectedAnnotation,
+            oldP: [''],
+            oldQ: [''],
+            oldR: [''],
+            oldS: [''],
+            oldT: [''],
+            p_flag: false,
+            q_flag: false,
+            r_flag: false,
+            s_flag: false,
+            t_flag: false,
+            },
+            freq: freq,
+            min: next_props.inputArr.extra_info.min,
+            max: next_props.inputArr.extra_info.max,
+            parent_width: next_props.width,
+            annos: prev_state.annos
+            }
             }
         }
     }
 
+
     //Render the graph
     render(){
+       // console.log("oo")
         const dat = {
             type:'Scatter',
             datasets: [
@@ -463,15 +587,8 @@ class Graph extends Component{
         width += width_offset
         width += 'px'
 
-        return(
-        <React.Fragment>
-            {
-
-                <div className="wrapper" style={{position: 'relative', height:HEIGHT}}>
-
-                    <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
-
-                    <div style={{position: 'absolute', top:0, right:0}}>
+        /** Legends within each graph
+         * <div style={{position: 'absolute', top:0, right:0}}>
                     <ul style = {{ position: 'relative', fontSize: '9px', fontWeight: 'bold' , marginLeft: -10}}> 
                         <div><span className={styles.p} ></span>P</div>
                         <div><span className={styles.q}></span>Q</div>
@@ -480,6 +597,17 @@ class Graph extends Component{
                         <div><span className={styles.t}></span>T</div>
                     </ul>
                     </div>
+         */
+
+        return(
+        <React.Fragment>
+            {
+
+                <div className="wrapper" style={{position: 'relative', height:HEIGHT}}>
+
+                    <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
+
+                    
 
                 <div className="graph" style={{position:'absolute', top: 0, left: 0, width: width}}>
                     <Scatter 
@@ -490,6 +618,7 @@ class Graph extends Component{
                         getElementAtEvent={(point) =>{
                             if(point.length > 0){
                                 this.modifyGraph(point);
+               
                             }
                         }}
                         options={{
@@ -514,7 +643,7 @@ class Graph extends Component{
                                 callbacks: {
                                     label: function(tooltipItems, data) { 
                                         return tooltipItems.xLabel + ' s, ' + tooltipItems.yLabel + ' mv';
-                                    }
+                                    }.bind(this)
                                 }
                             },
                             title: {
@@ -533,7 +662,7 @@ class Graph extends Component{
                                     filter: function(item) {
                                         // Remove the legend of the main-data, keep the annotation legend
                                         return !item.text.includes('Main-Data');
-                                    }
+                                    }.bind(this)
                                 }
                             },
                             scales: {
@@ -571,7 +700,7 @@ class Graph extends Component{
                 </div>
             }
         </React.Fragment>)
-    }
+        }
 
 }
 

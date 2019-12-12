@@ -1,3 +1,4 @@
+
 import React from "react";
 import styles from "./MainContainer.module.scss";
 import grid_styles from "../Grid/Grid.module.scss"
@@ -10,11 +11,6 @@ import LoadData from "../LoadData/LoadData";
 import Header from "../Header/Header";
 import ControlPanel from "../ControlPanel/ControlPanel";
 import * as d3 from 'd3';
-import csv_p from '../../csv_files/Annotattion/P.csv';
-import csv_q from '../../csv_files/Annotattion/Q.csv';
-import csv_r from '../../csv_files/Annotattion/R.csv';
-import csv_s from '../../csv_files/Annotattion/S.csv';
-import csv_t from '../../csv_files/Annotattion/T.csv';
 //import Canvas from 'canvas'
 import { fontWeight } from "@material-ui/system";
 import  KeyHandler,{ KEYPRESS } from 'react-key-handler';
@@ -71,37 +67,22 @@ export default class MainContainer extends React.Component {
 			    weight: 0,
 			    acquisitionDateTime: '',
 			    sampleBase: 0
-            }
+            },
+            annotations_all: []
         }
     }
     
     // Callback function passed to LoadData, to get which CSV to load in
-    dataCallBack(update){
+    dataCallBack(update, annotations){
+        console.log(update)
         data = update
-        this.parseData()
-        this.setState({ data: update })
-        this.forceUpdate();
-    }
-
-    /**
-     * @brief Method to parse annotation csv with no header. Calls necessary d3 functions
-     * 
-     * @param {csv} inputCsv 
-     * 
-     * @return a data object containing the parsed csv data
-     */
-    parseAnnotationCsv(inputCsv){
-        var parsed_val = d3.text(inputCsv, function(text) {
-                var data = d3.csv.parseRows(text, function(d) {
-                                            return d.map(Number);
-                                            });
-                });
+        this.parseData();
         
-        return parsed_val.then(data => {
-                               return data.split(',').map(function(item){
-                                            return parseInt(item,10);
-                                                                    })
-                                            });
+        this.setState({
+                      data: update,
+                      annotations_all: annotations
+                      })
+       this.forceUpdate();
     }
 
     /**
@@ -228,6 +209,7 @@ export default class MainContainer extends React.Component {
         this.base64String = canvas.toDataURL("grid_background/png"); 
     }
 
+
     /**
      * @brief This method handles parsing the data of a selected CSV using d3.csv
      * After parsing, it sets the state accordingly. It also saves the max and min
@@ -249,12 +231,7 @@ export default class MainContainer extends React.Component {
         let lead_v4 = [];
         let lead_v5 = [];
         let lead_v6 = [];
-
-        /*let annotation_p = [];
-         let annotation_q = [];
-         let annotation_r = [];
-         let annotation_s = [];
-         let annotation_t = [];*/
+        
         let labels = [];
         
         //Define Min/Max trackers
@@ -408,37 +385,6 @@ export default class MainContainer extends React.Component {
     }
 
     /**
-     * @brief This simple method is used to parse annotation CSVs for a given lead or data file. 
-     */
-    parseAnnotations(){
-        this.parseAnnotationCsv(csv_p).then(data => {
-            this.setState({
-                p: data
-            })
-        })
-        this.parseAnnotationCsv(csv_q).then(data => {
-            this.setState({
-                q: data
-            })
-        })
-        this.parseAnnotationCsv(csv_r).then(data => {
-            this.setState({
-                r: data
-            })
-        })
-        this.parseAnnotationCsv(csv_s).then(data => {
-            this.setState({
-                s: data
-            })
-        })
-        this.parseAnnotationCsv(csv_t).then(data => {
-            this.setState({
-                t: data
-            })
-        })
-    }
-
-    /**
      * @brief React method called here in order to ensure parseMetaData() and parseAnnotations()
      * are called when the component is rendered. 
      */
@@ -448,10 +394,8 @@ export default class MainContainer extends React.Component {
         this.parseMetaData();
 
         // Parse the data
-        //this.parseData();
+        this.parseData();
 
-        // Parse the annotations
-        this.parseAnnotations();
     }
 
     // Takes a number, not an event
@@ -517,11 +461,13 @@ export default class MainContainer extends React.Component {
                 </div> */
 
 	render() {
+        //console.log("oo")
         // Style json for radio button
         const radioStyle= {
             position: 'sticky',
-            marginLeft: -40,
+            marginRight: -40,
             top: 50,
+            float: 'right',
             width: 30,
             height: 10,
             fontWeight: 'bold'
@@ -594,30 +540,18 @@ export default class MainContainer extends React.Component {
 
 				<Grid >
                     <div className={styles.graphBackground} style = {{ backgroundImage: 'url('+this.base64String+')', backgroundRepeat: 'repeat'}}>
-                    
-					<GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					
-                    <GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-
-                    <GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					
-                    <GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					
-                    <GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					
-                    <GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					
-                    <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-				
-                    <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-				
-                    <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-				
-                    <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-				
-                    <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-					
-                    <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, p: this.state.p, q: this.state.q, r: this.state.r, s: this.state.s, t: this.state.t, extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, annotations_all: this.state.annotations_all[0], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, annotations_all: this.state.annotations_all[1], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, annotations_all: this.state.annotations_all[2], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, annotations_all: this.state.annotations_all[3], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, annotations_all: this.state.annotations_all[4], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, annotations_all: this.state.annotations_all[5], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, annotations_all: this.state.annotations_all[6], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, annotations_all: this.state.annotations_all[7], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, annotations_all: this.state.annotations_all[9], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, annotations_all: this.state.annotations_all[10], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, annotations_all: this.state.annotations_all[11], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                     </div>
                 </Grid>
 			</div>
