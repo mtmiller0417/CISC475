@@ -564,23 +564,23 @@ export default class MainContainer extends React.Component {
                 <div style={radioStyle} onChange={(e) => this.changeForm(e.target.value)}>
                     <div style={{position:'absolute', fontWeight: 'bold'}}>ADD</div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)', marginTop: -10}}>
+                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)', marginTop: 5}}>
                         <input type="radio" ref={this.pRef} value="0" name="annotation"/> P
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: -20}}>
+                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: 5}}>
                         <input type="radio" ref={this.qRef} value="1" name="annotation"/> Q
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: -30}}>
+                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: 5}}>
                         <input type="radio" ref={this.rRef} value="2" name="annotation"/> R
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: -40}}>
+                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: 5}}>
                         <input type="radio" ref={this.sRef} value="3" name="annotation"/> S
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: -50}}>
+                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: 5}}>
                         <input type="radio" ref={this.tRef} value="4" name="annotation"/> T
                     </div>
                 </div>
@@ -596,7 +596,7 @@ export default class MainContainer extends React.Component {
                 <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, annotations_all: this.state.annotations_all[6], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                 <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, annotations_all: this.state.annotations_all[7], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                 <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, annotations_all: this.state.annotations_all[9], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                 <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, annotations_all: this.state.annotations_all[10], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                 <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, annotations_all: this.state.annotations_all[11], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                     </div>

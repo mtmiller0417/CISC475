@@ -605,7 +605,7 @@ class Graph extends Component{
 
                 <div className="wrapper" style={{position: 'relative', height:HEIGHT}}>
 
-                    <div style={{position:'absolute', fontSize: 20, marginTop: -10, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
+                    <div style={{position:'absolute', fontSize: 20, marginTop: 0, fontWeight: 'bold'}}>{this.state.data.datasets.label}</div>
 
                     
 
