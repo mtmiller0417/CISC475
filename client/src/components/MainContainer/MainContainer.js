@@ -564,23 +564,23 @@ export default class MainContainer extends React.Component {
                 <div style={radioStyle} onChange={(e) => this.changeForm(e.target.value)}>
                     <div style={{position:'absolute', fontWeight: 'bold'}}>ADD</div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)', marginTop: 5}}>
+                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)', marginTop: 0}}>
                         <input type="radio" ref={this.pRef} value="0" name="annotation"/> P
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: 5}}>
+                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: 0}}>
                         <input type="radio" ref={this.qRef} value="1" name="annotation"/> Q
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: 5}}>
+                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: 0}}>
                         <input type="radio" ref={this.rRef} value="2" name="annotation"/> R
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: 5}}>
+                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: 0}}>
                         <input type="radio" ref={this.sRef} value="3" name="annotation"/> S
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: 5}}>
+                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: 0}}>
                         <input type="radio" ref={this.tRef} value="4" name="annotation"/> T
                     </div>
                 </div>
