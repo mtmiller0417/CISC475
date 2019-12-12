@@ -70,13 +70,17 @@ export default class MainContainer extends React.Component {
             },
             annotations_all: []
         }
+
+        this.createBackgroundImage(250) // Start with a default of 250
     }
     
     // Callback function passed to LoadData, to get which CSV to load in
-    dataCallBack(update, annotations){
+    dataCallBack(update, annotations, scan){
         console.log(update)
         data = update
         this.parseData();
+        //console.log("THIS is update: " + update)
+        this.parseMetaData(scan)
         
         this.setState({
                       data: update,
@@ -93,7 +97,12 @@ export default class MainContainer extends React.Component {
      * The method first processes the input CSV and then sets state after resolving the promise returned by d3.csv
      * After resolving the promise it sets state and calls createBackgroundImage() to setup gridlines
      */
-    parseMetaData(){
+    parseMetaData(scan){
+        let scanID = Number(scan.replace(/\D/g,''))
+        console.log('scanID')
+        console.log(scanID)
+        console.log('scan')
+        console.log(scan)
         let ecg_ID = [];
 		let patient_ID = [];
 		let gender = [];
@@ -104,10 +113,39 @@ export default class MainContainer extends React.Component {
 		let ac_Date = [];
 		let ac_Time = [];
         let sample_base = [];
-        
+
+        let correctDataRead = false;
+        console.log('start pass');
+        let md = {
+            ECGID: 0,
+            PatientID: 0,
+            Gender: 0,
+            Race: 0,
+            Age: 0,
+            Height: 0,
+            Weight: 0,
+            AcquisitionDate: 0,
+            AcquisitionTime: 0,
+            SampleBase: 0
+        }
         //metaData is a globle variable containing the hardcoded location of the same metadata CSV
         var metadata = d3.csv(metaData, function(metaData) {
-			return {
+            let ecgID = Number(metaData["ECG ID"]);
+            
+            if(ecgID === scanID && !correctDataRead){
+                console.log('   correct data read inn');
+                correctDataRead = true
+                md.ECGID = metaData["ECG ID"]
+                md.PatientID = metaData["Patient ID"]
+                md.Gender = metaData["Gender"];
+                md.Race = metaData["Race"];
+                md.Age = metaData["Age"];
+                md.Height = metaData["Height (in)"];
+                md.Weight = metaData["Weight "];
+                md.AcquisitionDate = metaData["Acquisition Date"];
+                md.AcquisitionTime = metaData["Acquisition Time"];
+                md.SampleBase = metaData["Sample Base"];
+			/*return {
 				ECGID: metaData["ECG ID"],
 				PatientID: metaData["Patient ID"],
 				Gender: metaData["Gender"],
@@ -118,10 +156,13 @@ export default class MainContainer extends React.Component {
 				AcquisitionDate: metaData["Acquisition Date"],
 				AcquisitionTime: metaData["Acquisition Time"],
 				SampleBase: metaData["Sample Base"]
-			};
+            };*/
+            } 
+            return md;
         });
-        metadata.then(data => {
 
+        metadata.then(data => {
+            if(data[1]) {
 			ecg_ID.push(data[1].ECGID);
 			patient_ID.push(data[1].PatientID);
 			gender.push(data[1].Gender);
@@ -131,9 +172,9 @@ export default class MainContainer extends React.Component {
 			weight.push(data[1].Weight);
 			ac_Date.push(data[1].AcquisitionDate);
 			ac_Time.push(data[1].AcquisitionTime);
-			sample_base.push(data[1].SampleBase);
+            sample_base.push(data[1].SampleBase);
 
-			this.setState({
+            this.setState({
                 metadata: {
 				    patientID: patient_ID[0],
 				    scanID: ecg_ID[0],
@@ -151,7 +192,15 @@ export default class MainContainer extends React.Component {
             //this.parseData();
             this.createBackgroundImage(this.state.metadata.sampleBase)
 
-		});
+            this.parseData();
+            } else {
+                // Otherwise no data was found with the corresponding metadata file
+                console.log('no metadata information was found with the scanID given')
+            }
+
+			// setState and createBackgroundImage was here before...
+
+        });
     }
 
     createData(type, mimetype) {
@@ -391,7 +440,7 @@ export default class MainContainer extends React.Component {
     componentWillMount(){
         console.log('componentWillMount()')
         // Parse the metaData
-        this.parseMetaData();
+       // this.parseMetaData();
 
         // Parse the data
         this.parseData();
@@ -465,7 +514,7 @@ export default class MainContainer extends React.Component {
         // Style json for radio button
         const radioStyle= {
             position: 'sticky',
-            marginRight: -40,
+            marginRight: -30,
             top: 50,
             float: 'right',
             width: 30,
@@ -517,23 +566,23 @@ export default class MainContainer extends React.Component {
                 <div style={radioStyle} onChange={(e) => this.changeForm(e.target.value)}>
                     <div style={{position:'absolute', fontWeight: 'bold'}}>ADD</div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)', marginTop: -10}}>
+                    <div style={{position:'absolute', color: 'rgba(255,105,97,1)', marginTop: 0}}>
                         <input type="radio" ref={this.pRef} value="0" name="annotation"/> P
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: -20}}>
+                    <div style={{position:'absolute', color: 'rgba(178,157,217,1)', marginTop: 0}}>
                         <input type="radio" ref={this.qRef} value="1" name="annotation"/> Q
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: -30}}>
+                    <div style={{position:'absolute', color: 'rgba(255,180,71,1)', marginTop: 0}}>
                         <input type="radio" ref={this.rRef} value="2" name="annotation"/> R
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: -40}}>
+                    <div style={{position:'absolute', color: 'rgba(88,148,156,1)', marginTop: 0}}>
                         <input type="radio" ref={this.sRef} value="3" name="annotation"/> S
                     </div>
                     <br />
-                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: -50}}>
+                    <div style={{position:'absolute', color: 'rgba(133,222,119,1)', marginTop: 0}}>
                         <input type="radio" ref={this.tRef} value="4" name="annotation"/> T
                     </div>
                 </div>
@@ -549,7 +598,7 @@ export default class MainContainer extends React.Component {
                 <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, annotations_all: this.state.annotations_all[6], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                 <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, annotations_all: this.state.annotations_all[7], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                 <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, annotations_all: this.state.annotations_all[9], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                 <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, annotations_all: this.state.annotations_all[10], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                 <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, annotations_all: this.state.annotations_all[11], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
                     </div>
