@@ -145,18 +145,6 @@ export default class MainContainer extends React.Component {
                 md.AcquisitionDate = metaData["Acquisition Date"];
                 md.AcquisitionTime = metaData["Acquisition Time"];
                 md.SampleBase = metaData["Sample Base"];
-			/*return {
-				ECGID: metaData["ECG ID"],
-				PatientID: metaData["Patient ID"],
-				Gender: metaData["Gender"],
-				Race: metaData["Race"],
-				Age: metaData["Age"],
-				Height: metaData["Height (in)"],
-				Weight: metaData["Weight "],
-				AcquisitionDate: metaData["Acquisition Date"],
-				AcquisitionTime: metaData["Acquisition Time"],
-				SampleBase: metaData["Sample Base"]
-            };*/
             } 
             return md;
         });
@@ -472,27 +460,22 @@ export default class MainContainer extends React.Component {
         // function that changes the state to reflect the button change
         if(event.key === 'p'){
             this.pRef.current.checked = true;
-            //this.pRef.current.focus();
             this.changeForm('0');
         }
         else if(event.key === 'q'){
             this.qRef.current.checked = true;
-            //this.qRef.current.focus();
             this.changeForm('1');
         }
         else if(event.key === 'r'){
             this.rRef.current.checked = true;
-            //this.rRef.current.focus();
             this.changeForm('2');
         }
         else if(event.key === 's'){
             this.sRef.current.checked = true;
-            //this.sRef.current.focus();
             this.changeForm('3');
         }
         else if(event.key === 't'){
             this.tRef.current.checked = true;
-            //this.tRef.current.focus();
             this.changeForm('4');
         } 
     }
@@ -510,7 +493,6 @@ export default class MainContainer extends React.Component {
                 </div> */
 
 	render() {
-        //console.log("oo")
         // Style json for radio button
         const radioStyle= {
             position: 'sticky',

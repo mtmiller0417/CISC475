@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {Scatter} from 'react-chartjs-2';
 import * as d3 from 'd3';
-import cloneDeep from 'lodash/cloneDeep';
-import styles from "./MainContainer/MainContainer.module.scss";
 
 // Set constant colors here
 let lightOpacity = .2
@@ -379,7 +377,6 @@ class Graph extends Component{
         var freq = next_props.inputArr.freq
 
         let props_array = next_props.inputArr;
-        //let parsed_anno = '';
 
         if(undefined !== next_props.inputArr.annotations_all && next_props.inputArr.annotations_all.length > 4){
             return{
@@ -461,7 +458,6 @@ class Graph extends Component{
 
     //Render the graph
     render(){
-       // console.log("oo")
         const dat = {
             type:'Scatter',
             datasets: [
