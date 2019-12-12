@@ -70,6 +70,8 @@ export default class MainContainer extends React.Component {
             },
             annotations_all: []
         }
+
+        this.createBackgroundImage(250) // Start with a default of 250
     }
     
     // Callback function passed to LoadData, to get which CSV to load in
@@ -512,7 +514,7 @@ export default class MainContainer extends React.Component {
         // Style json for radio button
         const radioStyle= {
             position: 'sticky',
-            marginRight: -40,
+            marginRight: -30,
             top: 50,
             float: 'right',
             width: 30,
