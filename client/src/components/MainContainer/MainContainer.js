@@ -96,8 +96,11 @@ export default class MainContainer extends React.Component {
      * After resolving the promise it sets state and calls createBackgroundImage() to setup gridlines
      */
     parseMetaData(scan){
-        let scanID = scan.replace(/\D/g,'');
-        console.log(patientID)
+        let scanID = Number(scan.replace(/\D/g,''))
+        console.log('scanID')
+        console.log(scanID)
+        console.log('scan')
+        console.log(scan)
         let ecg_ID = [];
 		let patient_ID = [];
 		let gender = [];
@@ -108,10 +111,39 @@ export default class MainContainer extends React.Component {
 		let ac_Date = [];
 		let ac_Time = [];
         let sample_base = [];
-        
+
+        let correctDataRead = false;
+        console.log('start pass');
+        let md = {
+            ECGID: 0,
+            PatientID: 0,
+            Gender: 0,
+            Race: 0,
+            Age: 0,
+            Height: 0,
+            Weight: 0,
+            AcquisitionDate: 0,
+            AcquisitionTime: 0,
+            SampleBase: 0
+        }
         //metaData is a globle variable containing the hardcoded location of the same metadata CSV
         var metadata = d3.csv(metaData, function(metaData) {
-			return {
+            let ecgID = Number(metaData["ECG ID"]);
+            
+            if(ecgID === scanID && !correctDataRead){
+                console.log('   correct data read inn');
+                correctDataRead = true
+                md.ECGID = metaData["ECG ID"]
+                md.PatientID = metaData["Patient ID"]
+                md.Gender = metaData["Gender"];
+                md.Race = metaData["Race"];
+                md.Age = metaData["Age"];
+                md.Height = metaData["Height (in)"];
+                md.Weight = metaData["Weight "];
+                md.AcquisitionDate = metaData["Acquisition Date"];
+                md.AcquisitionTime = metaData["Acquisition Time"];
+                md.SampleBase = metaData["Sample Base"];
+			/*return {
 				ECGID: metaData["ECG ID"],
 				PatientID: metaData["Patient ID"],
 				Gender: metaData["Gender"],
@@ -122,10 +154,13 @@ export default class MainContainer extends React.Component {
 				AcquisitionDate: metaData["Acquisition Date"],
 				AcquisitionTime: metaData["Acquisition Time"],
 				SampleBase: metaData["Sample Base"]
-			};
+            };*/
+            } 
+            return md;
         });
-        metadata.then(data => {
 
+        metadata.then(data => {
+            if(data[1]) {
 			ecg_ID.push(data[1].ECGID);
 			patient_ID.push(data[1].PatientID);
 			gender.push(data[1].Gender);
@@ -135,9 +170,9 @@ export default class MainContainer extends React.Component {
 			weight.push(data[1].Weight);
 			ac_Date.push(data[1].AcquisitionDate);
 			ac_Time.push(data[1].AcquisitionTime);
-			sample_base.push(data[1].SampleBase);
+            sample_base.push(data[1].SampleBase);
 
-			this.setState({
+            this.setState({
                 metadata: {
 				    patientID: patient_ID[0],
 				    scanID: ecg_ID[0],
@@ -155,7 +190,15 @@ export default class MainContainer extends React.Component {
             //this.parseData();
             this.createBackgroundImage(this.state.metadata.sampleBase)
 
-		});
+            this.parseData();
+            } else {
+                // Otherwise no data was found with the corresponding metadata file
+                console.log('no metadata information was found with the scanID given')
+            }
+
+			// setState and createBackgroundImage was here before...
+
+        });
     }
 
     createData(type, mimetype) {
