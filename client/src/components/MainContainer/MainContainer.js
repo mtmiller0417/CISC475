@@ -33,6 +33,8 @@ export default class MainContainer extends React.Component {
 	constructor(props){
         super(props);
 
+
+        // Refs for each radio button
         this.pRef = React.createRef();
         this.qRef = React.createRef();
         this.rRef = React.createRef();
@@ -76,11 +78,19 @@ export default class MainContainer extends React.Component {
     
     // Callback function passed to LoadData, to get which CSV to load in
     dataCallBack(update, annotations, scan){
+        // Clear all radio buttons
+        this.pRef.current.checked = false;
+        this.qRef.current.checked = false;
+        this.rRef.current.checked = false;
+        this.sRef.current.checked = false;
+        this.tRef.current.checked = false;
+
         console.log(update)
         data = update
         this.parseData();
         //console.log("THIS is update: " + update)
         this.parseMetaData(scan)
+        
         
         this.setState({
                       data: update,
