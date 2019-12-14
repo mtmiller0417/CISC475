@@ -112,10 +112,10 @@ export default class MainContainer extends React.Component {
      */
     parseMetaData(scan){
         let scanID = Number(scan.replace(/\D/g,''))
-        console.log('scanID')
+        /*console.log('scanID')
         console.log(scanID)
         console.log('scan')
-        console.log(scan)
+        console.log(scan)*/
         let ecg_ID = [];
 		let patient_ID = [];
 		let gender = [];

@@ -128,7 +128,7 @@ class Graph extends Component{
         let arrIndex = e[0]._index;
         let dataSet = e[0]._datasetIndex;
         let coordinates = this.state.data.datasets.data[arrIndex];
-        console.log("scanID:", this.state.data.scanID);
+        //console.log("scanID:", this.state.data.scanID);
         switch (dataSet) { 
             case 0:
                 //add a point to a specific set of annotations
@@ -191,10 +191,10 @@ class Graph extends Component{
                 console.log("Point not in any available dataset.");
        }
 
-        console.log('Call saveFunction');
+        //console.log('Call saveFunction');
         let testStr = "x"
         logLines.push(testStr)
-        console.log('logLines',logLines)
+        //console.log('logLines',logLines)
     }
 
     //Function to generalize the loading of annotation files
@@ -211,7 +211,6 @@ class Graph extends Component{
     }
     
     static parseAnnotations(annotations){
-        console.log('annotations', annotations)
         var p1 = this.parseAnnotationCsv(annotations[0]).then(data => {
                                             return data
                                             })
@@ -238,7 +237,6 @@ class Graph extends Component{
     //Receives a CSV file and an array for output
     //Processes the CSV file into the specified array
     static parseAnnotationCsv(inputCsv){
-        console.log('inputCSV', inputCsv);
         var parsed_val = d3.text(inputCsv, function(text) {
                                  var data = d3.csv.parseRows(text, function(d) {
                                                              return d.map(Number);
@@ -273,7 +271,6 @@ class Graph extends Component{
             let dataRead = prev_state.data.datasets.dataRead
             if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4 && this.props !== next_props && this.state.data.annotation !== prev_state.annotation && !dataRead) {
                 if(this.state.data.annotation.selectedAnnotation === prev_state.data.annotation.selectedAnnotation){
-                //console.log("ran")
                 dataRead = true;
                 var annos = Graph.parseAnnotations(this.state.data.annos).then(annotations => { return annotations })
 
