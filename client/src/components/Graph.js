@@ -15,6 +15,7 @@ let pastelGreenLightOpacity = 'rgba(133,222,119,' + lightOpacity + ')';
 let pastelPurple = 'rgba(178,157,217,1)';
 let pastelPurpleLightOpacity = 'rgba(178,157,217,' + lightOpacity + ')';
 
+var logLines = [];
 /**
  * This component defines the individual graphs for each lead and annotation set
  */
@@ -59,6 +60,7 @@ class Graph extends Component{
                     s_flag: false,
                     t_flag: false,
                 }, 
+                scanID: 0,
                 freq: 0,
                 max:this.props.inputArr.extra_info.max,
                 min:this.props.inputArr.extra_info.min, 
@@ -83,7 +85,7 @@ class Graph extends Component{
     deleteAnnotation(annotationArray, arraryIndex, event){
         //annotationArray[arraryIndex] = ""; // Dont delete, just make it empty
         annotationArray.splice(arraryIndex, 1)
-        console.log(annotationArray);
+        //console.log(annotationArray);
 
         event[0]._chart.chart.update();
     }
@@ -100,9 +102,15 @@ class Graph extends Component{
     addAnnotation(annotationArray, event, point)
     {
         annotationArray.push({x: point.x, y: point});
-        console.log(annotationArray);
+        //console.log(annotationArray);
 
        event[0]._chart.chart.update();
+    }
+
+    // This function will save the logFile, is called when the 'save' button is pressed in MainContainer
+    static saveFunction(outputName, outputType){
+        console.log("saveFunction called")
+        console.log('logLines',logLines)
     }
 
     /**
@@ -113,29 +121,28 @@ class Graph extends Component{
      * @param {Event} e which is the click event returned by chartJS
      */
     modifyGraph(e) {
-        console.log(e);
+        //console.log(e);
 
         const node = this.chartRef.current;
-        console.log("NODE");
-        console.log(node);
 
         let arrIndex = e[0]._index;
         let dataSet = e[0]._datasetIndex;
         let coordinates = this.state.data.datasets.data[arrIndex];
+        console.log("scanID:", this.state.data.scanID);
         switch (dataSet) { 
             case 0:
                 //add a point to a specific set of annotations
-                console.log(this.state.data.datasets.data);
-                console.log(coordinates);
+                //console.log(this.state.data.datasets.data);
+                //console.log("Coordinates",coordinates);
 
                 //Let the user select the type of point to add from some menu
                 //and set the response to this variable
                 //Hardcoded to 0 now to inidicate P
                 let inputChoice = this.state.data.annotation.selectedAnnotation;
-                console.log('inputChoice')
-                console.log(inputChoice)
+                //console.log('inputChoice')
+                //console.log(inputChoice)
                 if(inputChoice === -1){
-                    console.log('break')
+                    //console.log('break')
                     break;
                 }
 
@@ -182,7 +189,13 @@ class Graph extends Component{
                 break;
             default:
                 console.log("Point not in any available dataset.");
+
        }
+
+        console.log('Call saveFunction');
+        let testStr = "x"
+        logLines.push(testStr)
+        console.log('logLines',logLines)
     }
 
     //Function to generalize the loading of annotation files
@@ -260,7 +273,7 @@ class Graph extends Component{
             let dataRead = prev_state.data.datasets.dataRead
             if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4 && this.props !== next_props && this.state.data.annotation !== prev_state.annotation && !dataRead) {
                 if(this.state.data.annotation.selectedAnnotation === prev_state.data.annotation.selectedAnnotation){
-                console.log("ran")
+                //console.log("ran")
                 dataRead = true;
                 var annos = Graph.parseAnnotations(this.state.data.annos).then(annotations => { return annotations })
 
@@ -408,6 +421,7 @@ class Graph extends Component{
                                     s_flag: prev_state.data.annotation.s_flag,
                                     t_flag: prev_state.data.annotation.t_flag
                         },
+                    scanID: next_props.inputArr.scanID,
                     freq: freq,
                     min: next_props.inputArr.extra_info.min,
                     max: next_props.inputArr.extra_info.max,
@@ -445,6 +459,7 @@ class Graph extends Component{
             s_flag: false,
             t_flag: false,
             },
+            scanID: next_props.inputArr.scanID,
             freq: freq,
             min: next_props.inputArr.extra_info.min,
             max: next_props.inputArr.extra_info.max,

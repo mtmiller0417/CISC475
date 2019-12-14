@@ -9,6 +9,7 @@ import Metadata from "../Metadata/Metadata";
 import metaData from "../Metadata/meta.csv"
 import LoadData from "../LoadData/LoadData";
 import Header from "../Header/Header";
+import Graph from "../Graph"
 import ControlPanel from "../ControlPanel/ControlPanel";
 import * as d3 from 'd3';
 //import Canvas from 'canvas'
@@ -40,11 +41,13 @@ export default class MainContainer extends React.Component {
         this.rRef = React.createRef();
         this.sRef = React.createRef();
         this.tRef = React.createRef();
-        
+
         // Bind functions to 'this'
         this.dataCallBack = this.dataCallBack.bind(this)
         this.changeForm = this.changeForm.bind(this);
         this.setRadioButton = this.setRadioButton.bind(this);
+        this.clearRadioButtons = this.clearRadioButtons.bind(this);
+        this.handleSave = this.handleSave.bind(this);
         this.changeForm = this.changeForm.bind(this);
 
         // Set initial state 
@@ -490,6 +493,39 @@ export default class MainContainer extends React.Component {
         } 
     }
 
+    // Clears all the radio buttons and sets the selected radio button value to -1 (none selected)
+    clearRadioButtons(event){
+        // Handles ONLY the escape key
+        if(event.keyCode === 27){
+            //console.log('esc');
+            
+            // Uncheck all the radio buttons
+            this.pRef.current.checked = false;
+            this.qRef.current.checked = false;
+            this.rRef.current.checked = false;
+            this.sRef.current.checked = false;
+            this.tRef.current.checked = false;
+
+            // Set 'selected annotaion value to -1'
+            this.changeForm('-1');
+        }
+    }
+
+    handleSave(){
+        var fileName = "output:" + this.state.metadata.scanID
+        // Call save function in graph
+        Graph.saveFunction(fileName, '.txt');
+    }
+
+    // Use this only for handling the escape key
+    componentDidMount(){
+        document.addEventListener("keydown", this.clearRadioButtons, false);
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener("keydown", this.clearRadioButtons, false);
+    }
+
     // <div ><b>aVL</b></div> // Use this if you want some more spacing between
 
        /**<div style={radioStyle} onChange={this.changeForm.bind(this)}>
@@ -517,6 +553,11 @@ export default class MainContainer extends React.Component {
 		return (
             <React.Fragment>
 
+            <KeyHandler
+                keyEventName={KEYPRESS}
+                keyValue='escape'
+                onKeyHandle={this.clearRadioButtons}
+            />
             <KeyHandler
                 keyEventName={KEYPRESS}
                 keyValue="p"
@@ -555,6 +596,8 @@ export default class MainContainer extends React.Component {
                     <LoadData callBack={this.dataCallBack} className={styles.loadData}/>
                 </div>
 
+                <button className={styles.saveButton} onClick={this.handleSave}> SAVE </button>
+
                 <div style={radioStyle} onChange={(e) => this.changeForm(e.target.value)}>
                     <div style={{position:'absolute', fontWeight: 'bold'}}>ADD</div>
                     <br />
@@ -581,18 +624,18 @@ export default class MainContainer extends React.Component {
 
 				<Grid >
                     <div className={styles.graphBackground} style = {{ backgroundImage: 'url('+this.base64String+')', backgroundRepeat: 'repeat'}}>
-                <GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, annotations_all: this.state.annotations_all[0], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, annotations_all: this.state.annotations_all[1], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, annotations_all: this.state.annotations_all[2], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, annotations_all: this.state.annotations_all[3], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, annotations_all: this.state.annotations_all[4], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, annotations_all: this.state.annotations_all[5], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, annotations_all: this.state.annotations_all[6], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, annotations_all: this.state.annotations_all[7], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, annotations_all: this.state.annotations_all[10], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
-                <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, annotations_all: this.state.annotations_all[11], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase}}/>
+                <GridItem inputArr={{data: this.state.i, title: "I", labels: this.state.labels, annotations_all: this.state.annotations_all[0], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.avl, title: "aVL", labels: this.state.labels, annotations_all: this.state.annotations_all[1], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.ii, title: "II", labels: this.state.labels, annotations_all: this.state.annotations_all[2], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.iii, title: "III", labels: this.state.labels, annotations_all: this.state.annotations_all[3], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.avf, title: "aVF", labels: this.state.labels, annotations_all: this.state.annotations_all[4], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.avr, title: "aVR", labels: this.state.labels, annotations_all: this.state.annotations_all[5], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.v1, title: "V1", labels: this.state.labels, annotations_all: this.state.annotations_all[6], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.v2, title: "V2", labels: this.state.labels, annotations_all: this.state.annotations_all[7], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.v3, title: "V3", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.v4, title: "V4", labels: this.state.labels, annotations_all: this.state.annotations_all[8], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.v5, title: "V5", labels: this.state.labels, annotations_all: this.state.annotations_all[10], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
+                <GridItem inputArr={{data: this.state.v6, title: "V6", labels: this.state.labels, annotations_all: this.state.annotations_all[11], extra_info: this.state.extra_info, freq: this.state.metadata.sampleBase, scanID: this.state.metadata.scanID}}/>
                     </div>
                 </Grid>
 			</div>
