@@ -55,17 +55,22 @@
 // These are for the save button
 .saveButton {
 	font-family: Greycliff_Bold;
-	background-color: lightskyblue;
+	background-color: lightgreen;
 	text-align: center;
-	width: 50px;
+	width: 45px;
 	height: 30px;
-	position: fixed;
+	position: absolute; /* Can make fixed to make it stay in that corner */
 	top: 0;
 	right: 0;
 	margin-top: 15px;
+	margin-right: 15px;
 	border-color: darkgray;
 	border-width: medium;
 	border-radius: 5px;
+}
+
+.saveButton:hover {
+	transform: scale(1.2)
 }
 
 

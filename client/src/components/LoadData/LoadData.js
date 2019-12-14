@@ -61,9 +61,15 @@ export default class LoadData extends React.Component {
         let lead_v4 = [];
         let lead_v5 = [];
         let lead_v6 = [];
+
+        let folder_path = '../../annotations/' + csv_spliced
+
+        //var directoryContents = readdir.readSync('../../annotations');
         
         // Get full list of annotations
-        let annotations = this.importAll(require.context('../../annotations', false,  /\.csv$/));
+        // The true means it looks in subdirectories as well, which is how we can put the folders inside each other
+        //        You could break the folders down even more and it should still work
+        let annotations = this.importAll(require.context('../../annotations', true,  /\.csv$/));
         
         let correct_a = [];
         
@@ -150,4 +156,3 @@ export default class LoadData extends React.Component {
                 );
     }
 }
-

@@ -189,7 +189,6 @@ class Graph extends Component{
                 break;
             default:
                 console.log("Point not in any available dataset.");
-
        }
 
         console.log('Call saveFunction');
@@ -212,6 +211,7 @@ class Graph extends Component{
     }
     
     static parseAnnotations(annotations){
+        console.log('annotations', annotations)
         var p1 = this.parseAnnotationCsv(annotations[0]).then(data => {
                                             return data
                                             })
@@ -237,8 +237,8 @@ class Graph extends Component{
     //Since the logic for all 5 is the exact same
     //Receives a CSV file and an array for output
     //Processes the CSV file into the specified array
-    static parseAnnotationCsv(inputCsv)
-    {
+    static parseAnnotationCsv(inputCsv){
+        console.log('inputCSV', inputCsv);
         var parsed_val = d3.text(inputCsv, function(text) {
                                  var data = d3.csv.parseRows(text, function(d) {
                                                              return d.map(Number);

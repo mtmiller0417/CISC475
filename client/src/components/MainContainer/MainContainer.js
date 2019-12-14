@@ -76,7 +76,7 @@ export default class MainContainer extends React.Component {
             annotations_all: []
         }
 
-        this.createBackgroundImage(250) // Start with a default of 250
+        this.createBackgroundImage(250) // Start with a default frequency of 250
     }
     
     // Callback function passed to LoadData, to get which CSV to load in
@@ -87,8 +87,8 @@ export default class MainContainer extends React.Component {
         this.rRef.current.checked = false;
         this.sRef.current.checked = false;
         this.tRef.current.checked = false;
-
-        console.log(update)
+  
+        //console.log(update)
         data = update
         this.parseData();
         //console.log("THIS is update: " + update)
@@ -128,7 +128,6 @@ export default class MainContainer extends React.Component {
         let sample_base = [];
 
         let correctDataRead = false;
-        console.log('start pass');
         let md = {
             ECGID: 0,
             PatientID: 0,
@@ -146,7 +145,7 @@ export default class MainContainer extends React.Component {
             let ecgID = Number(metaData["ECG ID"]);
             
             if(ecgID === scanID && !correctDataRead){
-                console.log('   correct data read inn');
+                //console.log('   correct data read inn');
                 correctDataRead = true
                 md.ECGID = metaData["ECG ID"]
                 md.PatientID = metaData["Patient ID"]
@@ -267,7 +266,7 @@ export default class MainContainer extends React.Component {
      */
     parseData(){
 
-        console.log('parseData() entered');
+        //console.log('parseData() entered');
         //Define arrays
         let lead_i = [];
         let lead_ii = [];
@@ -311,7 +310,7 @@ export default class MainContainer extends React.Component {
         
         //Resolve the returned promise to gain access to the newly created array
         //Then iterate through it and assign the correct values to the correct arrays
-        console.log('parsing data csv');
+        //console.log('parsing data csv');
         parsed_csv.then((data) => {
             let freq = Number(this.state.metadata.sampleBase);
             //console.log("data[0]");
@@ -439,7 +438,7 @@ export default class MainContainer extends React.Component {
      * are called when the component is rendered. 
      */
     componentWillMount(){
-        console.log('componentWillMount()')
+        //console.log('componentWillMount()')
         // Parse the metaData
        // this.parseMetaData();
 
