@@ -15,6 +15,9 @@ let pastelGreenLightOpacity = 'rgba(133,222,119,' + lightOpacity + ')';
 let pastelPurple = 'rgba(178,157,217,1)';
 let pastelPurpleLightOpacity = 'rgba(178,157,217,' + lightOpacity + ')';
 
+// Each logLine will be a single element in this list
+// When the save function is activated in this method, it
+// will write whats in this variable to an output file
 var logLines = [];
 /**
  * This component defines the individual graphs for each lead and annotation set
@@ -48,7 +51,7 @@ class Graph extends Component{
                     r: [{x:0,y:10000}],
                     s: [{x:0,y:10000}],
                     t: [{x:0,y:10000}],
-                    selectedAnnotation: this.props.inputArr.extra_info.selectedAnnotation,
+                    selectedAnnotation: -1,
                     oldP: [''],
                     oldQ: [''],
                     oldR: [''],
@@ -110,7 +113,14 @@ class Graph extends Component{
     // This function will save the logFile, is called when the 'save' button is pressed in MainContainer
     static saveFunction(outputName, outputType){
         console.log("saveFunction called")
-        console.log('logLines',logLines)
+        //console.log('logLines',logLines)
+        var one_line = ''
+        // Concatonate all lines into 1 string with line breaks?
+        logLines.forEach(line => {
+            one_line += (line+'\n')
+        });
+
+        console.log('one_line\n', one_line);
     }
 
     /**
@@ -123,7 +133,7 @@ class Graph extends Component{
     modifyGraph(e) {
         //console.log(e);
 
-        const node = this.chartRef.current;
+        //const node = this.chartRef.current;
 
         let arrIndex = e[0]._index;
         let dataSet = e[0]._datasetIndex;
@@ -139,10 +149,7 @@ class Graph extends Component{
                 //and set the response to this variable
                 //Hardcoded to 0 now to inidicate P
                 let inputChoice = this.state.data.annotation.selectedAnnotation;
-                //console.log('inputChoice')
-                //console.log(inputChoice)
                 if(inputChoice === -1){
-                    //console.log('break')
                     break;
                 }
 
@@ -150,7 +157,6 @@ class Graph extends Component{
                 //User wants to add P
                 if(inputChoice === 0){
                     //Duplicate the current state
-                    //this.setState({oldP: this.state.data.annotation.oldP.push(this.state.data.annotation.p)});
 
                     //Add the annotation
                     this.addAnnotation(this.state.data.annotation.p, e, coordinates);
@@ -192,9 +198,9 @@ class Graph extends Component{
        }
 
         //console.log('Call saveFunction');
-        let testStr = "x"
-        logLines.push(testStr)
-        //console.log('logLines',logLines)
+        //let testStr = "x"
+        logLines.push('x')
+        console.log('Update Made',logLines)
     }
 
     //Function to generalize the loading of annotation files
@@ -238,7 +244,8 @@ class Graph extends Component{
     //Processes the CSV file into the specified array
     static parseAnnotationCsv(inputCsv){
         var parsed_val = d3.text(inputCsv, function(text) {
-                                 var data = d3.csv.parseRows(text, function(d) {
+                        // let data = d3.csv... ; // It was that before but that variable assignment isnt needed
+                                   d3.csv.parseRows(text, function(d) {  
                                                              return d.map(Number);
                                                              });
                                  });
@@ -266,7 +273,7 @@ class Graph extends Component{
     // If annotations are passed in
     componentDidUpdate(next_props, prev_state){
             var freq = next_props.inputArr.freq
-            let props_array = next_props.inputArr;
+            //let props_array = next_props.inputArr;
 
             let dataRead = prev_state.data.datasets.dataRead
             if (typeof this.state.data.annos !== 'undefined' && this.state.data.annos.length > 4 && this.props !== next_props && this.state.data.annotation !== prev_state.annotation && !dataRead) {
@@ -386,7 +393,9 @@ class Graph extends Component{
 
         var freq = next_props.inputArr.freq
 
-        let props_array = next_props.inputArr;
+        //let props_array = next_props.inputArr;
+
+        //console.log('prev_state',prev_state)
 
         if(undefined !== next_props.inputArr.annotations_all && next_props.inputArr.annotations_all.length > 4){
             return{
@@ -574,7 +583,7 @@ class Graph extends Component{
 
         // Some constants
         const HEIGHT = 225; // The stated height of the chart
-        const INTERVAL = 0.2 // 0.2 seconds or 200 ms
+        //const INTERVAL = 0.2 // 0.2 seconds or 200 ms
         const SECONDS_PER_WIDTH_MAX = 10
         const TIME_PER_WIDTH = Math.min(SECONDS_PER_WIDTH_MAX, total_time) // Number of seconds to fit on the screen at a time
 
@@ -621,9 +630,9 @@ class Graph extends Component{
                         height={HEIGHT}
                         ref={this.chartRef}
                         getElementAtEvent={(point) =>{
-                            if(point.length > 0){
+                            let selected_anno = this.state.data.annotation.selectedAnnotation
+                            if(point.length > 0 && selected_anno && selected_anno !== -1){
                                 this.modifyGraph(point);
-               
                             }
                         }}
                         options={{

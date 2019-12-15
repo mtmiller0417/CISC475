@@ -1,5 +1,5 @@
 import React from "react";
-import * as d3 from "d3";
+
 import styles from "./LoadData.module.scss";
 import Select from 'react-select';
 //import MainContainer from "../MainContainer/MainContainer";
@@ -7,7 +7,7 @@ import Select from 'react-select';
 //import * as Items from '../../csv_files';
 //import listReactFiles from 'list-react-files'
 var file_list = [];
-var file_names = [];
+//var file_names = [];
 const options = [];
 
 /**
@@ -26,7 +26,7 @@ export default class LoadData extends React.Component {
         file_list = this.importAll(require.context('../../csv_files', false,  /\.csv$/));
         var file_string = this.importAllNames(require.context('../../csv_files', false,  /\.csv$/));
 
-        const {callBack} = this.props
+        //const {callBack} = this.props
         
         for(var i = 0; i < file_list.length; i++){
             options.push({ label: file_string[i], value: file_list[i]});
@@ -61,8 +61,6 @@ export default class LoadData extends React.Component {
         let lead_v4 = [];
         let lead_v5 = [];
         let lead_v6 = [];
-
-        let folder_path = '../../annotations/' + csv_spliced
 
         //var directoryContents = readdir.readSync('../../annotations');
         
@@ -143,7 +141,7 @@ export default class LoadData extends React.Component {
     // Renders the selectable list at the top
     render () {
         const { selectedOption } = this.state;
-        const { file_names } = this.state;
+        //const { file_names } = this.state;
         
         return (
                 <div className={styles.LoadData}>

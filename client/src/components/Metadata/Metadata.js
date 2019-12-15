@@ -1,6 +1,4 @@
 import React from "react";
-import * as d3 from "d3";
-import data from "./meta.csv";
 import styles from "./Metadata.module.scss";
 
 export default class Metadata extends React.Component {
@@ -25,7 +23,7 @@ export default class Metadata extends React.Component {
 	static getDerivedStateFromProps(next_props, prev_state){
 		let props = next_props.metadata;
         
-        console.log("props meta:" + props.patientID)
+        //console.log("props meta:" + props.patientID)
 
 		// The state is set from what is returned from this
 		// This also causes a re-render of the new information

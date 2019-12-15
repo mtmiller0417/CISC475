@@ -1,8 +1,8 @@
 
 import React from "react";
 import styles from "./MainContainer.module.scss";
-import grid_styles from "../Grid/Grid.module.scss"
-import control_styles from "../ControlPanel/ControlPanel.module.scss"
+//import grid_styles from "../Grid/Grid.module.scss"
+//import control_styles from "../ControlPanel/ControlPanel.module.scss"
 import Grid from "../Grid/Grid";
 import GridItem from "../Grid/GridItem/GridItem";
 import Metadata from "../Metadata/Metadata";
@@ -10,10 +10,10 @@ import metaData from "../Metadata/meta.csv"
 import LoadData from "../LoadData/LoadData";
 import Header from "../Header/Header";
 import Graph from "../Graph"
-import ControlPanel from "../ControlPanel/ControlPanel";
+//import ControlPanel from "../ControlPanel/ControlPanel";
 import * as d3 from 'd3';
 //import Canvas from 'canvas'
-import { fontWeight } from "@material-ui/system";
+//import { fontWeight } from "@material-ui/system";
 import  KeyHandler,{ KEYPRESS } from 'react-key-handler';
 
 let data = ""
